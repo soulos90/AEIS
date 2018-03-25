@@ -13,11 +13,21 @@ namespace StateTemplateV5Beta.Controllers
             return View();
         }
 
-        public ActionResult Contact()
+        public ActionResult Justification()
         {
             return View();
         }
 
+        public ActionResult Inventory()
+        {
+            return View();
+        }
+
+        #region Template Remnants
+        public ActionResult Contact()
+        {
+            return View();
+        }
 
         public ActionResult Structure()
         {
@@ -33,15 +43,6 @@ namespace StateTemplateV5Beta.Controllers
         {
             return View();
         }
-
-        public ActionResult Justification()
-        {
-            return View();
-        }
-
-        public ActionResult Inventory()
-        {
-            return View();
-        }
+        #endregion
     }
 }
