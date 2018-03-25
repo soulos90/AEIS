@@ -14,7 +14,7 @@
         Based on Twitter Bootstrap
     -->
     <meta charset="utf-8">
-    <title>DEV-Your Organization Name</title>
+    <title>AEIS</title>
     <meta name="Author" content="State of California" />
     <meta name="Description" content="State of California" />
     <meta name="Keywords" content="California, government" />
@@ -57,7 +57,7 @@
     <![endif]-->
 </head>
 <body>
-    <header role="banner" id="header" class="global-header fixed">
+    <header role="banner" id="header" class="global-header fixed hidden-print">
         <div id="skip-to-content"><a href="#main-content">Skip to Main Content</a></div>
         <!-- Location Bar -->
         <div class="location-settings section section-standout collapse collapsed " id="locationSettings">
@@ -75,7 +75,7 @@
 
 
         <!-- Utility Header -->
-        <div class="utility-header">
+        <div class="utility-header hidden-print">
             <div class="container">
                 <div class="group">
                     <div class="half">
@@ -102,7 +102,7 @@
             </div>
         </div>
         <!--  Settings Bar -->
-        <div class="site-settings section section-standout collapse collapsed" role="alert" id="siteSettings">
+        <div class="site-settings section section-standout collapse collapsed hidden-print" role="alert" id="siteSettings">
             <div class="container  p-y">
                 <button type="button" class="close" data-toggle="collapse" data-target="#siteSettings" aria-expanded="false" aria-controls="siteSettings" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 
@@ -123,7 +123,7 @@
 
 
         <!-- Branding -->
-        <div class="branding">
+        <div class="branding hidden-print">
             <div class="header-organization-banner"><a href="/"><img src="/Content/stateTemplate/images/template-logo.png" alt="Organization Title" /></a></div>
         </div>
 
@@ -146,7 +146,7 @@
 
 
         <!--  Navigation -->
-        <div class="navigation-search">
+        <div class="navigation-search hidden-print">
 
             <div id="head-search" class="search-container">
                 <!-- Google Custom Search -->
@@ -176,6 +176,12 @@
                     <li class="nav-item">
                         <a href="~/Home/Contact" class="first-level-link"><span class="ca-gov-icon-lightbulb" aria-hidden="true"></span>Contact Us</a>
                     </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Justification" class="first-level-link"><span class="ca-gov-icon-page" aria-hidden="true"></span>Summary</a>
+                    </li>
                     <li class="nav-item" id="nav-item-search">
                         <a href="javascript:;" class="first-level-link"><span class="ca-gov-icon-search" aria-hidden="true"></span>Search</a>
                     </li>
@@ -183,18 +189,17 @@
             </nav>
         </div>
     </header>
-    <div class="header-decoration"></div>
+    <div class="header-decoration hidden-print"></div>
 
     <div id="main-content" class="main-content">
 
         @RenderBody()
 
-
     </div>
 
 
     <!-- Global Footer -->
-    <footer id="footer" class="global-footer">
+    <footer id="footer" class="global-footer hidden-print">
         <div class="container">
             <div class="row">
                 <div class="three-quarters">
@@ -225,7 +230,7 @@
         </div>
     </footer>
     <!-- Extra Decorative Content -->
-    <div class="decoration-last">&nbsp;</div>
+    <div class="decoration-last hidden-print">&nbsp;</div>
 
 
     @Scripts.Render("~/bundles/stateTemplateJs")

@@ -33,5 +33,15 @@ namespace StateTemplateV5Beta.Controllers
         {
             return View();
         }
+
+        public ActionResult Justification()
+        {
+            return View();
+        }
+
+        public ActionResult Inventory()
+        {
+            return View();
+        }
     }
 }
