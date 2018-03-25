@@ -17,6 +17,10 @@ namespace StateTemplateV5Beta.Models
         public string Cookie { get; set; }
         public DateTime created { get; set; }
         public DateTime LastUsed { get; set; }
+        public User()
+        {
+
+        }
     }
     public class DBUContext : DbContext
     {

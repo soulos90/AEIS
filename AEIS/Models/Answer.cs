@@ -20,7 +20,11 @@ namespace StateTemplateV5Beta.Models
         public string q8 { get; set; }
         public string q9 { get; set; }
         public string q10 { get; set; }
-        
+        public Answer()
+        {
+
+        }
+
     }
     public class DBAContext : DbContext
     {

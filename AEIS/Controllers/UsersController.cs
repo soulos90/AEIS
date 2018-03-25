@@ -27,6 +27,8 @@ namespace StateTemplateV5Beta.Controllers
         public IHttpActionResult GetUser(string id)
         {
             User user = db.Users.Find(id);
+            user.LastUsed = new DateTime().Date;
+
             if (user == null)
             {
                 return NotFound();
@@ -48,6 +50,9 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
+            if(db.Users.Find(id)==null)
+                user.created = new DateTime().Date;
+            user.LastUsed = new DateTime().Date;
 
             db.Entry(user).State = EntityState.Modified;
 
@@ -78,6 +83,9 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
+            if (db.Users.Find(user.ID) == null)
+                user.created = new DateTime().Date;
+            user.LastUsed = new DateTime().Date;
 
             db.Users.Add(user);
 
@@ -115,7 +123,21 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(user);
         }
-
+        // returns index of next user id (fun fact it won't always be chronological)
+        public int Next(int id)
+        {
+            int i = 0, end = 0;
+            bool cont = true;
+            while (cont)
+            {
+                if (db.Users.Find(id) == null)
+                {
+                    end = i;
+                    cont = false;
+                }
+            }
+            return end;
+        }
         protected override void Dispose(bool disposing)
         {
             if (disposing)
