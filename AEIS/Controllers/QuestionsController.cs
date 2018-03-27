@@ -14,6 +14,7 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class QuestionsController : ApiController
     {
+        public QuestionsController() { }
         private DBQContext db = new DBQContext();
 
         // GET: api/Questions

@@ -2,6 +2,9 @@
     ViewBag.Title = "Justification";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
+	var question = new StateTemplateV5Beta.Models.Question();
+    var controller = new StateTemplateV5Beta.Controllers.QuestionsController();
+    //question = controller.GetQuestion(1);
     var Name = "/name/";
     var Public = "##";
     var Internal = "##";
@@ -9,70 +12,87 @@
     var System = "##";
     var Total = "##";
 }
+<style>
+    div.container{
+        outline:solid;
+        padding: 50px;
+    }
+</style>
+<main class="main-primary">
+	<div class="container col-md-9">
+		<div class="section" id="printable">
+			<h1>Summary / Justification</h1>
 
-<div class="section">
-    <h1>Summary / Justification</h1>
+			<div class="row">
+				<h2 class="text-center">AEIS Assessment for '@Name'</h2>
 
-    <div class="row">
-        <h2 class="text-center">AEIS Assessment for '@Name'</h2>
+				<div class="col-xs-5">
+					<table class="table">
+						<thead>
+							<tr>
+								<th colspan="3" class="text-center">AEIS Breakdown</th>
+							</tr>
+						</thead>
+						<tr>
+							<td class="text-right" style="width: 65%">Public Services:</td>
+							<td style="width: 15%"></td>
+							<td class="bg-primary text-center"><strong>@Public</strong></td>
+						</tr>
+						<tr>
+							<td class="text-right">Internal Services:</td>
+							<td></td>
+							<td class="bg-primary text-center"><strong>@Internal</strong></td>
+						</tr>
+						<tr>
+							<td class="text-right">Accessibility Testing:</td>
+							<td></td>
+							<td class="bg-primary text-center"><strong>@Accessibility</strong></td>
+						</tr>
+						<tr>
+							<td class="text-right">System Life Span:</td>
+							<td></td>
+							<td class="bg-primary text-center"><strong>@System</strong></td>
+						</tr>
+						<tr>
+							<td class="text-right">Total:</td>
+							<td></td>
+							<td class="bg-primary text-center"><strong>@Total</strong></td>
+						</tr>
+					</table>
+				</div> <!-- end breakdown column -->
 
-        <div class="col-xs-5">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th colspan="3" class="text-center">AEIS Breakdown</th>
-                    </tr>
-                </thead>
-                <tr>
-                    <td class="text-right" style="width: 65%">Public Services:</td>
-                    <td style="width: 15%"></td>
-                    <td class="bg-primary text-center"><strong>@Public</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right">Internal Services:</td>
-                    <td></td>
-                    <td class="bg-primary text-center"><strong>@Internal</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right">Accessibility Testing:</td>
-                    <td></td>
-                    <td class="bg-primary text-center"><strong>@Accessibility</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right">System Life Span:</td>
-                    <td></td>
-                    <td class="bg-primary text-center"><strong>@System</strong></td>
-                </tr>
-                <tr>
-                    <td class="text-right">Total:</td>
-                    <td></td>
-                    <td class="bg-primary text-center"><strong>@Total</strong></td>
-                </tr>
-            </table>
-        </div> <!-- end breakdown column -->
+				<div class="col-xs-7">
+					<div class="panel panel-primary" style="height:100%;">
+						<div class="panel-heading text-center"><strong>System Description:</strong></div>
+						<div class="panel-body">
+						</div>
+					</div>
+				</div> <!-- end system description column -->
+			</div> <!-- end breakdown and description row -->
 
-        <div class="col-xs-7">
-            <div class="panel panel-primary" style="height:100%;">
-                <div class="panel-heading text-center"><strong>System Description:</strong></div>
-                <div class="panel-body">
-                </div>
-            </div>
-        </div> <!-- end system description column -->
-    </div> <!-- end breakdown and description row -->
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
+					<div class="panel-body" style="height:90px;"></div>
+				</div>
+			</div> <!-- end services row -->
+			<div class="row">
+				<div class="panel panel-primary">
+					<div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
+					<div class="panel-body" style="height:90px;"></div>
+				</div>
+			</div> <!-- end impact row -->
+		</div> <!-- end section -->
+	</div> <!-- end container -->
+	<div class=" col-md-3">
+        <button onclick="myFunction()">Print this page</button>
 
-    <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-            <div class="panel-body" style="height:90px;"></div>
-        </div>
-    </div> <!-- end services row -->
+        <script>
 
-    <div class="row">
-        <div class="panel panel-primary">
-            <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-            <div class="panel-body" style="height:90px;"></div>
-        </div>
-    </div> <!-- end impact row -->
-</div> <!-- end section -->
+            function myFunction() {
+                window.print();
 
-
+            }
+        </script>
+    </div>
+</main>
