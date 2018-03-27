@@ -34,7 +34,13 @@ namespace StateTemplateV5Beta.Controllers
             answer.LastUsed = new DateTime().Date;
             return Ok(answer);
         }
-
+        public Answer GetA(string id)
+        {
+            Answer answer = db.Answers.Find(id);
+            if(answer!=null)
+                PutAnswer(id, answer);
+            return answer;
+        }
         // PUT: api/Answers/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAnswer(string id, Answer answer)

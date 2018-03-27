@@ -1,14 +1,21 @@
 # AEIS built from CA state template MVC
 
 Accessing Data:
-
-	temporary data is to be inserted into a object of type Answer/Question/User.
+	Data is manipulated through object of type StateTemplateV5Beta.Models."Answer/Question/User"().
 	
-	temporary data is inserted into the (Answers/Questions/Users)Controller(string id, Object object)
-		
-		where id is created by new{email,#id}
-		
-			and #id is created by Controller.Next(email)
+	The database is manipulated through object of type StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller()
+	
+	retrieving data:
+		StateTemplateV5Beta.Models."Answer/Question/User" = StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller().Get"Q/U/A"("int/id/id")
+			id is created by new{string email,int iterator}
+				#id is created by StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller.Next(string email)
+		access StateTemplateV5Beta.Models."Answer/Question/User"'s datamembers	
+	
+	inserting data:
+		populate StateTemplateV5Beta.Models."Answer/User"'s datamembers
+		StateTemplateV5Beta.Controllers."Answers/Users"Controller().Put"User/Answer"("id/id",StateTemplateV5Beta.Models."Answer/User")
+			id is created by new{string email,int iterator}
+				#id is created by StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller.Next(string email)
 
 The California State Template is a .NET MVC template and website standard offered by the California Department of Technology to state agencies and departments within the State of California and beyond. Please visit webtools.ca.gov for more information.
 

@@ -36,7 +36,13 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(user);
         }
-
+        public User GetU(string id)
+        {
+            User user = db.Users.Find(id);
+            if (user != null)
+                PutUser(id, user);
+            return user;
+        }
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUser(string id, User user)

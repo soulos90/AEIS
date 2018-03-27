@@ -2,24 +2,35 @@
     ViewBag.Title = "Justification";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-	var question = new StateTemplateV5Beta.Models.Question();
-    var controller = new StateTemplateV5Beta.Controllers.QuestionsController();
-    //question = controller.GetQuestion(1);
-    var Name = "/name/";
+    var question = new StateTemplateV5Beta.Models.Question();
+    var qcontroller = new StateTemplateV5Beta.Controllers.QuestionsController();
+    var answer = new StateTemplateV5Beta.Models.Answer();
+    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
+    var user = new StateTemplateV5Beta.Models.User();
+    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
+    question = qcontroller.GetQ(1);
+    var Name = question.Text;
     var Public = "##";
     var Internal = "##";
     var Accessibility = "##";
     var System = "##";
     var Total = "##";
 }
+<script>
+    var page = document.getElementById("JustificationPage");
+    page.style.height = string(550) + "px";
+    page.style.width = string(425) + "px";
+    
+</script>
 <style>
-    div.container{
-        outline:solid;
-        padding: 50px;
+    #JustificationPage {
+        border: 2px solid black;
+        height: 1100px;
+        width: 850px;
     }
 </style>
 <main class="main-primary">
-	<div class="container col-md-9">
+	<div class="container" id="JustificationPage">
 		<div class="section" id="printable">
 			<h1>Summary / Justification</h1>
 
@@ -84,14 +95,18 @@
 			</div> <!-- end impact row -->
 		</div> <!-- end section -->
 	</div> <!-- end container -->
-	<div class=" col-md-3">
-        <button onclick="myFunction()">Print this page</button>
-
+	<div>
+        <button onclick="myFunction('printable')">Print this page</button>
         <script>
+            function myFunction(divName) {
+                var printContents = document.getElementById(divName).innerHTML;
+                var originalContents = document.body.innerHTML;
 
-            function myFunction() {
+                document.body.innerHTML = printContents;
+
                 window.print();
 
+                document.body.innerHTML = originalContents;
             }
         </script>
     </div>

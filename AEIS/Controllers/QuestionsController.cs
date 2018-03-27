@@ -35,7 +35,10 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(question);
         }
-
+        public Question GetQ(int id)
+        {
+            return db.Questions.Find(id);
+        }
         // PUT: api/Questions/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutQuestion(int id, Question question)
