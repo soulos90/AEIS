@@ -15,7 +15,7 @@ namespace StateTemplateV5Beta.Controllers
     public class AnswersController : ApiController
     {
         private DBAContext db = new DBAContext();
-
+        private DBUContext dbu = new DBUContext();
         // GET: api/Answers
         public IQueryable<Answer> GetAnswers()
         {
@@ -114,13 +114,27 @@ namespace StateTemplateV5Beta.Controllers
         [ResponseType(typeof(Answer))]
         public IHttpActionResult DeleteAnswer(string id)
         {
+            int temp=0,temp1=0;
+            string tempo="";
+            bool check = false;
             Answer answer = db.Answers.Find(id);
             if (answer == null)
             {
                 return NotFound();
             }
-
+            if(db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count()-1 > answer.AId)
+            {
+                temp = answer.AId;
+                temp1 = db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1;
+                tempo = answer.UId;
+                check = true;
+            }
             db.Answers.Remove(answer);
+            if(check)
+            {
+                PutAnswer(id,db.Answers.Find(new { tempo, temp1 }));
+                db.Answers.Remove(db.Answers.Find(new { tempo, temp1 }));
+            }
             db.SaveChanges();
 
             return Ok(answer);
