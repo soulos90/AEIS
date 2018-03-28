@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using StateTemplateV5Beta.Models;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace StateTemplateV5Beta.Controllers
 {
@@ -157,5 +159,32 @@ namespace StateTemplateV5Beta.Controllers
         {
             return db.Users.Count(e => e.ID == id) > 0;
         }
+
+        public string GenerateSalt()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+        public string HashPassword(string password, string salt)
+        {
+            string combined = password + salt;
+            return HashString(combined);
+        }
+
+        public bool CheckPassword(string password, string salt, string hash)
+        {
+            return HashPassword(password, salt) == hash;
+        }
+
+        private string HashString(string toHash)
+        {
+            using (SHA512CryptoServiceProvider sha = new SHA512CryptoServiceProvider())
+            {
+                byte[] dataToHash = Encoding.UTF8.GetBytes(toHash);
+                byte[] hashed = sha.ComputeHash(dataToHash);
+                return Convert.ToBase64String(hashed);
+            }
+        }
+
     }
 }
