@@ -23,6 +23,26 @@ namespace StateTemplateV5Beta.Controllers
             return View();
         }
 
+        public ActionResult ChartAnalysis()
+        {
+            return View();
+        }
+
+        public ActionResult TextAnalysis()
+        {
+            return View();
+        }
+
+        public ActionResult Account()
+        {
+            return View();
+        }
+
+        public ActionResult Registration()
+        {
+            return View();
+        }
+
         #region Template Remnants
         public ActionResult Contact()
         {
