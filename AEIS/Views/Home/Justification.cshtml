@@ -33,10 +33,11 @@
 	<div class="container" id="JustificationPage">
 		<div class="section" id="printable">
 			<h1>Summary / Justification</h1>
-
+        
 			<div class="row">
 				<h2 class="text-center">AEIS Assessment for '@Name'</h2>
-
+                
+                <!-- Breakdown -->
 				<div class="col-xs-5">
 					<table class="table">
 						<thead>
@@ -72,29 +73,41 @@
 					</table>
 				</div> <!-- end breakdown column -->
 
+                <!-- System Descripton -->
 				<div class="col-xs-7">
 					<div class="panel panel-primary" style="height:100%;">
 						<div class="panel-heading text-center"><strong>System Description:</strong></div>
-						<div class="panel-body">
-						</div>
+                        <div class="panel-body">
+                            <input id="SysDesc" class="form-control" type="text" placeholder="System Description">
+                        </div>
 					</div>
 				</div> <!-- end system description column -->
 			</div> <!-- end breakdown and description row -->
-
+            
+            <!-- Services -->
 			<div class="row">
-				<div class="panel panel-primary">
-					<div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-					<div class="panel-body" style="height:90px;"></div>
-				</div>
+                <div class="col-xs-12">
+				    <div class="panel panel-primary">
+					    <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
+					    <div class="panel-body" style="height:90px;"></div>
+				    </div> <!-- end panel -->
+                </div>
 			</div> <!-- end services row -->
-			<div class="row">
-				<div class="panel panel-primary">
-					<div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-					<div class="panel-body" style="height:90px;"></div>
-				</div>
-			</div> <!-- end impact row -->
-		</div> <!-- end section -->
+			
+            <!-- Impact -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
+                        <div class="panel-body" style="height:90px;"></div>
+                    </div>
+                </div> <!-- end panel -->
+            </div> <!-- end impact row -->
+
+            </div> <!-- end section -->
 	</div> <!-- end container -->
+
+    <!-- Print button -->
 	<div>
         <button onclick="myFunction('printable')">Print this page</button>
         <script>
