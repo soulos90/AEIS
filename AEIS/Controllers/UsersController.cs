@@ -45,6 +45,10 @@ namespace StateTemplateV5Beta.Controllers
                 PutUser(id, user);
             return user;
         }
+        public void Jank()//somewhere to put queries to modify db structure
+        {
+            db.Users.SqlQuery("ALTER TABLE Users ADD PassSalt string; ");
+        }
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUser(string id, User user)

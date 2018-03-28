@@ -14,6 +14,7 @@ namespace StateTemplateV5Beta.Models
         public string FName { get; set; }
         public string LName { get; set; }
         public string Passhash { get; set; }
+        public string PassSalt { get; set; }
         public string Cookie { get; set; }
         public DateTime created { get; set; }
         public DateTime LastUsed { get; set; }
