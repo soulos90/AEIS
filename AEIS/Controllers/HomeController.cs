@@ -41,6 +41,11 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult Registration()
         {
             return View();
+  
+        }
+        public ActionResult Questions()
+        {
+            return View();
         }
 
         #region Template Remnants
