@@ -3,8 +3,8 @@
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var FirstName = "Joe";
-    var LastName = "Schmoe";
+    var FirstName = "John";
+    var LastName = "Smith";
     var Organization = "CSUS";
 }
 
@@ -18,19 +18,19 @@
             <label>First Name</label><br />
         </div>
         <div class="row p-l-md">
-            <input type="text" value=@FirstName id="first-name" name="firstName" tabindex="1">
+            <input type="text" style="width:250px" value=@FirstName id="first-name" name="firstName" tabindex="1">
         </div>
         <div class="row p-t p-l-md">
             <label>Last Name</label>
         </div>
         <div class="row p-l-md">
-            <input type="text" value=@LastName id="last-name" name="lastName" tabindex="2">
+            <input type="text" style="width:250px" value=@LastName id="last-name" name="lastName" tabindex="2">
         </div>
         <div class="row p-t p-l-md">
             <label>Organization</label>
         </div>
         <div class="row p-b p-l-md">
-            <input type="text" value=@Organization id="org" name="organization" tabindex="3">
+            <input type="text" style="width:250px" value=@Organization id="org" name="organization" tabindex="3">
         </div>
     </div> <!-- end account container -->
     <!-- Change Password -->
@@ -40,19 +40,19 @@
             <label>Current password</label>
         </div>
         <div class="row p-l-md">
-            <input type="password" placeholder="Current password" id="current-password" name="currentPassword" tabindex="4">
+            <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="currentPassword" tabindex="4">
         </div>
         <div class="row p-t p-l-md">
             <label>New password</label>
         </div>
         <div class="row p-l-md">
-            <input type="password" placeholder="New password" id="new-password" name="newPassword" tabindex="5">
+            <input type="password" style="width:250px" placeholder="New password" id="new-password" name="newPassword" tabindex="5">
         </div>
         <div class="row p-t p-l-md">
             <label>Reenter password</label>
         </div>
         <div class="row p-b p-l-md">
-            <input type="password" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6">
+            <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6">
         </div>
     </div> <!-- end password container -->
 
