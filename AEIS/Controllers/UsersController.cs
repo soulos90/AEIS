@@ -124,6 +124,7 @@ namespace StateTemplateV5Beta.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(string id)
         {
+
             User user = db.Users.Find(id);
             if (user == null)
             {
@@ -134,21 +135,6 @@ namespace StateTemplateV5Beta.Controllers
             db.SaveChanges();
 
             return Ok(user);
-        }
-        // returns index of next user id (fun fact it won't always be chronological)
-        public int Next(int id)
-        {
-            int i = 0, end = 0;
-            bool cont = true;
-            while (cont)
-            {
-                if (db.Users.Find(id) == null)
-                {
-                    end = i;
-                    cont = false;
-                }
-            }
-            return end;
         }
         protected override void Dispose(bool disposing)
         {

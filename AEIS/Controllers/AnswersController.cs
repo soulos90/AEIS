@@ -142,18 +142,8 @@ namespace StateTemplateV5Beta.Controllers
         // returns index of next answer id (fun fact it won't always be chronological)
         public int Next(string id)//this id is just email not a touple
         {
-            int i = 0,end=0;
-            bool cont = true;
-            while (cont)
-            {
-                if(db.Answers.Find(new { id, i }) == null)
-                {
-                    end = i;
-                    cont = false;
-                }
-                    
-            }
-            return end;
+            
+            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + id + ";").Count();
         }
 
         protected override void Dispose(bool disposing)
