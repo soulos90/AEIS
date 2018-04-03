@@ -19,9 +19,10 @@ namespace StateTemplateV5Beta.Controllers
             return View("LoggedIn");
         }
         // GET: Login
-        public ActionResult LoggedIn()
+        public ActionResult LogIn(User user)
         {
-            return View();
+            SController.Login(user.ID);
+            return View("LoggedIn");
         }
     }
 }
