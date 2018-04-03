@@ -12,10 +12,15 @@ Accessing Data:
 		access StateTemplateV5Beta.Models."Answer/Question/User"'s datamembers	
 	
 	inserting data:
-		populate StateTemplateV5Beta.Models."Answer/User"'s datamembers
-		StateTemplateV5Beta.Controllers."Answers/Users"Controller().Put"User/Answer"("id/id",StateTemplateV5Beta.Models."Answer/User")
-			id is created by new{string email,int iterator}
-				#id is created by StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller.Next(string email)
+		create new data:
+			populate StateTemplateV5Beta.Models."Answer/User"'s datamembers
+			StateTemplateV5Beta.Controllers."Answers/Users"Controller().Post"User/Answer"(StateTemplateV5Beta.Models."Answer/User")
+				
+		modify preexisting data:
+			populate StateTemplateV5Beta.Models."Answer/User"'s datamembers
+			StateTemplateV5Beta.Controllers."Answers/Users"Controller().Put"User/Answer"("id/id",StateTemplateV5Beta.Models."Answer/User")
+				id is created by new{string email,int iterator}
+					iterator is created by StateTemplateV5Beta.Controllers."Answers/Questions/Users"Controller.Next(string email)
 
 The California State Template is a .NET MVC template and website standard offered by the California Department of Technology to state agencies and departments within the State of California and beyond. Please visit webtools.ca.gov for more information.
 
