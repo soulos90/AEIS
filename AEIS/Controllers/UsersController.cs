@@ -29,7 +29,7 @@ namespace StateTemplateV5Beta.Controllers
         public IHttpActionResult GetUser(string id)
         {
             User user = db.Users.Find(id);
-            user.LastUsed = new DateTime().Date;
+            user.LastUsed = DateTime.Now;
 
             if (user == null)
             {
@@ -62,9 +62,8 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
-            if(db.Users.Find(id)==null)
-                user.created = new DateTime().Date;
-            user.LastUsed = new DateTime().Date;
+            user.LastUsed = DateTime.Now;
+            ;
 
             db.Entry(user).State = EntityState.Modified;
 
@@ -87,7 +86,6 @@ namespace StateTemplateV5Beta.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
         [ResponseType(typeof(User))]
         public IHttpActionResult PostUser(User user)
         {
@@ -95,12 +93,10 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (db.Users.Find(user.ID) == null)
-                user.created = new DateTime().Date;
-            user.LastUsed = new DateTime().Date;
-
+            user.LastUsed = user.created = DateTime.Now;
+            //user.PassSalt = GenerateSalt();
+            //user.Passhash = HashPassword(user.Passhash,user.PassSalt);
             db.Users.Add(user);
-
             try
             {
                 db.SaveChanges();
@@ -116,7 +112,6 @@ namespace StateTemplateV5Beta.Controllers
                     throw;
                 }
             }
-
             return CreatedAtRoute("DefaultApi", new { id = user.ID }, user);
         }
 

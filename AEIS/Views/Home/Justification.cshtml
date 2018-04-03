@@ -1,4 +1,8 @@
 ﻿@{
+    if(!StateTemplateV5Beta.MvcApplication.active.CheckLogin())
+    {
+        Response.Redirect("~/Home/Index");
+    }
     ViewBag.Title = "Justification";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
@@ -8,8 +12,6 @@
     var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
     var user = new StateTemplateV5Beta.Models.User();
     var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    //question = qcontroller.GetQ(1);//
-    //ucontroller.Jank();//dangerous permanently changes db
     var Name = question.Text;
     var Public = "##";
     var Internal = "##";

@@ -31,7 +31,7 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return NotFound();
             }
-            answer.LastUsed = new DateTime().Date;
+            answer.LastUsed = DateTime.Now;
             return Ok(answer);
         }
         public Answer GetA(string id)
@@ -54,9 +54,7 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
-            if (db.Answers.Find(id) == null)
-                answer.Created = new DateTime().Date;
-            answer.LastUsed = new DateTime().Date;
+            answer.LastUsed = DateTime.Now;
             db.Entry(answer).State = EntityState.Modified;
 
             try
@@ -86,9 +84,8 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (db.Answers.Find(new {answer.UId, answer.AId }) == null)
-                answer.Created = new DateTime().Date;
-            answer.LastUsed = new DateTime().Date;
+            answer.Created = DateTime.Now;
+            answer.LastUsed = DateTime.Now;
             db.Answers.Add(answer);
 
             try
