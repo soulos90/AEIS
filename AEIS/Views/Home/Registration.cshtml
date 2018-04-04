@@ -3,15 +3,29 @@
 	ViewBag.Title = "Registration";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 
+
 	var email = "";
 	var firstName = "";
 	var lastName = "";
 	var organization = "";
 	var password = "";
-	var salt = new StateTemplateV5Beta.Controllers.UsersController().GenerateSalt();
 
-	if(IsPost)
-	
+
+	if (IsPost)
+	{
+		email = Request.Form["email"];
+		firstName = Request.Form["firstName"];
+		lastName = Request.Form["lastName"];
+		password = Request.Form["password"];
+		var salt = new StateTemplateV5Beta.Controllers.UsersController().GenerateSalt();
+
+		// var id = new StateTemplateV5Beta.Controllers.UsersController().PutUser(email, new StateTemplateV5Beta.Models.User());
+
+		//System.Diagnostics.Debug.WriteLine(salt);
+
+
+	}
+
 }
 
 
