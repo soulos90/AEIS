@@ -31,7 +31,7 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return NotFound();
             }
-            answer.LastUsed = new DateTime().Date;
+            answer.LastUsed = DateTime.Now;
             return Ok(answer);
         }
         public Answer GetA(string id)
@@ -54,9 +54,7 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
-            if (db.Answers.Find(id) == null)
-                answer.Created = new DateTime().Date;
-            answer.LastUsed = new DateTime().Date;
+            answer.LastUsed = DateTime.Now;
             db.Entry(answer).State = EntityState.Modified;
 
             try
@@ -86,9 +84,8 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (db.Answers.Find(new {answer.UId, answer.AId }) == null)
-                answer.Created = new DateTime().Date;
-            answer.LastUsed = new DateTime().Date;
+            answer.Created = DateTime.Now;
+            answer.LastUsed = DateTime.Now;
             db.Answers.Add(answer);
 
             try
@@ -142,18 +139,8 @@ namespace StateTemplateV5Beta.Controllers
         // returns index of next answer id (fun fact it won't always be chronological)
         public int Next(string id)//this id is just email not a touple
         {
-            int i = 0,end=0;
-            bool cont = true;
-            while (cont)
-            {
-                if(db.Answers.Find(new { id, i }) == null)
-                {
-                    end = i;
-                    cont = false;
-                }
-                    
-            }
-            return end;
+            
+            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + id + ";").Count();
         }
 
         protected override void Dispose(bool disposing)
