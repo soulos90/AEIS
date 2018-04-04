@@ -11,6 +11,7 @@ namespace StateTemplateV5Beta.Controllers
     
     public class SecurityController
     {
+        private UsersController user = new UsersController();
         private static Security active;
         private HttpCookie activeCookie;
         public SecurityController()
@@ -55,6 +56,7 @@ namespace StateTemplateV5Beta.Controllers
                 check = true;
                 activeCookie["ID"] = Security.ID;
                 activeCookie["LoggedIn"] = "True";
+                activeCookie["Hash"] = user.GetU(Security.ID).Passhash;
                 activeCookie.Expires = DateTime.Now.AddHours(8);
                 Security.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
@@ -71,7 +73,7 @@ namespace StateTemplateV5Beta.Controllers
             return check;
         }
 
-        public void Login(string ID)
+        public HttpCookie Login(string ID)
         {
             if (active==null)
             {
@@ -98,6 +100,7 @@ namespace StateTemplateV5Beta.Controllers
             activeCookie["LoggedIn"] = "True";
             activeCookie["ID"] = Security.ID = ID;
             HttpContext.Current.Response.Cookies.Set(activeCookie);
+            return activeCookie;
         }
         public void Logout()
         {

@@ -94,8 +94,8 @@ namespace StateTemplateV5Beta.Controllers
                 return BadRequest(ModelState);
             }
             user.LastUsed = user.created = DateTime.Now;
-            //user.PassSalt = GenerateSalt();
-            //user.Passhash = HashPassword(user.Passhash,user.PassSalt);
+            user.PassSalt = GenerateSalt();
+            user.Passhash = HashPassword(user.Passhash,user.PassSalt);
             db.Users.Add(user);
             try
             {
