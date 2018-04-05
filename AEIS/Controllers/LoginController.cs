@@ -14,8 +14,9 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult PostUser(User user)
         {
+            HttpCookie pass = SController.Login(user.ID);
             UController.PostUser(user);
-            SController.Login(user.ID);
+            
             return View("LoggedIn");
         }
         // GET: Login

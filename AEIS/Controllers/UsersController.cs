@@ -95,7 +95,7 @@ namespace StateTemplateV5Beta.Controllers
             }
             user.LastUsed = user.created = DateTime.Now;
             user.PassSalt = GenerateSalt();
-            user.Passhash = HashPassword(user.Passhash, user.PassSalt);
+            user.Passhash = HashPassword(user.Passhash,user.PassSalt);
             db.Users.Add(user);
             try
             {
