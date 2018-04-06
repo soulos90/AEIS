@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 
-namespace StateTemplateV5Beta.Models
+/*namespace StateTemplateV5Beta.Models
 {
     public class Question
     {
@@ -22,4 +22,4 @@ namespace StateTemplateV5Beta.Models
     {
         public DbSet<Question> Questions { get; set; }
     }
-}
+}*/

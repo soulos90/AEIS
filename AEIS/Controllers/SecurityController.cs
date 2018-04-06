@@ -16,7 +16,7 @@ namespace StateTemplateV5Beta.Controllers
         private HttpCookie activeCookie;
         public SecurityController()
         {
-            Security active = new Security();
+            active = new Security();
         }
         public string GetID()
         {

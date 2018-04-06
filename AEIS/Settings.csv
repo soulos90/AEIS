@@ -1,0 +1,58 @@
+DBSource:,aeisdb.database.windows.net
+,Initial Catalog:,AEISdb
+,Database User:,NRaymond
+,Database Password:,Bestgroup[0]
+Number of Questions:,10
+,Question 1 Text:,"Does the system provide a service that is essential to the general public? "
+,,Question 1 YesVal:,80
+,,Question 1 NoVal:,5
+,,Question 1 ReliesOn:,0
+,Question 2 Text:,"Are citizens required to use the system to gain access to a service?"
+,,Question 2 YesVal:,80
+,,Question 2 NoVal:,5
+,,Question 2 ReliesOn:,0
+,Question 3 Text:,"Is the system the only or most efficient option for accessing the public service or information in a timely manner?"
+,,Question 3 YesVal:,60
+,,Question 3 NoVal:,5
+,,Question 3 ReliesOn:,0
+,Question 4 Text:,"If a citizen is unable to use the service that the system provides, does it prevent or reduce access to another service (i.e. travel, healthcare, etc.)?"
+,,Question 4 YesVal:,80
+,,Question 4 NoVal:,5
+,,Question 4 ReliesOn:,0
+,Question 5 Text:,"In addition to internal staff, are employees from other State departments required to use or interface with the system?"
+,,Question 5 YesVal:,60
+,,Question 5 NoVal:,5
+,,Question 5 ReliesOn:,0
+,Question 6 Text:,"Would accessibility issues prevent an employee from performing essential job functions?"
+,,Question 6 YesVal:,40
+,,Question 6 NoVal:,5
+,,Question 6 ReliesOn:,0
+,Question 7 Text:,"Has the system been tested for accessibility since the last major release?"
+,,Question 7 YesVal:,0
+,,Question 7 NoVal:,200
+,,Question 7 ReliesOn:,0
+,Question 8 Text:,"If so, were any findings of accessibility issues not addressed?"
+,,Question 8 YesVal:,80
+,,Question 8 NoVal:,20
+,,Question 8 ReliesOn:,7
+,Question 9 Text:,"Are there plans for the system to be retired or replaced?"
+,,Question 9 YesVal:,5
+,,Question 9 NoVal:,250
+,,Question 9 ReliesOn:,0
+,Question 10 Text:,"Is there a State or Federal mandate that requires this system or an equivalent system to be readily available?"
+,,Question 10 YesVal:,50
+,,Question 10 NoVal:,5
+,,Question 10 ReliesOn:,0
+Number of Sections:,4		
+,Section 1 Name:,Public Services	
+,,Section 1 First:,1
+,,Section 1 Last:,4
+,Section 2 Name:,Internal Services	
+,,Section 2 First:,5
+,,Section 2 Last:,6
+,Section 3 Name:,Accessibility	
+,,Section 3 First:,7
+,,Section 3 Last:,8
+,Section 4 Name:,Life Span	
+,,Section 4 First:,9
+,,Section 4 Last:,10 

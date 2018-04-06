@@ -140,6 +140,7 @@
     <Compile Include="Controllers\AnswersController.cs" />
     <Compile Include="Controllers\CalculationController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
+    <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
@@ -150,6 +151,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Answer.cs" />
+    <Compile Include="Models\Environment.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\User.cs" />
@@ -438,6 +440,7 @@
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Login\LoggedIn.cshtml" />
+    <Content Include="Settings.csv" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -451,7 +454,6 @@
     <Folder Include="Content\StateTemplate\sample\_notes\" />
     <Folder Include="Views\Chart\" />
     <Folder Include="Views\ScoreCalculation\" />
-    <Folder Include="Views\Security\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

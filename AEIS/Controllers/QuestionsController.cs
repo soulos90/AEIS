@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using StateTemplateV5Beta.Models;
-
+/*
 namespace StateTemplateV5Beta.Controllers
 {
     public class QuestionsController : ApiController
@@ -119,4 +119,4 @@ namespace StateTemplateV5Beta.Controllers
             return db.Questions.Count(e => e.ID == id) > 0;
         }
     }
-}
+}*/
