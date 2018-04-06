@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
+
 namespace StateTemplateV5Beta.Controllers
 {
     public class HomeController : Controller
@@ -45,7 +46,12 @@ namespace StateTemplateV5Beta.Controllers
         }
         public ActionResult Questions()
         {
+            
             return View();
+        }
+        public ActionResult Survey()
+        {
+            return RedirectToAction("Index", "Survey");
         }
 
         #region Template Remnants

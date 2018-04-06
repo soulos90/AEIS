@@ -140,6 +140,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnswersController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
@@ -147,8 +148,19 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201804060254211_initial.cs" />
+    <Compile Include="Migrations\201804060254211_initial.Designer.cs">
+      <DependentUpon>201804060254211_initial.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804060327473_fixQuestion.cs" />
+    <Compile Include="Migrations\201804060327473_fixQuestion.Designer.cs">
+      <DependentUpon>201804060327473_fixQuestion.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Question.cs" />
+    <Compile Include="Models\QuestionViewModel.cs" />
+    <Compile Include="Models\SummaryViewModelcs.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -385,6 +397,7 @@
     </Content>
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
@@ -435,6 +448,9 @@
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Home\Questions.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\SurveQuestions.cshtml" />
+    <Content Include="Views\Survey\Summary.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -446,11 +462,20 @@
     <Folder Include="Content\StateTemplate\images\template2014\_notes\" />
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
+    <Folder Include="Views\Default\" />
     <Folder Include="Views\ScoreCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201804060254211_initial.resx">
+      <DependentUpon>201804060254211_initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804060327473_fixQuestion.resx">
+      <DependentUpon>201804060327473_fixQuestion.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
