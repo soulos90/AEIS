@@ -38,10 +38,10 @@ namespace StateTemplateV5Beta.Models
 
     public class Environment
     {
-        public static Section[] Sections { get; set;}
-        public static Question[] Questions { get; set; }
+        private static Section[] Sections;
+        private static Question[] Questions;
         public static int NumSec { get; set; }
-        public static int NumQus { get; set; }
+        public static string NumQus { get; set; }
         public static string DBSource { get; set; }
         public static string InitCat { get; set; }
         public static string User { get; set; }
@@ -49,14 +49,13 @@ namespace StateTemplateV5Beta.Models
         
         public Environment()
         {
-            using (FileStream fs = File.Open(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv", FileMode.Open))
-            {
-                string line;
-                byte[] b = new byte[1024];
-                UTF8Encoding temp = new UTF8Encoding(true);
-                while (fs.Read(b, 0, b.Length) > 0)
+            StreamReader file = new StreamReader(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv");
+            
+            string line, qtext = "", qY = "", qN = "", qR = "", sf = "", sl = "", sn = "";
+            int scount = 0, qcount = 0;
+
+            while ((line = file.ReadLine())!=null)
                 {
-                    line = temp.GetString(b);
                     if (line.Contains("DBSource:"))
                     {
                         DBSource = line.Split(',')[1];
@@ -73,29 +72,17 @@ namespace StateTemplateV5Beta.Models
                     {
                         Password = line.Split(',')[2];
                     }
-                    else if (line.Contains("Questions:"))
+                    else if (line.Contains("of Questions:"))
                     {
-                        NumQus = Convert.ToInt32(line.Split(',')[1]);
-                        Questions = new Question[NumQus];
+                        NumQus = line.Split(',')[1];
+                        Questions = new Question[Convert.ToInt64(NumQus)];
                     }
                     else if (line.Contains("Sections:"))
                     {
                         NumSec = Convert.ToInt32(line.Split(',')[1]);
                         Sections = new Section[NumSec];
                     }
-                }
-            }
-            string qtext="",qY="",qN="",qR="", sf="",sl="",sn="";
-            using (FileStream fs = File.Open(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv", FileMode.Open))
-            {
-                int scount = 0, qcount=0;
-                string line;
-                byte[] b = new byte[1024];
-                UTF8Encoding temp = new UTF8Encoding(true);
-                while (fs.Read(b, 0, b.Length) > 0)
-                {
-                    line = temp.GetString(b);
-                    if (line.Contains("Text:"))
+                    else if (line.Contains("Text:"))
                     {
                         qtext = line.Split(Convert.ToChar(34))[1];
                     }
@@ -123,10 +110,37 @@ namespace StateTemplateV5Beta.Models
                     else if (line.Contains("Last:"))
                     {
                         sl = line.Split(',')[3];
-                        Sections[scount++] = new Section(sf,sl,sn);
+                        Sections[scount++] = new Section(sf, sl, sn);
                     }
-                }
             }
+        }
+        public string GetSectionName(int i)
+        {
+            return Sections[i].name;
+        }
+        public string GetSectionFirst(int i)
+        {
+            return Sections[i].first;
+        }
+        public string GetSectionLast(int i)
+        {
+            return Sections[i].last;
+        }
+        public string GetQuestionText(int i)
+        {
+            return Questions[i].text;
+        }
+        public string GetQuestionYV(int i)
+        {
+            return Questions[i].YesVal;
+        }
+        public string GetQuestionNV(int i)
+        {
+            return Questions[i].NoVal;
+        }
+        public string GetQuestionRO(int i)
+        {
+            return Questions[i].ReliesOn;
         }
     }
 }

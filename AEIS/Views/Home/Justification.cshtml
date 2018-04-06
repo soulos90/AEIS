@@ -11,12 +11,12 @@
     var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
     var user = new StateTemplateV5Beta.Models.User();
     var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var Name = MvcApplication.environment.GetQuestionText(1);
-    var Public = "##";
-    var Internal = "##";
-    var Accessibility = "##";
-    var System = "##";
-    var Total = "##";
+    var Name = MvcApplication.environment.GetSectionCount();
+    var Public = MvcApplication.environment.GetQuestionCount();
+    var Internal = MvcApplication.environment.GetDBSource();
+    var Accessibility = MvcApplication.environment.GetInitCatalog();
+    var System = MvcApplication.environment.GetDBUser();
+    var Total = MvcApplication.environment.GetSectionName(1);
 }
 <style>
     #JustificationPage {
