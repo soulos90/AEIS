@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using StateTemplateV5Beta.Models;
-
+/*
 namespace StateTemplateV5Beta.Controllers
 {
     public class CalculationController
     {
         #region Fields
-        private QuestionsController qController = new QuestionsController();
+       // private QuestionsController qController = new QuestionsController();
+       private EnvironmentController qController = StateTemplateV5Beta.MvcApplication.environment;
         private AnswersController aController = new AnswersController();
         private const int MAX_SCORE = 900;
         #endregion
@@ -28,9 +29,9 @@ namespace StateTemplateV5Beta.Controllers
             int publicServicesScore = 0;
             Answer a = aController.GetA(entryId);
 
-            Question q = qController.GetQ(1);
+            //Question q = qController.GetQ(1);
             if (a.q1 == "YES")
-                publicServicesScore += q.yesVal;
+                publicServicesScore += qController.GetQuestionYesVal(1);
             else if (a.q1 == "NO")
                 publicServicesScore += q.noVal;
 
@@ -125,4 +126,4 @@ namespace StateTemplateV5Beta.Controllers
         }
         #endregion
     }
-}
+}*/
