@@ -1,63 +1,65 @@
 ﻿
 @{
-    if (StateTemplateV5Beta.MvcApplication.active.CheckLogin())
-    {
-        Response.Redirect("~/Home/Index");
-    }
+  //  if (StateTemplateV5Beta.MvcApplication.active.CheckLogin())
+    //{
+      //  Response.Redirect("~/Home/Index");
+   // }
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
     @model StateTemplateV5Beta.Models.User
+
 
 }
 
 <div class="section">
 
-    <h1>Account Registration</h1>
+	<h1>Account Registration</h1>
 
-    <!-- Account Information -->
-    @using (Html.BeginForm("PostUser", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.ValidationSummary(false, "", new { @class = "" })
-        <div class="panel panel-primary">
-            <div class="panel-heading"><h2>Create An Account</h2></div>
-            <div class="row p-t p-l-md">
-                <label>E-mail address</label><br />
-            </div>
-            <div class="row p-l-md">
-                <input type="text" placeholder="E-mail address" id="e-mail" name="ID" tabindex="1">
-            </div>
-            <div class="row p-t p-l-md">
-                <label>First name</label><br />
-            </div>
-            <div class="row p-l-md">
-                <input type="text" placeholder="First name" id="first-name" name="FName" tabindex="2">
-            </div>
-            <div class="row p-t p-l-md">
-                <label>Last name</label>
-            </div>
-            <div class="row p-l-md">
-                <input type="text" placeholder="Last name" id="last-name" name="LName" tabindex="3">
-            </div>
-            <div class="row p-t p-l-md">
-                <label>Organization</label>
-            </div>
-            <div class="row p-l-md">
-                <input type="text" placeholder="Organization" id="org" name="Orginization" tabindex="4">
-            </div>
-            <div class="row p-t p-l-md">
-                <label>Password</label>
-            </div>
-            <div class="row p-l-md">
-                <input type="password" placeholder="Password" id="password" name="Passhash" tabindex="5">
-            </div>
-            <div class="row p-t p-l-md">
-                <label>Reenter password</label>
-            </div>
-            <div class="row p-b p-l-md">
-                <input type="password" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6">
-            </div>
-        </div> <!-- end account container -->
+	<!-- Account Information -->
+	@using (Html.BeginForm("PostUser", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	{
+		@Html.ValidationSummary(false, "", new { @class = "" })
+		<div class="panel panel-primary">
+			<div class="panel-heading"><h2>Create An Account</h2></div>
+			<div class="row p-t p-l-md">
+				<label>E-mail address</label><br />
+			</div>
+			<div class="row p-l-md">
+				<input type="text" placeholder="E-mail address" id="e-mail" name="ID" tabindex="1">
+			</div>
+			<div class="row p-t p-l-md">
+				<label>First name</label><br />
+			</div>
+			<div class="row p-l-md">
+				<input type="text" placeholder="First name" id="first-name" name="FName" tabindex="2">
+			</div>
+			<div class="row p-t p-l-md">
+				<label>Last name</label>
+			</div>
+			<div class="row p-l-md">
+				<input type="text" placeholder="Last name" id="last-name" name="LName" tabindex="3">
+			</div>
+			<div class="row p-t p-l-md">
+				<label>Organization</label>
+			</div>
+			<div class="row p-l-md">
+				<input type="text" placeholder="Organization" id="org" name="Orginization" tabindex="4">
+			</div>
+			<div class="row p-t p-l-md">
+				<label>Password</label>
+			</div>
+			<div class="row p-l-md">
+				<input type="password" placeholder="Password" id="password" name="Passhash" tabindex="5" onchange='check();'>
+			</div>
+			<div class="row p-t p-l-md">
+				<label>Reenter password</label>
+			</div>
+			<div class="row p-b p-l-md">
+				<input type="password" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6" onchange='check();'>
+			</div>
+		</div> <!-- end account container -->
 
-        <input type="submit" value="Submit" class="btn btn-lg btn-primary" />
-    }
+		<input type="submit" value="Submit" id ="submit" class="btn btn-lg btn-primary" disabled/>
+	}
+	@Scripts.Render("~/Scripts/register-check.js")
 </div> <!-- end section -->
