@@ -56,7 +56,6 @@ namespace StateTemplateV5Beta.Controllers
                 check = true;
                 activeCookie["ID"] = Security.ID;
                 activeCookie["LoggedIn"] = "True";
-                activeCookie["Hash"] = user.GetU(Security.ID).Passhash;
                 activeCookie.Expires = DateTime.Now.AddHours(8);
                 Security.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);

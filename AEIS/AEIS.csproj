@@ -374,6 +374,7 @@
     <Content Include="Content\StateTemplate\sample\configs\line.json" />
     <Content Include="Content\StateTemplate\sample\configs\pie.csv" />
     <Content Include="Content\StateTemplate\sample\configs\pie.json" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\AEIS - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />

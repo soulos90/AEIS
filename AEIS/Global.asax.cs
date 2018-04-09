@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Http;
+using System.Configuration;
+using System.Web.Configuration;
 
 namespace StateTemplateV5Beta
 {
@@ -25,5 +27,6 @@ namespace StateTemplateV5Beta
             GlobalConfiguration.Configure(WebApiConfig.Register);
             
         }
+
     }
 }
