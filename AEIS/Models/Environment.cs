@@ -49,8 +49,10 @@ namespace StateTemplateV5Beta.Models
         
         public Environment()
         {
-            StreamReader file = new StreamReader(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv");
+            bool update = 0<(DateTime.Compare(File.GetLastWriteTime(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv"),
+                 File.GetLastWriteTime(HostingEnvironment.ApplicationPhysicalPath + "ConnectionStrings.config")));
             
+            StreamReader file = new StreamReader(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv");
             string line, qtext = "", qY = "", qN = "", qR = "", sf = "", sl = "", sn = "";
             int scount = 0, qcount = 0;
 
@@ -113,14 +115,18 @@ namespace StateTemplateV5Beta.Models
                         Sections[scount++] = new Section(sf, sl, sn);
                     }
             }
-            StreamWriter fileO = new StreamWriter(HostingEnvironment.ApplicationPhysicalPath + "ConnectionStrings.config",false);
-            {
+            file.Close();
+            if(update)
+            { 
+                StreamWriter fileO = new StreamWriter(HostingEnvironment.ApplicationPhysicalPath + "ConnectionStrings.config",false);
+            
                 line += "<connectionStrings>\n";
                 line += "\t<add name=\"DBAContext\" connectionString=\"Data Source = aeisdb.database.windows.net; Initial Catalog = AEISdb; Integrated Security = False; User Id = NRaymond; Password = Bestgroup[0]; Encrypt = True; TrustServerCertificate = False; MultipleActiveResultSets = True\" providerName=\"System.Data.SqlClient\" />\n";
                 line += "\t<add name=\"DBUContext\" connectionString=\"Data Source = aeisdb.database.windows.net; Initial Catalog = AEISdb; Integrated Security = False; User Id = NRaymond; Password = Bestgroup[0]; Encrypt = True; TrustServerCertificate = False; MultipleActiveResultSets = True\" providerName=\"System.Data.SqlClient\" />\n";
                 line += "</connectionStrings>";
                 fileO.Write(line);
                 fileO.Flush();
+                fileO.Close();
             }
 
         }
