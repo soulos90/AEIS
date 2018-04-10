@@ -22,7 +22,7 @@ namespace StateTemplateV5Beta.Models
         [Display(Name = "Survey Question")]
         [Required]
         public string Question { get; set; }
-        [Display(Name = "Survey?")]
+        //[Display(Name = "Survey?")]
         public bool Answer { get; set; }
         public int CurrentID { get; set; }
         public string ProgramName { get; set; }

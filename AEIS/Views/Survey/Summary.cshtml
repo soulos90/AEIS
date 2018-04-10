@@ -1,13 +1,25 @@
 ﻿@model StateTemplateV5Beta.Models.SummaryViewModel
 
 @{
-    ViewBag.Title = "SurveQuestions";
+    ViewBag.Title = "SurveyQuestions";
 }
 
-<h2>Summary</h2>
+<div class="section">
+    <div class="offset-quarter half">
+        <h1 class="text-center">Summary for @Model.ProgramName </h1>
 
-@Model.ProgramName
-@Model.Points
+        <div style="text-align:left">
+            Total Point: @Model.Points
+           <p>
+               Lifespan:
+            </p> 
+            <p>
+                blah..
+            </p>
+            </div>
+
+        </div>
+    </div>
 
 
 

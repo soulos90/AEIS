@@ -449,7 +449,7 @@
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Home\Questions.cshtml" />
     <Content Include="Views\Survey\Index.cshtml" />
-    <Content Include="Views\Survey\SurveQuestions.cshtml" />
+    <Content Include="Views\Survey\SurveyQuestions.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
   </ItemGroup>
   <ItemGroup>

@@ -15,6 +15,9 @@ namespace StateTemplateV5Beta.Controllers
         // GET: Default
         public ActionResult Index()
         {
+            //          This is an example of how to write to the database, and a possible way of deleting a question
+            //          another way would to be go into the database from an app and do it there
+            //
             //using (var context = new SurveyContext())
             //{
             //    var q1 = new Question2() { Text = "My first question" };
@@ -45,45 +48,41 @@ namespace StateTemplateV5Beta.Controllers
             else
             {
 
-               
-                //Question question = null;
-
                 Question2 question = null;
                 SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
                 viewModel.ProgramName = model.Name;
                 using (var context = new SurveyContext())
                 {
-                    
+                    // This is LINQ query                 
                     question = (from s in context.Q2 where s.Id == 1 select s).FirstOrDefault();
                    
-
                     if (question != null)
                     {
 
                         viewModel.Question = question.Text;
                         viewModel.CurrentID = question.Id;
-
                     }
-
                 }
-                // TODO get first question
-                return RedirectToAction("SurveQuestions", viewModel);
+                // This redirects to an "actionName", with an Object so that we can pass around the viewmodel
+                return RedirectToAction("SurveyQuestions", viewModel);
             }
             
         }
 
-        public ActionResult SurveQuestions(SurveyQuestionViewModel model)
+        public ActionResult SurveyQuestions(SurveyQuestionViewModel model)
         {
                
             return View(model);
         }
+
         [HttpPost]
         public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
         {
                
                 if (!ModelState.IsValid)
             {
-                return View("SurveQuestions", model);
+
+                return View("SurveyQuestions", model);
             }
             else
             {
@@ -115,8 +114,8 @@ namespace StateTemplateV5Beta.Controllers
                     }
 
                 }
-                // TODO get next question.  if no more questions then thank you view
-                return RedirectToAction("SurveQuestions", viewModel);
+
+                return RedirectToAction("SurveyQuestions", viewModel);
             }
         }
     
