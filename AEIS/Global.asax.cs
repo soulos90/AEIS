@@ -18,8 +18,8 @@ namespace StateTemplateV5Beta
         public static Controllers.EnvironmentController environment;
         protected void Application_Start()
         {
-            active = new Controllers.SecurityController();
             environment = new Controllers.EnvironmentController();
+            active = new Controllers.SecurityController();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

@@ -3,7 +3,7 @@ DBSource:,aeisdb.database.windows.net
 ,Database User:,NRaymond
 ,Database Password:,Bestgroup[0]
 Number of Questions:,10
-,Question 1 Text:,"Does the system provide a service that is essential to the general public? "
+,Question 1 Text:,"Does the system provide a service that is essential to the general public?"
 ,,Question 1 YesVal:,80
 ,,Question 1 NoVal:,5
 ,,Question 1 ReliesOn:,0
