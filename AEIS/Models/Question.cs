@@ -10,19 +10,6 @@ namespace StateTemplateV5Beta.Models
 {
 
 
-    public class Question
-    {
-        public int ID { get; set; }
-        public string Text { get; set; }
-        public int yesVal { get; set; }
-        public int noVal { get; set; }
-        public int reliesOn { get; set; }
-        public Question()
-        {
-
-        }
-    }
-
     public class Question2
     {
         [Key]

@@ -1,21 +1,20 @@
 ﻿@{
+    if(!MvcApplication.active.CheckLogin())
+    {
+        Response.Redirect("~/Home/Index");
+    }
     ViewBag.Title = "Justification";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var question = new StateTemplateV5Beta.Models.Question();
-    var qcontroller = new StateTemplateV5Beta.Controllers.QuestionsController();
-    var answer = new StateTemplateV5Beta.Models.Answer();
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
     var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
-    var user = new StateTemplateV5Beta.Models.User();
     var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    //question = qcontroller.GetQ(1);
-    //ucontroller.Jank();//dangerous permanently changes db
-    var Name = question.Text;
-    var Public = "##";
-    var Internal = "##";
-    var Accessibility = "##";
-    var System = "##";
-    var Total = "##";
+    var Name = MvcApplication.environment.GetSectionCount();
+    var Public = MvcApplication.environment.GetQuestionCount();
+    var Internal = MvcApplication.environment.GetDBSource();
+    var Accessibility = MvcApplication.environment.GetInitCatalog();
+    var System = ucontroller.GetU(MvcApplication.active.GetID()).Orginization;
+    var Total = MvcApplication.environment.GetSectionName(1);
 }
 <style>
     #JustificationPage {

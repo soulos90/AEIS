@@ -140,10 +140,17 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnswersController.cs" />
+
     <Compile Include="Controllers\SurveyController.cs" />
+
+    <Compile Include="Controllers\CalculationController.cs" />
+    <Compile Include="Controllers\ChartController.cs" />
+    <Compile Include="Controllers\EnvironmentController.cs" />
+
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
-    <Compile Include="Controllers\QuestionsController.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -158,9 +165,14 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Answer.cs" />
+
     <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\SummaryViewModelcs.cs" />
+
+    <Compile Include="Models\Environment.cs" />
+    <Compile Include="Models\Security.cs" />
+
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -383,8 +395,10 @@
     <Content Include="Content\StateTemplate\sample\configs\line.json" />
     <Content Include="Content\StateTemplate\sample\configs\pie.csv" />
     <Content Include="Content\StateTemplate\sample\configs\pie.json" />
+    <Content Include="ConnectionStrings.config" />
     <None Include="Properties\PublishProfiles\AEIS - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\register-check.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
@@ -447,10 +461,15 @@
     <Content Include="Views\Home\ChartAnalysis.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
+
     <Content Include="Views\Home\Questions.cshtml" />
     <Content Include="Views\Survey\Index.cshtml" />
     <Content Include="Views\Survey\SurveyQuestions.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
+
+    <Content Include="Views\Login\LoggedIn.cshtml" />
+    <Content Include="Settings.csv" />
+
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -462,7 +481,11 @@
     <Folder Include="Content\StateTemplate\images\template2014\_notes\" />
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
+
     <Folder Include="Views\Default\" />
+
+    <Folder Include="Views\Chart\" />
+
     <Folder Include="Views\ScoreCalculation\" />
   </ItemGroup>
   <ItemGroup>

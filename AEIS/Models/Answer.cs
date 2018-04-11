@@ -6,14 +6,16 @@ namespace StateTemplateV5Beta.Models
 {
     public class Answer
     {
-        [Key]
+        
         public int AId { get; set; }
+        public int QId { get; set; }
         public string UId { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUsed { get; set; }
-        public string programName { get; set; }
-        public string q1 { get; set; }
-       
+        public string programName { get; set; }     
+      
+        public string Value { get; set; }
+
         public Answer()
         {
 
@@ -39,7 +41,7 @@ namespace StateTemplateV5Beta.Models
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Answer>().HasKey(c => new { c.UId, c.AId });
+            modelBuilder.Entity<Answer>().HasKey(c => new { c.UId, c.AId, c.QId });
             base.OnModelCreating(modelBuilder);
         }
     }
