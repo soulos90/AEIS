@@ -441,6 +441,7 @@
     <Content Include="Views\Home\Registration.cshtml" />
     <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
+    <Content Include="Views\Login\LoginFail.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
