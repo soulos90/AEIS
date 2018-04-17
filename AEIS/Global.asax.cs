@@ -19,7 +19,6 @@ namespace StateTemplateV5Beta
         protected void Application_Start()
         {
             environment = new Controllers.EnvironmentController();
-            active = new Controllers.SecurityController();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

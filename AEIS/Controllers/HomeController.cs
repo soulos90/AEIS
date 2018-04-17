@@ -8,17 +8,35 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class HomeController : Controller
     {
+        public static Controllers.SecurityController active = null;
         public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult Justification()
+        public ActionResult Justification(string name)
         {
+            // if user is not logged in, redirect to index
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 
         public ActionResult Inventory()
+        {
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
+            return View();
+        }
+
+        public ActionResult InventoryGrid()
         {
             return View();
         }
@@ -40,29 +58,18 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult Registration()
         {
+            session();
+            if (active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
-        #region Template Remnants
-        public ActionResult Contact()
+        private void session()
         {
-            return View();
+            if(active==null)
+                active = new Controllers.SecurityController();
         }
-
-        public ActionResult Structure()
-        {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            return View();
-        }
-
-        public ActionResult serp()
-        {
-            return View();
-        }
-        #endregion
     }
 }
