@@ -121,8 +121,8 @@ namespace StateTemplateV5Beta.Models
                 StreamWriter fileO = new StreamWriter(HostingEnvironment.ApplicationPhysicalPath + "ConnectionStrings.config",false);
             
                 line += "<connectionStrings>\n";
-                line += "\t<add name=\"DBAContext\" connectionString=\"Data Source = " + DBSource + "; Initial Catalog = " + InitCat + "; Integrated Security = False; User Id = "+ User +"; Password = "+ Password +"; Encrypt = True; TrustServerCertificate = False; MultipleActiveResultSets = True\" providerName=\"System.Data.SqlClient\" />\n";
-                line += "\t<add name=\"DBUContext\" connectionString=\"Data Source = " + DBSource + "; Initial Catalog = " + InitCat + "; Integrated Security = False; User Id = " + User + "; Password = " + Password + "; Encrypt = True; TrustServerCertificate = False; MultipleActiveResultSets = True\" providerName=\"System.Data.SqlClient\" />\n";
+                line += "\t<add name=\"DBAContext\" connectionString=\"Server=tcp:" + DBSource + ";Initial Catalog=" + InitCat + ";Integrated Security=False;User Id=" + User + ";Password=" + Password + ";Encrypt=True;TrustServerCertificate=False;MultipleActiveResultSets=True\" providerName=\"System.Data.SqlClient\" />\n";
+                line += "\t<add name=\"DBUContext\" connectionString=\"Server=tcp:" + DBSource + ";Initial Catalog=" + InitCat + ";Integrated Security=False;User Id=" + User + ";Password=" + Password + ";Encrypt=True;TrustServerCertificate=False;MultipleActiveResultSets=True\" providerName=\"System.Data.SqlClient\" />\n";
                 line += "</connectionStrings>";
                 fileO.Write(line);
                 fileO.Flush();
