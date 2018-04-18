@@ -12,18 +12,28 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult GetChart()
         {
             var key = new Chart(width: 800, height: 600)
+                
                 .AddTitle("AEIS Inventory Analysis")
                 .AddSeries(
-                    chartType: "column",
+                    chartType: "StackedColumn",
                     legend: "AEIS Inventory Analysis",
                     xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
                     yValues: new[] { "33", "33", "17", "33", "33", "27" })
-                .Write()
-                .AddSeries(
-                    chartType: "column",
+               
+                    .AddSeries(
+                    chartType: "StackedColumn",
                     legend: "AEIS Inventory Analysis",
-                    xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
                     yValues: new[] { "11", "11", "11", "11", "11", "11" })
+
+                    .AddSeries(
+                    chartType: "StackedColumn",
+                    legend: "AEIS Inventory Analysis",
+                    yValues: new[] { "22", "9", "22", "2", "22", "22" })
+
+                    .AddSeries(
+                    chartType: "StackedColumn",
+                    legend: "AEIS Inventory Analysis",
+                    yValues: new[] { "28", "28", "28", "28", "6", "6" })
                 .Write();
             return null;
         }
