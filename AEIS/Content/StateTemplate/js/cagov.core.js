@@ -13156,8 +13156,6 @@ $(document).ready(function(){
     var docURL = window.location.href;
     docURL = encodeURIComponent(sanitize(docURL));
 
-    // TODO: flickr, linkedin, instagram, pinterest, vimeo, youtube
-
     $(".ca-gov-icon-share-facebook").on('click', function(e) {
       PopupCentered('https://www.facebook.com/sharer/sharer.php?u=' + docURL + '&display=popup','socialsharer','658','450')
     });
@@ -13452,10 +13450,6 @@ var $content = $item.parent().find('.service-tile-panel[data-tile-id="' + id + '
   })
 }
 
-/**
- * TODO: +Docs
- * TODO: Expand height using calculated content height
- */
 function insertContent($rowEl, $item) {
     if (!$rowEl) {
         return
@@ -13477,7 +13471,6 @@ function insertContent($rowEl, $item) {
 }
 
 /**
- * TODO: +Docs
  * @param  {[type]} $item [description]
  * @return {[type]}       [description]
  */
@@ -13519,7 +13512,6 @@ function checkIfOldAndSet($rowEl) {
 }
 
 /**
- * TODO: +Docs
  * @param  {[type]} $item  [description]
  * @param  {[type]} method [description]
  * @return {[type]}        [description]
@@ -13527,7 +13519,6 @@ function checkIfOldAndSet($rowEl) {
 function createExpandedRow($item, method) {
     var newEl = $('<div>').addClass('service-tile-full');
     ($item[method](newEl));
-    // HACK: trigger on focus so transitions work
     newEl.focus();
     newEl.addClass('is-open');
     return newEl;
@@ -13538,7 +13529,6 @@ function createExpandedRow($item, method) {
 ----------------------------------------- */
 
 /**
- * TODO: +Docs
  * @param  {[type]} $el [description]
  * @return {[type]}     [description]
  */
@@ -13996,13 +13986,13 @@ $(function () {
     $('.plotly-chart').each(initPlotly);
 });
 
-// TODO: fallback image for non-js,
+
 // Description and details for screen readers
 function initPlotly(d3, Plotly) {
     var container = $(this);
 
     if ($('html').hasClass('ie8') || $('html').hasClass('ie7')) {
-        //  TODO: Unsupport graphs fall back to image
+        
         if (!container.has('img').length) {
             container.html('<span class="plotly-chart--loading">Chart image not found</span>')
         }
@@ -14253,7 +14243,7 @@ function initStats() {
     var libs = ['d3'];
     if ($('html').hasClass('ie8')|| $('html').hasClass('ie7') ) {
         return;
-        //  TODO: Unsupport graphs fall back to something else
+        
     }
     requirejs(libs, function (d3) {
 
@@ -14345,7 +14335,6 @@ function initStats() {
 
 /**
  * Custom Half Donut plugin
- * TODO: code clean up, and refactor
  */
 
 function initHalfDonut(d3) {
@@ -14767,9 +14756,6 @@ $(document).ready(function () {
 }(jQuery));
 
 
-
-
-// TODO: readd this back in
 function makeBlur($el) {
     $el.Vague({intensity: 6}).blur();
 }
@@ -14814,8 +14800,6 @@ function initLoad() {
    HIGH CONTRAST MODES
    /source/js/cagov/high-contrast.js
 ----------------------------------------- */
-
-// TODO: Settings stored in cookies
 
 $(document).ready(function () {
 
