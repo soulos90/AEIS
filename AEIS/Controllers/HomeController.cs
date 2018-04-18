@@ -58,11 +58,7 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult Registration()
         {
-            session();
-            if (active.CheckLogin())
-            {
-                return RedirectToAction("Index");
-            }
+
             return View();
         }
 

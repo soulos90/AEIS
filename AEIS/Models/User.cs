@@ -6,7 +6,7 @@ namespace StateTemplateV5Beta.Models
     public class User
     {
         public string ID { get; set; }
-        public string Organization { get; set; }
+        public string Orginization { get; set; }
         public string FName { get; set; }
         public string LName { get; set; }
         public string PassHash { get; set; }

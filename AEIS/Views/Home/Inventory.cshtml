@@ -3,6 +3,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     string[] db = new string[6] { "name", "##", "##", "##", "##", "##" };
+
+    // TODO: INVENTORY - populate with info from db
+    // TODO: INVENTORY - add passing of clicked system value to print button
+    // TODO: INVENTORY - add proper link to edit button
+    // TODO: INVENTORY - change to grid for pagination(?)
 }
 
 <div class="section">
@@ -36,13 +41,12 @@
                             </button>
                         </td>
                         <td style="text-align:center">
-                            <button type="button" id="btnPrint" value="@db[0]" class="btn btn-primary btn-sm" title="Print">
-                                <a href="~/Home/Justification">
+                            <button type="button" id="btnPrint" value="@db[0]" class="btn btn-primary btn-sm" title="Print" onclick="window.location.href='/Home/Justification'">
                                     <i class="ca-gov-icon-print"></i>
                             </button>
                         </td>
                         <td style="text-align:center">
-                            <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Delete @db[0] ?')">
+                            <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@db[0]\' from Inventory?')">
                                 <i class="ca-gov-icon-close-fill"></i>
                             </button>
                         </td>
