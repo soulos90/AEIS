@@ -2,7 +2,18 @@
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string[] db = new string[6] { "name", "##", "##", "##", "##", "##" };
+    /*
+    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
+    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
+    */
+
+    string[] sectionInfo = new string[6] { "name", "##", "##", "##", "##", "##" };
+    string[] sectionNames = new string[4] { "Public Services", "Internal Services", "Accessibility", "Life Span" };
+
+    // TODO: INVENTORY - populate with info from db
+    // TODO: INVENTORY - pass value of clicked system to print page w/ button
+    // TODO: INVENTORY - add proper link to edit form button
+    // TODO: INVENTORY - change to grid for pagination(?)
 }
 
 <div class="section">
@@ -10,38 +21,39 @@
     <div class="row p-b-lg">
         <div class="offset-quarter half">
             <table class="table table-bordered" style="white-space:nowrap;">
+
                 <thead>
                     <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
                         <th style="text-align:center">Application / System Name</th>
-                        <th style="text-align:center">Public Services</th>
-                        <th style="text-align:center">Internal Services</th>
-                        <th style="text-align:center">Accessibility</th>
-                        <th style="text-align:center">Life Span</th>
+                        @for (int i = 0; i < sectionNames.Length; i++)
+                        {
+                            <th style="text-align:center">@sectionNames[i]</th>
+                        }
                         <th style="text-align:center">Total</th>
                     </tr>
                 </thead>
 
-                @foreach (var item in db)
-                {
-                    <tr>
-                        <td>@db[0]</td>
-                        <td>@db[1]</td>
-                        <td>@db[2]</td>
-                        <td>@db[3]</td>
-                        <td>@db[4]</td>
-                        <td>@db[5]</td>
-                        <td style="text-align:center">
-                            <button type="button" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                                <i class="ca-gov-icon-pencil-edit"></i>
-                            </button>
-                        </td>
-                        <td style="text-align:center">
-                            <button type="button" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Delete @db[0] ?')">
-                                <i class="ca-gov-icon-close-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
-                }
+                <tr>
+                    @for (int i = 0; i < sectionInfo.Length; i++)
+                    {
+                        <td>@sectionInfo[i]</td>
+                    }
+                    <td style="text-align:center">
+                        <button type="button" id="btnEdit" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
+                            <i class="ca-gov-icon-pencil-edit"></i>
+                        </button>
+                    </td>
+                    <td style="text-align:center">
+                        <button type="button" id="btnPrint" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Print" onclick="window.location.href='/Home/Justification'">
+                            <i class="ca-gov-icon-print"></i>
+                        </button>
+                    </td>
+                    <td style="text-align:center">
+                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@sectionInfo[0]\' from Inventory?')">
+                            <i class="ca-gov-icon-close-fill"></i>
+                        </button>
+                    </td>
+                </tr>
 
             </table>
         </div> <!-- end offset -->

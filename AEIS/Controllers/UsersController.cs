@@ -29,7 +29,7 @@ namespace StateTemplateV5Beta.Controllers
         public IHttpActionResult GetUser(string id)
         {
             User user = db.Users.Find(id);
-            user.LastUsed = new DateTime().Date;
+            user.LastUsed = DateTime.Now;
 
             if (user == null)
             {
@@ -62,9 +62,8 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
-            if(db.Users.Find(id)==null)
-                user.created = new DateTime().Date;
-            user.LastUsed = new DateTime().Date;
+            user.LastUsed = DateTime.Now;
+            ;
 
             db.Entry(user).State = EntityState.Modified;
 
@@ -87,7 +86,6 @@ namespace StateTemplateV5Beta.Controllers
             return StatusCode(HttpStatusCode.NoContent);
         }
 
-        // POST: api/Users
         [ResponseType(typeof(User))]
         public IHttpActionResult PostUser(User user)
         {
@@ -95,12 +93,10 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            if (db.Users.Find(user.ID) == null)
-                user.created = new DateTime().Date;
-            user.LastUsed = new DateTime().Date;
-
+            user.LastUsed = user.Created = DateTime.Now;
+            user.PassSalt = GenerateSalt();
+            user.PassHash = HashPassword(user.PassHash,user.PassSalt);
             db.Users.Add(user);
-
             try
             {
                 db.SaveChanges();
@@ -116,7 +112,6 @@ namespace StateTemplateV5Beta.Controllers
                     throw;
                 }
             }
-
             return CreatedAtRoute("DefaultApi", new { id = user.ID }, user);
         }
 
@@ -124,6 +119,7 @@ namespace StateTemplateV5Beta.Controllers
         [ResponseType(typeof(User))]
         public IHttpActionResult DeleteUser(string id)
         {
+
             User user = db.Users.Find(id);
             if (user == null)
             {
@@ -134,21 +130,6 @@ namespace StateTemplateV5Beta.Controllers
             db.SaveChanges();
 
             return Ok(user);
-        }
-        // returns index of next user id (fun fact it won't always be chronological)
-        public int Next(int id)
-        {
-            int i = 0, end = 0;
-            bool cont = true;
-            while (cont)
-            {
-                if (db.Users.Find(id) == null)
-                {
-                    end = i;
-                    cont = false;
-                }
-            }
-            return end;
         }
         protected override void Dispose(bool disposing)
         {
