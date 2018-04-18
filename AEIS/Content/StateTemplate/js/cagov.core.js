@@ -13710,7 +13710,7 @@ $(document).ready(function () {
     var currentScrollTop = $(document).scrollTop();
 
     var hideDistance = calcInputDifference();
-
+    
     setAskBarTop();
     $headSearch.bind("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function(){ setAskBarTop(); });
     function setAskBarTop() {
@@ -13732,7 +13732,7 @@ $(document).ready(function () {
         }, 0)
 
     }
-
+    
     /**
  * Create a return to top button
  */

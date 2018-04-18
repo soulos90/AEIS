@@ -17,9 +17,14 @@ namespace StateTemplateV5Beta.Controllers
                     chartType: "column",
                     legend: "AEIS Inventory Analysis",
                     xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
-                    yValues: new[] { "94", "81", "78", "74", "72", "66" })
+                    yValues: new[] { "33", "33", "17", "33", "33", "27" })
+                .Write()
+                .AddSeries(
+                    chartType: "column",
+                    legend: "AEIS Inventory Analysis",
+                    xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
+                    yValues: new[] { "11", "11", "11", "11", "11", "11" })
                 .Write();
-
             return null;
         }
     }
