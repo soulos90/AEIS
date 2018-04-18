@@ -37,7 +37,7 @@ namespace StateTemplateV5Beta.Controllers
 						var saltHash = getUser.PassSalt;
 						var encodedPassword = new UsersController().HashPassword(password, saltHash);
 
-						var query = (from s in context.Users where s.ID == userName && s.Passhash.Equals(encodedPassword) select s).FirstOrDefault();
+						var query = (from s in context.Users where s.ID == userName && s.PassHash.Equals(encodedPassword) select s).FirstOrDefault();
 						if(query != null)
 						{
 							return View("LoggedIn");
