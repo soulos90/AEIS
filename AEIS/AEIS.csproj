@@ -138,10 +138,8 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnswersController.cs" />
-    <Compile Include="Controllers\CalculationController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\QuestionsController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
@@ -425,10 +423,10 @@
     <Content Include="Views\Shared\modules\service-directory.cshtml" />
     <Content Include="Views\Shared\modules\serp.cshtml" />
     <Content Include="Views\Shared\modules\search-results-standalone.cshtml" />
-    <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Structure.cshtml" />
-    <Content Include="Views\Home\About.cshtml" />
-    <Content Include="Views\Home\serp.cshtml" />
+    <Content Include="Views\Template\Contact.cshtml" />
+    <Content Include="Views\Template\Structure.cshtml" />
+    <Content Include="Views\Template\About.cshtml" />
+    <Content Include="Views\Template\serp.cshtml" />
     <Content Include="Views\Home\Justification.cshtml">
       <BrowseToURL>~/Home/Justification</BrowseToURL>
     </Content>

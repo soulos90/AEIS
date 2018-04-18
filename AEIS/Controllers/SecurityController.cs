@@ -14,10 +14,12 @@ namespace StateTemplateV5Beta.Controllers
         private UsersController user = new UsersController();
         private static Security active;
         private HttpCookie activeCookie;
+
         public SecurityController()
         {
             Security active = new Security();
         }
+
         public string GetID()
         {
             string value = "";
@@ -56,7 +58,7 @@ namespace StateTemplateV5Beta.Controllers
                 check = true;
                 activeCookie["ID"] = Security.ID;
                 activeCookie["LoggedIn"] = "True";
-                activeCookie["Hash"] = user.GetU(Security.ID).Passhash;
+                activeCookie["Hash"] = user.GetU(Security.ID).PassHash;
                 activeCookie.Expires = DateTime.Now.AddHours(8);
                 Security.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);

@@ -13,12 +13,23 @@ namespace StateTemplateV5Beta.Controllers
             return View();
         }
 
-        public ActionResult Justification()
+        public ActionResult Justification(string name)
         {
+            // if user is not logged in, redirect to index
+            if (!StateTemplateV5Beta.MvcApplication.active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
+
             return View();
         }
 
         public ActionResult Inventory()
+        {
+            return View();
+        }
+
+        public ActionResult InventoryGrid()
         {
             return View();
         }
@@ -42,27 +53,5 @@ namespace StateTemplateV5Beta.Controllers
         {
             return View();
         }
-
-        #region Template Remnants
-        public ActionResult Contact()
-        {
-            return View();
-        }
-
-        public ActionResult Structure()
-        {
-            return View();
-        }
-
-        public ActionResult About()
-        {
-            return View();
-        }
-
-        public ActionResult serp()
-        {
-            return View();
-        }
-        #endregion
     }
 }
