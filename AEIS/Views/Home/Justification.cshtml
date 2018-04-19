@@ -34,16 +34,15 @@
 </style>
 <main class="main-primary">
 
-
-    <!-- Print button -->
     <div class="section hidden-print">
         <div class="container">
             <div class="row m-b-sm" style="vertical-align:middle">
                 <div class="col-xs-9">
-                <h1>Summary / Justification</h1>
+                    <h1>Summary / Justification</h1>
                 </div>
+                <!-- Print button -->
                 <div class="col-xs-3" style="text-align:right">
-                    <h1><button class ="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
+                    <h1><button class="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
                     <script>
                         function myFunction(divName) {
                             var printContents = document.getElementById(divName).innerHTML;
@@ -56,72 +55,76 @@
                             document.body.innerHTML = originalContents;
                         }
                     </script>
-                </div>
-            </div><!-- End Print Button -->
-        </div>
-    </div>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end section -->
 
+    <!-- Printable Justification Page -->
     <div class="container m-t-sm m-b-sm" id="JustificationPage">
         <div class="section" id="printable">
             <div class="row">
                 <div class="col-xs-12">
                     <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@systemName'</strong></h2>
-
-                    <!-- AEIS Breakdown -->
-                    <div class="col-xs-5">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th colspan="3" class="text-center">AEIS Breakdown</th>
-                                </tr>
-                            </thead>
-
-                            @for (int i = 0; i < sectionNames.Length; i++)
-                {
-                    <tr>
-                        <td class="text-right" style="width: 65%">@sectionNames[i]</td>
-                        <td style="width: 15%"></td>
-                        <td class="bg-primary text-center"><strong>@sectionScore</strong></td>
-                    </tr>
-    }
-
-                            <tr>
-                                <td class="text-right">Total:</td>
-                                <td></td>
-                                <td class="bg-primary text-center"><strong>@totalScore</strong></td>
-                            </tr>
-                        </table>
-                    </div> <!-- end breakdown column -->
-                    <!-- System Descripton -->
-                    <div class="col-xs-7">
-                        <div class="panel panel-primary" style="height:100%;">
-                            <div class="panel-heading text-center"><strong>System Description:</strong></div>
-                            <div class="panel-body" style="height: @descriptionHeight">
-                                <!--<input id="SysDesc" class="form-control" type="text" placeholder="System Description">-->
-                            </div>
-                        </div>
-                    </div> <!-- end system description column -->
-
-                </div> <!-- end breakdown and description row -->
-                <!-- Services -->
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-                            <div class="panel-body" style="height:@servicesHeight;"></div>
-                        </div> <!-- end panel -->
-                    </div> <!-- end column -->
-                </div> <!-- end services row -->
-                <!-- Impact -->
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-                            <div class="panel-body" style="height:@impactHeight;"></div>
-                        </div><!-- end panel -->
-                    </div> <!-- end column -->
-                </div> <!-- end impact row -->
+                </div>
             </div>
+
+            <!-- AEIS Breakdown -->
+            <div class="row">
+                <div class="col-xs-5">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="text-center">AEIS Breakdown</th>
+                            </tr>
+                        </thead>
+
+                        @for (int i = 0; i < sectionNames.Length; i++)
+                        {
+                            <tr>
+                                <td class="text-right" style="width: 65%">@sectionNames[i]</td>
+                                <td style="width: 15%"></td>
+                                <td class="bg-primary text-center"><strong>@sectionScore</strong></td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="text-right">Total:</td>
+                            <td></td>
+                            <td class="bg-primary text-center"><strong>@totalScore</strong></td>
+                        </tr>
+                    </table>
+                </div> <!-- end breakdown column -->
+                <!-- System Descripton -->
+                <div class="col-xs-7">
+                    <div class="panel panel-primary" style="height:100%;">
+                        <div class="panel-heading text-center"><strong>System Description:</strong></div>
+                        <div class="panel-body" style="height: @descriptionHeight">
+                            <!--<input id="SysDesc" class="form-control" type="text" placeholder="System Description">-->
+                        </div>
+                    </div>
+                </div> <!-- end system description column -->
+            </div> <!-- end breakdown and description row -->
+
+            <!-- Services -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
+                        <div class="panel-body" style="height:@servicesHeight;"></div>
+                    </div> <!-- end panel -->
+                </div> <!-- end column -->
+            </div> <!-- end services row -->
+
+            <!-- Impact -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
+                        <div class="panel-body" style="height:@impactHeight;"></div>
+                    </div><!-- end panel -->
+                </div> <!-- end column -->
+            </div> <!-- end impact row -->
+
         </div> <!-- end section -->
     </div> <!-- end container -->
 </main>
