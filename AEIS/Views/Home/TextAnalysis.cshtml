@@ -25,7 +25,7 @@
         Below is the scoring results for the top @numOfSystems systems in descending order.
     </p>
 
-    @for (int i = 1; i <= 6; i++)
+    @for (int i = 1; i <= numOfSystems; i++)
     { 
         <div class="panel panel-primary">
             <div class="panel-heading"><h3>#@i - @systemName - AEIS Score: @totalScore</h3></div>
