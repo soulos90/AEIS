@@ -1,6 +1,5 @@
 ﻿@{
     ViewBag.Title = "Justification";
-
     Layout = "~/Views/Shared/_Layout.cshtml";
 
     /* Database access reference
@@ -41,21 +40,21 @@
         <div class="container">
             <div class="row m-b-sm" style="vertical-align:middle">
                 <div class="col-xs-9">
-                    <h1>Summary / Justification</h1>
+                <h1>Summary / Justification</h1>
                 </div>
-                <div class="col-xs-3 display: visible-lg-inline-block" style="text-align:left">
-                    <h1><button onclick="myFunction('printable')">Print This Page</button></h1>
+                <div class="col-xs-3" style="text-align:right">
+                    <h1><button class ="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
                     <script>
                         function myFunction(divName) {
-        var printContents = document.getElementById(divName).innerHTML;
-        var originalContents = document.body.innerHTML;
+                            var printContents = document.getElementById(divName).innerHTML;
+                            var originalContents = document.body.innerHTML;
 
-        document.body.innerHTML = printContents;
+                            document.body.innerHTML = printContents;
 
-        window.print();
+                            window.print();
 
-        document.body.innerHTML = originalContents;
-    }
+                            document.body.innerHTML = originalContents;
+                        }
                     </script>
                 </div>
             </div><!-- End Print Button -->
@@ -65,66 +64,64 @@
     <div class="container m-t-sm m-b-sm" id="JustificationPage">
         <div class="section" id="printable">
             <div class="row">
-                <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@systemName'</strong></h2>
+                <div class="col-xs-12">
+                    <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@systemName'</strong></h2>
 
-                <!-- AEIS Breakdown -->
-                <div class="col-xs-5">
-                    <table class="table">
-                        <thead>
+                    <!-- AEIS Breakdown -->
+                    <div class="col-xs-5">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th colspan="3" class="text-center">AEIS Breakdown</th>
+                                </tr>
+                            </thead>
+
+                            @for (int i = 0; i < sectionNames.Length; i++)
+                {
+                    <tr>
+                        <td class="text-right" style="width: 65%">@sectionNames[i]</td>
+                        <td style="width: 15%"></td>
+                        <td class="bg-primary text-center"><strong>@sectionScore</strong></td>
+                    </tr>
+    }
+
                             <tr>
-                                <th colspan="3" class="text-center">AEIS Breakdown</th>
+                                <td class="text-right">Total:</td>
+                                <td></td>
+                                <td class="bg-primary text-center"><strong>@totalScore</strong></td>
                             </tr>
-                        </thead>
-
-                        @for (int i = 0; i < sectionNames.Length; i++)
-                        {
-                            <tr>
-                                <td class="text-right" style="width: 65%">@sectionNames[i]</td>
-                                <td style="width: 15%"></td>
-                                <td class="bg-primary text-center"><strong>@sectionScore</strong></td>
-                            </tr>
-                        }
-                        
-                        <tr>
-                            <td class="text-right">Total:</td>
-                            <td></td>
-                            <td class="bg-primary text-center"><strong>@totalScore</strong></td>
-                        </tr>
-                    </table>
-                </div> <!-- end breakdown column -->
-
-                <!-- System Descripton -->
-                <div class="col-xs-7">
-                    <div class="panel panel-primary" style="height:100%;">
-                        <div class="panel-heading text-center"><strong>System Description:</strong></div>
-                        <div class="panel-body" style="height: @descriptionHeight">
-                            <!--<input id="SysDesc" class="form-control" type="text" placeholder="System Description">-->
+                        </table>
+                    </div> <!-- end breakdown column -->
+                    <!-- System Descripton -->
+                    <div class="col-xs-7">
+                        <div class="panel panel-primary" style="height:100%;">
+                            <div class="panel-heading text-center"><strong>System Description:</strong></div>
+                            <div class="panel-body" style="height: @descriptionHeight">
+                                <!--<input id="SysDesc" class="form-control" type="text" placeholder="System Description">-->
+                            </div>
                         </div>
-                    </div>
-                </div> <!-- end system description column -->
+                    </div> <!-- end system description column -->
 
-            </div> <!-- end breakdown and description row -->
-
-            <!-- Services -->
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-                        <div class="panel-body" style="height:@servicesHeight;"></div>
-                    </div> <!-- end panel -->
-                </div> <!-- end column -->
-            </div> <!-- end services row -->
-
-            <!-- Impact -->
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-                        <div class="panel-body" style="height:@impactHeight;"></div>
-                    </div><!-- end panel -->
-                </div> <!-- end column -->
-            </div> <!-- end impact row -->
-
+                </div> <!-- end breakdown and description row -->
+                <!-- Services -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
+                            <div class="panel-body" style="height:@servicesHeight;"></div>
+                        </div> <!-- end panel -->
+                    </div> <!-- end column -->
+                </div> <!-- end services row -->
+                <!-- Impact -->
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
+                            <div class="panel-body" style="height:@impactHeight;"></div>
+                        </div><!-- end panel -->
+                    </div> <!-- end column -->
+                </div> <!-- end impact row -->
+            </div>
         </div> <!-- end section -->
     </div> <!-- end container -->
 </main>

@@ -7,55 +7,80 @@
     var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
     */
 
+    int numOfSystems = 6;
     string[] sectionInfo = new string[6] { "name", "##", "##", "##", "##", "##" };
     string[] sectionNames = new string[4] { "Public Services", "Internal Services", "Accessibility", "Life Span" };
 
     // TODO: INVENTORY - populate with info from db
     // TODO: INVENTORY - pass value of clicked system to print page w/ button
+    // TODO: INVENTORY - implement add system button
     // TODO: INVENTORY - add proper link to edit form button
     // TODO: INVENTORY - change to grid for pagination(?)
 }
 
 <div class="section">
-    <h1 class="text-center">AEIS System Inventory</h1>
-    <div class="row p-b-lg">
-        <div class="offset-quarter half">
-            <table class="table table-bordered" style="white-space:nowrap;">
+    
+    <div class="container">     
+        <div class="row m-b-sm">
+            <div class="col-xs-9">
+                <h1>AEIS System Inventory</h1>
+            </div>
+            <!-- Add New System Button -->
+            <div class="col-xs-3" style="text-align:right">
+                <h1>
+                    <button type="button" id="btnAddSystem" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Add New System" onclick="window.location.href='/Home/Inventory'">
+                        Add New System
+                    </button>
+                </h1>
+            </div>
+        </div>
 
-                <thead>
-                    <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <th style="text-align:center">Application / System Name</th>
-                        @for (int i = 0; i < sectionNames.Length; i++)
-                        {
-                            <th style="text-align:center">@sectionNames[i]</th>
-                        }
-                        <th style="text-align:center">Total</th>
-                    </tr>
-                </thead>
+        <!-- Inventory System Table -->
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered" style="white-space:nowrap;">
+                    <thead>
+                        <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <th style="text-align:center">Application / System Name</th>
 
-                <tr>
-                    @for (int i = 0; i < sectionInfo.Length; i++)
-                    {
-                        <td>@sectionInfo[i]</td>
-                    }
-                    <td style="text-align:center">
-                        <button type="button" id="btnEdit" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                            <i class="ca-gov-icon-pencil-edit"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center">
-                        <button type="button" id="btnPrint" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Print" onclick="window.location.href='/Home/Justification'">
-                            <i class="ca-gov-icon-print"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center">
-                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@sectionInfo[0]\' from Inventory?')">
-                            <i class="ca-gov-icon-close-fill"></i>
-                        </button>
-                    </td>
-                </tr>
+                            @for (int i = 0; i < sectionNames.Length; i++)
+                {
+                    <th style="text-align:center">@sectionNames[i]</th>
+    }
 
-            </table>
-        </div> <!-- end offset -->
-    </div> <!-- end row -->
+                            <th style="text-align:center">Total</th>
+                        </tr>
+                    </thead>
+
+                    @for (int i = 0; i < numOfSystems; i++)
+        {
+            <tr>
+
+                @for (int j = 0; j < sectionInfo.Length; j++)
+    {
+            <td>@sectionInfo[j]</td>
+}
+
+                <td style="text-align:center">
+                    <button type="button" id="btnEdit" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
+                        <i class="ca-gov-icon-pencil-edit"></i>
+                    </button>
+                </td>
+                <td style="text-align:center">
+                    <button type="button" id="btnPrint" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Print" onclick="window.location.href='/Home/Justification'">
+                        <i class="ca-gov-icon-print"></i>
+                    </button>
+                </td>
+                <td style="text-align:center">
+                    <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@sectionInfo[0]\' from Inventory?')">
+                        <i class="ca-gov-icon-close-fill"></i>
+                    </button>
+                </td>
+            </tr>
+}
+
+                </table>
+            </div> <!-- end system table column -->
+        </div> <!-- end system table row -->
+    </div> <!-- end container -->
 </div> <!-- end section -->

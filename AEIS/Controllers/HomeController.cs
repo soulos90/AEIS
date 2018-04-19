@@ -18,21 +18,25 @@ namespace StateTemplateV5Beta.Controllers
         {
             // if user is not logged in, redirect to index
             session();
+            /*
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-
+            */
             return View();
         }
 
         public ActionResult Inventory()
         {
+           
             session();
-            if (!active.CheckLogin())
-            {
-                return RedirectToAction("Index");
-            }
+            /*
+           if (!active.CheckLogin())
+           {
+               return RedirectToAction("Index");
+           }
+           */
             return View();
         }
 
