@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
@@ -10,30 +11,12 @@ namespace StateTemplateV5Beta.Controllers
 
     public class SurveyController : Controller
     {
-        private DBQContext db = new DBQContext();
+        private DBAContext db = new DBAContext();
 
         // GET: Default
         public ActionResult Index()
         {
-            //          This is an example of how to write to the database, and a possible way of deleting a question
-            //          another way would to be go into the database from an app and do it there
-            //
-            //using (var context = new SurveyContext())
-            //{
-            //    var q1 = new Question2() { Text = "My first question" };
-            //    var q2 = new Question2() { Text = "My second question", reliesOn = q1 };
-            //    context.Q2.Add(q1);
-            //    context.Q2.Add(q2);
-            //    context.SaveChanges();
-
-            //    var a1 = new Answer2() { Question = q1, Value = true , Created = DateTime.Now};
-            //    var a2 = new Answer2() { Question = q2, Value = false, Created = DateTime.Now };
-            //    context.A2.Add(a1);
-            //    context.A2.Add(a2);
-            //    context.SaveChanges();
-
-            //}
-            return View();
+                return View();
         }
 
         [HttpPost]
@@ -47,22 +30,27 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
             {
-
-                Question2 question = null;
                 SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                viewModel.ProgramName = model.Name;
-                using (var context = new SurveyContext())
-                {
-                    // This is LINQ query                 
-                    question = (from s in context.Q2 where s.Id == 1 select s).FirstOrDefault();
-                   
-                    if (question != null)
-                    {
 
-                        viewModel.Question = question.Text;
-                        viewModel.CurrentID = question.Id;
-                    }
-                }
+                var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
+                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
+                
+                viewModel.Question = Controller.GetQuestionText(1);
+                viewModel.CurrentID = 1;
+                viewModel.ProgramName = model.Name;
+                // Need to check if the answer exists || old example
+                        //Answer2 CheckAnswer = (from t in context.A2 where ((viewModel.CurrentID == t.Question.Id) & (viewModel.ProgramName == t.programName)) select t).FirstOrDefault();
+
+                        // This is mostly for when you are modifing a previously answered survey, it checks to see if the answer exists already and sets the value
+                        // and would get changed in the AnswerSurvey action.
+                        //if (CheckAnswer != null)
+                        //{
+                        //    viewModel.Answer = CheckAnswer.Value;
+                        //}
+
+                    //}
+                //}
+
                 // This redirects to an "actionName", with an Object so that we can pass around the viewmodel
                 return RedirectToAction("SurveyQuestions", viewModel);
             }
@@ -75,11 +63,13 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
+        
+        //This is for when someone presses the Previous button. Do i make this a httpost? it works without it.
+        public ActionResult PreviousQuestion(SurveyQuestionViewModel model)
         {
-               
-                if (!ModelState.IsValid)
+            var PreviousQuestionPress = new StateTemplateV5Beta.Controllers.EnvironmentController();
+
+            if (!ModelState.IsValid)
             {
 
                 return View("SurveyQuestions", model);
@@ -87,53 +77,152 @@ namespace StateTemplateV5Beta.Controllers
             else
             {
                 
+                //TODO: Check if answer exists. If it does update with new value if not create new answer
                 SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+                //      Check if the answer exists || an old example
+                //    //TODO: to replace the answer in the database with the new answer
+                //    if (CheckAnswer != null)
+                //    {
+                //        viewModel.Answer = CheckAnswer.Value;
+
+                //    }
+
+                //if the answer does not exists then
+                //Saves the recently submitted answer
+                //else
+                //{
+
+                //    Question2 previousQuestion = (from s in context.Q2 where (model.CurrentID == s.Id) select s).FirstOrDefault();
+                //    Answer2 PreviousAnswer = new Answer2();
+
+                //    PreviousAnswer.Question = previousQuestion;
+                //    PreviousAnswer.Value = model.Answer;
+                //    PreviousAnswer.Created = DateTime.Now;
+                //    PreviousAnswer.programName = model.ProgramName;
+                //    context.A2.Add(PreviousAnswer);
+                //    context.SaveChanges();
+
+                //}
+
+
                 viewModel.ProgramName = model.ProgramName;
-                using (var context = new SurveyContext())
+
+                //TODO: what happens when we reach the end
+                viewModel.CurrentID = model.CurrentID;
+                int i = viewModel.CurrentID; 
+                i--;
+                viewModel.Question = PreviousQuestionPress.GetQuestionText(i);
+                viewModel.CurrentID = i;
+
+                //Question2 PreviousQuestionPress = (from s in context.Q2 where (model.CurrentID == s.Id) select s).First();
+                //CheckAnswer = (from t in context.A2 where ((PreviousQuestionPress.Id == t.Question.Id) & (model.ProgramName == t.programName)) select t).FirstOrDefault();
+
+                //if (PreviousQuestionPress != null)
+                //{
+               // viewModel.Question = PreviousQuestionPress(i);
+
+                    //    if (CheckAnswer != null)
+                    //    {
+                    //        viewModel.Answer = CheckAnswer.Value;
+                    //    }
+
+                    //}
+                    //else
+                    //{
+                    //    return RedirectToAction("Summary", "Survey", viewModel);
+                    //}
+
+               // }
+                return RedirectToAction("SurveyQuestions", viewModel);
+            }
+        }
+
+        [HttpPost]    
+        public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
+        {
+            var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
+            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+
+            if (!ModelState.IsValid)
+            {
+
+                return View("SurveyQuestions", model);
+            }
+            else
+            {
+                //TODO: check to see if the answer exists already 
+                //Save the Answer to the question just answered.
+                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
+                using (var context = new DBAContext())
                 {
-                    Question2 previousQuestion = (from s in context.Q2 where (model.CurrentID == s.Id) select s).FirstOrDefault();
-                    Answer2 PreviousAnswer = new Answer2();
-                    PreviousAnswer.Question = previousQuestion;
+                    Answer PreviousAnswer = new Answer();
+                    PreviousAnswer.QId = model.CurrentID;
                     PreviousAnswer.Value = model.Answer;
-                    PreviousAnswer.Created = DateTime.Now;
                     PreviousAnswer.programName = model.ProgramName;
-                    context.A2.Add(PreviousAnswer);
-                    context.SaveChanges();
+                    PreviousAnswer.UId = "testing";
+                    //PreviousAnswer.AId = 199;
 
-                    Question2 nextQuestion = (from s in context.Q2 where (model.CurrentID < s.Id)  select s).FirstOrDefault();
+                    //context.Answers.Add(PreviousAnswer);
+                    //context.SaveChanges();
+                    AnswerController.PostAnswer(PreviousAnswer);
 
-                    if (nextQuestion != null)
-                    {
-                        viewModel.Question = nextQuestion.Text;
-                        viewModel.CurrentID = nextQuestion.Id;
+                //        Question2 previousQuestion = (from s in context.Q2 where (model.CurrentID == s.Id) select s).FirstOrDefault();
+                //        Answer2 PreviousAnswer = new Answer2();                
 
-                    }
-                    else
-                    {
-                       return RedirectToAction("Summary", "Survey", viewModel);
-                    }
+                // gets the next question
+                    viewModel.CurrentID = model.CurrentID;
+
+                    int i = viewModel.CurrentID;
+                    i++;
+                    viewModel.Question = Controller.GetQuestionText(i);
+                    viewModel.CurrentID = i;
+
+                    //checks to see if the next question has an answer already
+                    //CheckAnswer = (from t in context.A2 where ((nextQuestion.Id == t.Question.Id) & (model.ProgramName == t.programName)) select t).FirstOrDefault();
+
+                    //if (nextQuestion != null)
+                    //{
+                    //    //If there is an answer to the question already then set the value for the viewmodel to it.
+                    //    if (CheckAnswer != null)
+                    //    {
+                    //        viewModel.Answer = CheckAnswer.Value;
+                    //    }
+
+                    // sets the Values for the next question
+                    //viewModel.Question = nextQuestion.Text;
+                    //        viewModel.CurrentID = nextQuestion.Id;                       
 
                 }
+            }
+                    // TODO: when we reach the end it should redirect us to a summary page.
+                    //else
+                    //{
+                    //    return RedirectToAction("Summary", "Survey", viewModel);
+                    //}
+
+                //}
 
                 return RedirectToAction("SurveyQuestions", viewModel);
             }
         }
-    
-        public ActionResult Summary(SurveyQuestionViewModel model)
-        {
-            SummaryViewModel ViewModel = new SummaryViewModel();
-            ViewModel.ProgramName = model.ProgramName;    
 
-            using (var context = new SurveyContext())
-            {
-                int YesSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == true) select SS.Question.yesPointValue).Sum();
-                int NoSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == false) select SS.Question.noPointValue).Sum();
-                ViewModel.Points = (YesSum + NoSum);
+        //TODO: Need to change it so that it is in line with the new models
+        //public ActionResult Summary(SurveyQuestionViewModel model)
+        //{
+        //    SummaryViewModel ViewModel = new SummaryViewModel();
+        //    ViewModel.ProgramName = model.ProgramName;    
 
-            }
-                return View(ViewModel);
-        }
+        //    using (var context = new SurveyContext())
+        //    {
+        //        //TODO: If there were questions that didnt have any yes or no. It would return an error
+        //        int YesSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == true) select SS.Question.yesPointValue).Sum();
+        //        int NoSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == false) select SS.Question.noPointValue).Sum();
+        //        ViewModel.Points = (YesSum + NoSum);
+
+        //    }
+        //        return View(ViewModel);
+        //}
 
     }
     
-}
+//}

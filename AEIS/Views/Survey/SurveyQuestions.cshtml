@@ -3,8 +3,8 @@
 @{
     ViewBag.Title = "SurveyQuestions";
 }
-
-<div class= "section">
+}
+<div class=" fluid container"
     <div class="offset-quarter half">
         <h1 class="text-center">Survey Questions</h1>
 
@@ -41,11 +41,19 @@
                     </div>
                 </div>
 
-                <div class="form-actions">
-                    <button type="submit" id="submitButton" class="btn btn-block btn-primary">
-                        Next
-                    </button>
+                
+                    <div class="form-actions">
+                        
+                        <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
+                        <input type ="submit" value ="Next" formaction="@Url.Action("AnswerQuestion","Survey")"/>
+                        
+                    </div>
+                            
+                                            
+                     } 
+            
                 </div>
-                }
-            </div>
-    </div>
+</div>
+
+        
+
