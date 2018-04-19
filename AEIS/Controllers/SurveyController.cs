@@ -178,7 +178,7 @@ namespace StateTemplateV5Beta.Controllers
                     viewModel.CurrentID = i;
 
                     //checks to see if the next question has an answer already
-                    //CheckAnswer = (from t in context.A2 where ((nextQuestion.Id == t.Question.Id) & (model.ProgramName == t.programName)) select t).FirstOrDefault();
+                    //CheckAnswer = (from t in context.A2 where ((nextQuestion.Id == t.Question.Id) & (model.ProgramName == t.programName)) & (currentuser.id == t. select t).FirstOrDefault();
 
                     //if (nextQuestion != null)
                     //{
@@ -206,23 +206,23 @@ namespace StateTemplateV5Beta.Controllers
             }
         }
 
-        //TODO: Need to change it so that it is in line with the new models
-        //public ActionResult Summary(SurveyQuestionViewModel model)
-        //{
-        //    SummaryViewModel ViewModel = new SummaryViewModel();
-        //    ViewModel.ProgramName = model.ProgramName;    
+    //TODO: Need to change it so that it is in line with the new models
+    //public ActionResult Summary(SurveyQuestionViewModel model)
+    //{
+    //    SummaryViewModel ViewModel = new SummaryViewModel();
+    //    ViewModel.ProgramName = model.ProgramName;
 
-        //    using (var context = new SurveyContext())
-        //    {
-        //        //TODO: If there were questions that didnt have any yes or no. It would return an error
-        //        int YesSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == true) select SS.Question.yesPointValue).Sum();
-        //        int NoSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == false) select SS.Question.noPointValue).Sum();
-        //        ViewModel.Points = (YesSum + NoSum);
+    //    using (var context = new DBAContext())
+    //    {
+    //        //TODO: If there were questions that didnt have any yes or no. It would return an error
+    //        int YesSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == true) select SS.Question.yesPointValue).Sum();
+    //        int NoSum = (from SS in context.A2 where (SS.programName == model.ProgramName && SS.Value == false) select SS.Question.noPointValue).Sum();
+    //        ViewModel.Points = (YesSum + NoSum);
 
-        //    }
-        //        return View(ViewModel);
-        //}
+    //    }
+    //    return View(ViewModel);
+    //}
 
-    }
+}
     
 //}

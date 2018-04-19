@@ -25,6 +25,7 @@ namespace StateTemplateV5Beta.Models
         //[Display(Name = "Survey?")]
         public bool Answer { get; set; }
         public int CurrentID { get; set; }
+        public int Key { get; set; }
         public string ProgramName { get; set; }
         
     }
