@@ -14,22 +14,24 @@ namespace StateTemplateV5Beta.Controllers
             return View();
         }
 
-        public ActionResult Justification(string name)
+        public ActionResult Registration()
         {
-            // if user is not logged in, redirect to index
-            session();
-            /*
-            if (!active.CheckLogin())
-            {
-                return RedirectToAction("Index");
-            }
-            */
+
+            return View();
+        }
+
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        public ActionResult Account()
+        {
             return View();
         }
 
         public ActionResult Inventory()
-        {
-           
+        {        
             session();
             /*
            if (!active.CheckLogin())
@@ -37,11 +39,6 @@ namespace StateTemplateV5Beta.Controllers
                return RedirectToAction("Index");
            }
            */
-            return View();
-        }
-
-        public ActionResult InventoryGrid()
-        {
             return View();
         }
 
@@ -55,14 +52,21 @@ namespace StateTemplateV5Beta.Controllers
             return View();
         }
 
-        public ActionResult Account()
+        public ActionResult Justification(string name)
         {
+            // if user is not logged in, redirect to index
+            session();
+            /*
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
+            */
             return View();
         }
 
-        public ActionResult Registration()
+        public ActionResult About()
         {
-
             return View();
         }
 

@@ -440,6 +440,8 @@
     <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
     <Content Include="Views\Login\LoginFail.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

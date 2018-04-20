@@ -94,8 +94,9 @@
                     </div>
                     <div class="half settings-links">
                         <ul class="utility-links ">
+                            <!-- TODO: add in link for DoR -->
                             <li><a href="">Contact Us</a></li>
-                            <li><a role="button" data-toggle="collapse" href="#siteSettings" aria-expanded="false" aria-controls="siteSettings"><span class="ca-gov-icon-gear" aria-hidden="true"></span> Settings</a></li>
+                            <li><a role="button" data-toggle="collapse" href="#siteSettings" aria-expanded="false" aria-controls="siteSettings"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Settings</a></li>
 
                         </ul>
                     </div>
@@ -152,23 +153,22 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
+                    <!-- TODO: add login check for Account, Inventory, Chart, Text; should only be displayed if logged in. -->
                     <li class="nav-item">
-                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
                     </li>
                     <li class="nav-item">
                         <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
                     </li>
                     <li class="nav-item">
-                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Justification" class="first-level-link"><span class="ca-gov-icon-page" aria-hidden="true"></span>Justification</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
                     </li>
                     <li class="nav-item">
                         <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
+                    </li>
+                    <!-- TODO: switch between login / logout text and functionality -->
+                    <li class="nav-item">
+                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
                     </li>
                 </ul>
             </nav>
@@ -182,7 +182,6 @@
 
     </div>
 
-
     <!-- Global Footer -->
     <footer id="footer" class="global-footer hidden-print row">
         <div class="container">
@@ -190,10 +189,12 @@
                 <div class="three-quarters">
                     <ul class="footer-links">
                         <li><a href="#skip-to-content">Back to Top</a></li>
+                        <!-- TODO: connect links to correct places -->
                         <li><a href="/">Conditions of Use</a></li>
                         <li><a href="/">Privacy Policy</a></li>
                         <li><a href="/">Accessibility</a></li>
-                        <li><a href="/">Contact Us</a></li>
+                        <li><a href="/">About</a></li>
+                        <li><a href="http://www.dor.ca.gov/">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -208,7 +209,6 @@
     </footer>
     <!-- Extra Decorative Content -->
     <div class="decoration-last hidden-print">&nbsp;</div>
-
 
     @Scripts.Render("~/bundles/stateTemplateJs")
 </body>
