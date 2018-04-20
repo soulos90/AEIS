@@ -4,6 +4,9 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
+@{ 
+    bool loggedIn = (StateTemplateV5Beta.Controllers.HomeController.active == null) ? false : true;
+}
 <html class="no-js" lang="en">
 <!--<![endif]-->
 <head>
@@ -152,7 +155,8 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
-                    <!-- TODO: add login check for Account, Inventory, Chart, Text; should only be displayed if logged in. -->
+                    @if (loggedIn)
+                    {
                     <li class="nav-item">
                         <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
                     </li>
@@ -165,10 +169,17 @@
                     <li class="nav-item">
                         <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
                     </li>
-                    <!-- TODO: switch between login / logout text and functionality -->
+                    <!-- TODO: add logout functionality to logout button -->
+                    <li class="nav-item">
+                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Logout</a>
+                    </li>
+                    }
+                    else
+                    {
                     <li class="nav-item">
                         <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
                     </li>
+                    }
                 </ul>
             </nav>
         </div>
