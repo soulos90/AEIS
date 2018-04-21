@@ -166,7 +166,6 @@
     <Content Include="Content\StateTemplate\css\colorscheme-santabarbara.css" />
     <Content Include="Content\StateTemplate\css\colorscheme-sierra.css" />
     <Content Include="Content\StateTemplate\css\colorscheme-trinity.css" />
-    <Content Include="Content\StateTemplate\favicon.ico" />
     <Content Include="Content\StateTemplate\fonts\CaGov.svg" />
     <Content Include="Content\StateTemplate\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\StateTemplate\images\background.jpg" />
@@ -177,13 +176,13 @@
     <Content Include="Content\StateTemplate\images\Ca-Gov-Logo-Gold.svg" />
     <Content Include="Content\StateTemplate\images\Ca-Gov-Logo-White.svg" />
     <Content Include="Content\StateTemplate\images\ca-logo.png" />
+    <Content Include="Content\StateTemplate\images\favicon.ico" />
     <Content Include="Content\StateTemplate\images\fancybox\blank.gif" />
     <Content Include="Content\StateTemplate\images\fancybox\fancybox_loading%402x.gif" />
     <Content Include="Content\StateTemplate\images\fancybox\fancybox_loading.gif" />
     <Content Include="Content\StateTemplate\images\fancybox\fancybox_overlay.png" />
     <Content Include="Content\StateTemplate\images\fancybox\fancybox_sprite%402x.png" />
     <Content Include="Content\StateTemplate\images\fancybox\fancybox_sprite.png" />
-    <Content Include="Content\StateTemplate\images\favicon.ico" />
     <Content Include="Content\StateTemplate\images\template-logo.png" />
     <Content Include="Content\StateTemplate\images\template2014\apple-touch-icon-114x114.png" />
     <Content Include="Content\StateTemplate\images\template2014\apple-touch-icon-144x144.png" />
@@ -356,7 +355,6 @@
     <Content Include="Content\StateTemplate\sample\images\student-driver.jpg" />
     <Content Include="Content\StateTemplate\sample\images\working.jpg" />
     <Content Include="Content\StateTemplate\sample\images\_notes\dwsync.xml" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -464,6 +462,10 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>
+    </ApplicationIcon>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
