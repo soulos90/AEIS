@@ -19,7 +19,7 @@ namespace StateTemplateV5Beta.Controllers
         {
             return Models.Environment.NumSec;
         }
-        public int GetQuestionCount()
+        public string GetQuestionCount()
         {
             return Models.Environment.NumQus;
         }
@@ -41,31 +41,31 @@ namespace StateTemplateV5Beta.Controllers
         }
         public string GetSectionName(int i)
         {
-            return Models.Environment.Sections[i].name;
+            return Env.GetSectionName(i-1);
         }
         public string GetSectionFirst(int i)
         {
-            return Models.Environment.Sections[i].first;
+            return Env.GetSectionFirst(i-1);
         }
         public string GetSectionLast(int i)
         {
-            return Models.Environment.Sections[i].last;
+            return Env.GetSectionLast(i-1);
         }
         public string GetQuestionText(int i)
         {
-            return Models.Environment.Questions[i].text;
+            return Env.GetQuestionText(i - 1);
         }
         public string GetQuestionYesVal(int i)
         {
-            return Models.Environment.Questions[i].YesVal;
+            return Env.GetQuestionYV(i-1);
         }
         public string GetQuestionNoVal(int i)
         {
-            return Models.Environment.Questions[i].NoVal;
+            return Env.GetQuestionNV(i-1);
         }
         public string GetQuestionReliesOn(int i)
         {
-            return Models.Environment.Questions[i].ReliesOn;
+            return Env.GetQuestionRO(i-1);
         }
     }
 }

@@ -37,7 +37,7 @@ namespace StateTemplateV5Beta.Controllers
         public Answer GetA(string id)
         {
             Answer answer = db.Answers.Find(id);
-            if(answer!=null)
+            if (answer != null)
                 PutAnswer(id, answer);
             return answer;
         }
@@ -54,7 +54,9 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest();
             }
+
             answer.LastUsed = DateTime.Now;
+
             db.Entry(answer).State = EntityState.Modified;
 
             try
@@ -84,8 +86,10 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             answer.Created = DateTime.Now;
             answer.LastUsed = DateTime.Now;
+
             db.Answers.Add(answer);
 
             try
@@ -111,15 +115,30 @@ namespace StateTemplateV5Beta.Controllers
         [ResponseType(typeof(Answer))]
         public IHttpActionResult DeleteAnswer(string id)
         {
-            int temp=0,temp1=0;
-            string tempo="";
-            bool check = false;
             Answer answer = db.Answers.Find(id);
             if (answer == null)
             {
                 return NotFound();
             }
-            if(db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count()-1 > answer.AId)
+
+            db.Answers.Remove(answer);
+            db.SaveChanges();
+
+            return Ok(answer);
+        }
+
+        [ResponseType(typeof(Answer))]
+        public IHttpActionResult DeleteWholeAnswer(string id)
+        {
+            int temp = 0, temp1 = 0,one = 1;
+            string tempo = "";
+            bool check = false;
+            Answer answer = db.Answers.Find(new { id, one });
+            if (answer == null)
+            {
+                return NotFound();
+            }
+            if (db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1 > answer.AId)
             {
                 temp = answer.AId;
                 temp1 = db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1;
@@ -129,17 +148,20 @@ namespace StateTemplateV5Beta.Controllers
             db.Answers.Remove(answer);
             if(check)
             {
-                PutAnswer(id,db.Answers.Find(new { tempo, temp1 }));
-                db.Answers.Remove(db.Answers.Find(new { tempo, temp1 }));
+                for(int i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
+                {
+                    PutAnswer(id, db.Answers.Find(new { tempo, temp1, i }));
+                    db.Answers.Remove(db.Answers.Find(new { tempo, temp1, i }));
+                }
             }
             db.SaveChanges();
 
             return Ok(answer);
         }
-        // returns index of next answer id (fun fact it won't always be chronological)
+
         public int Next(string id)//this id is just email not a touple
         {
-            
+
             return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + id + ";").Count();
         }
 
@@ -156,6 +178,5 @@ namespace StateTemplateV5Beta.Controllers
         {
             return db.Answers.Count(e => e.UId == id) > 0;
         }
-
     }
 }

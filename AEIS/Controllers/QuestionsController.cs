@@ -9,13 +9,16 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using StateTemplateV5Beta.Models;
-/*
+
 namespace StateTemplateV5Beta.Controllers
 {
     public class QuestionsController : ApiController
-    {
-        public QuestionsController() { }
+    {       
         private DBQContext db = new DBQContext();
+        private int max_score = 900;
+        public int MAX_SCORE { get { return max_score; } }
+
+        public QuestionsController() { }
 
         // GET: api/Questions
         public IQueryable<Question> GetQuestions()
@@ -47,8 +50,7 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-
-            if (id != question.ID)
+            else if (id != question.ID)
             {
                 return BadRequest();
             }
@@ -119,4 +121,4 @@ namespace StateTemplateV5Beta.Controllers
             return db.Questions.Count(e => e.ID == id) > 0;
         }
     }
-}*/
+}

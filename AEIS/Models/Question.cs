@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data.Entity;
 
-/*namespace StateTemplateV5Beta.Models
+namespace StateTemplateV5Beta.Models
 {
     public class Question
     {
@@ -13,13 +13,11 @@ using System.Data.Entity;
         public int yesVal { get; set; }
         public int noVal { get; set; }
         public int reliesOn { get; set; }
-        public Question()
-        {
 
-        }
+        public Question() {}
     }
     public class DBQContext : DbContext
     {
         public DbSet<Question> Questions { get; set; }
     }
-}*/
+}
