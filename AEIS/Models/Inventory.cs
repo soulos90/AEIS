@@ -17,29 +17,14 @@ namespace StateTemplateV5Beta.Models
         {
             DBAContext dBAContext = new DBAContext();
             // TODO: fix db query... currently gets all answers with given aId. I just want to know how many different answers there are.
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';");
-            
+            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';");          
             int numOfSystems = answers.Count();
-            string userId = HomeController.active.GetID();
 
-            Environment e = new Environment();
-
-            // put section titles from settings into array
-            SectionTitles = new string[Models.Environment.NumSec];
-            for (int i = 0; i < SectionTitles.Length; i++)
-            {
-                SectionTitles[i] = e.GetSectionName(i);
-            }
-
-            // get systems from userId
-            Systems = new InventoryItem[numOfSystems];
-            for (int i = 0; i < Systems.Length; i++)
-            {
-                Systems[i] = new InventoryItem(uId, i.ToString());
-            }
+            getSections();
+            getSystems(uId, numOfSystems);
         }
 
-        // gets a certain number of systems from a given uId
+        // gets a given number of systems from a given uId
         public Inventory(string uId, int numOfSystems)
         {
             DBAContext dBAContext = new DBAContext();
