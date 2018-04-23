@@ -1,12 +1,9 @@
-﻿
+﻿@model StateTemplateV5Beta.ViewModels.AccountVM
 @{
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    //var uController = new StateTemplateV5Beta.Controllers.UsersController();
-    //var user = uController.GetU(MvcApplication.active.GetID());
 
-    // TODO: ACCOUNT - fix MvcApplication.active null (?)
-    // TODO: ACCOUNT - on submit button press change db info
+    // TODO: ACCOUNT - on submit button press verify info / change db info
 }
 
 <div class="section">
@@ -19,19 +16,19 @@
             <label>First Name</label><br />
         </div>
         <div class="row p-l-md">
-            <input type="text" style="width:250px" placeholder="First Name" id="first-name" name="firstName" tabindex="1">
+            <input type="text" style="width:250px" value="@Model.FirstName" id="first-name" name="firstName" tabindex="1">
         </div>
         <div class="row p-t p-l-md">
             <label>Last Name</label>
         </div>
         <div class="row p-l-md">
-            <input type="text" style="width:250px" placeholder="Last Name" id="last-name" name="lastName" tabindex="2">
+            <input type="text" style="width:250px" value="@Model.LastName" id="last-name" name="lastName" tabindex="2">
         </div>
         <div class="row p-t p-l-md">
             <label>Organization</label>
         </div>
         <div class="row p-b p-l-md">
-            <input type="text" style="width:250px" placeholder="Organization" id="org" name="organization" tabindex="3">
+            <input type="text" style="width:250px" value="@Model.Organization" id="org" name="organization" tabindex="3">
         </div>
     </div> <!-- end account container -->
     <!-- Change Password -->

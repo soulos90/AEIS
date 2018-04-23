@@ -5809,7 +5809,7 @@ h6,
     line-height: 55px;
   }
   .fixed.compact .header-organization-banner a {
-    max-width: 225px;
+    max-width: 100px;
   }
   .fixed.compact .top-level-nav {
     min-height: 50px;
