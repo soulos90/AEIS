@@ -14,34 +14,39 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult Index()
         {
-            return View();
+            return View();//TODO: Logged in vs not logged in views
         }
 
         public ActionResult Registration()
         {
-
+            session();
+            if (active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
         public ActionResult ForgotPassword()
         {
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
         [HttpGet]
         public ActionResult Account()
         {
-            /*
+            session();
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-            */
-
-            session();
+            
             string uId = active.GetID();
-            if (uId == "")
-                uId = "mswart";
 
             AccountVM model = new AccountVM(uId);
             return View(model);
@@ -50,17 +55,13 @@ namespace StateTemplateV5Beta.Controllers
         [HttpGet]
         public ActionResult Inventory()
         {
-            /*
+            session();
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-            */
-
-            session();
+            
             string uId = active.GetID();
-            if (uId == "")
-                uId = "mswart";
 
             InventoryVM model = new InventoryVM(uId);
             return View(model);
@@ -69,17 +70,12 @@ namespace StateTemplateV5Beta.Controllers
         [HttpGet]
         public ActionResult ChartAnalysis()
         {
-            /*
+            session();
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-            */
-
-            session();
             string uId = active.GetID();
-            if (uId == "")
-                uId = "mswart";
 
             InventoryVM model = new InventoryVM(uId, 6);
             return View(model);
@@ -88,17 +84,12 @@ namespace StateTemplateV5Beta.Controllers
         [HttpGet]
         public ActionResult TextAnalysis()
         {
-            /*
+            session();
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-            */
-
-            session();
             string uId = active.GetID();
-            if (uId == "")
-                uId = "mswart";
 
             InventoryVM model = new InventoryVM(uId, 6);
             return View(model);
@@ -107,17 +98,12 @@ namespace StateTemplateV5Beta.Controllers
         [HttpGet]
         public ActionResult Justification(string btnPrint)
         {
-            /*
+            session();
             if (!active.CheckLogin())
             {
                 return RedirectToAction("Index");
             }
-            */
-
-            session();
             string uId = active.GetID();
-            if (uId == "")
-                uId = "mswart";
 
             JustificationVM model = new JustificationVM(uId, btnPrint);
             return View(model);
