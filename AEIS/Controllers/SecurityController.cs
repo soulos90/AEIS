@@ -59,7 +59,7 @@ namespace StateTemplateV5Beta.Controllers
                 check = true;
                 activeCookie["ID"] = Security.ID;
                 activeCookie["LoggedIn"] = "True";
-                activeCookie["Hash"] = user.GetU(Security.ID).Passhash;
+                activeCookie["Hash"] = user.GetU(Security.ID).PassHash;
                 if (Security.Remember)
                     activeCookie.Expires = DateTime.Now.AddMonths(4);
                 else

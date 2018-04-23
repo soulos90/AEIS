@@ -14,18 +14,20 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult PostUser(User user)
         {
-            HttpCookie pass = SController.Login(user.ID);
-            UController.PostUser(user);
-            
-            return View("LoggedIn");
-        }
-        // GET: Login
-        public ActionResult LogIn(User user)
-        {
-            SController.Login(user.ID);
-            return View("LoggedIn");
-        }
+            using (var context = new DBUContext())
+            {
+                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
+                if (getUser == null)
+                {
+                    HttpCookie pass = SController.Login(user.ID);
+                    UController.PostUser(user);
 
+                    return View("LoggedIn");
+                }
+                return View("LoginFail");
+            }
+                
+        }
 		[HttpPost]
 		public ActionResult LoginCheck(string userName, string password)
 		{
@@ -37,10 +39,11 @@ namespace StateTemplateV5Beta.Controllers
 						var saltHash = getUser.PassSalt;
 						var encodedPassword = new UsersController().HashPassword(password, saltHash);
 
-						var query = (from s in context.Users where s.ID == userName && s.Passhash.Equals(encodedPassword) select s).FirstOrDefault();
+						var query = (from s in context.Users where s.ID == userName && s.PassHash.Equals(encodedPassword) select s).FirstOrDefault();
 						if(query != null)
 						{
-							return View("LoggedIn");
+                            SController.Login(userName);
+                            return View("LoggedIn");
 						}
 						ViewBag.ErrorMessage = "Invalid User Name or Password";
 						return View("LoginFail");
