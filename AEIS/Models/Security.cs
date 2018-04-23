@@ -10,12 +10,13 @@ namespace StateTemplateV5Beta.Models
         public static string ID { get; set; }
         public static HttpCookie Cookie { get; set; }
         public static bool IsLoggedIn { get; set; }
-
+        public static bool Remember { get; set; }
         public Security()
         {
             IsLoggedIn = false;
             ID = "";
             Cookie = null;
+            Remember = false;
         }
 
     }

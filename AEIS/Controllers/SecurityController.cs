@@ -41,7 +41,10 @@ namespace StateTemplateV5Beta.Controllers
             if (activeCookie == null && Security.Cookie==null)
             {
                 activeCookie = new HttpCookie("Status");
-                activeCookie.Expires = DateTime.Now.AddHours(8);
+                if (Security.Remember)
+                    activeCookie.Expires = DateTime.Now.AddMonths(4);
+                else
+                    activeCookie.Expires = DateTime.Now.AddHours(8);
                 activeCookie["LoggedIn"] = "False";
                 Security.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
@@ -56,13 +59,20 @@ namespace StateTemplateV5Beta.Controllers
                 check = true;
                 activeCookie["ID"] = Security.ID;
                 activeCookie["LoggedIn"] = "True";
-                activeCookie.Expires = DateTime.Now.AddHours(8);
+                activeCookie["Hash"] = user.GetU(Security.ID).PassHash;
+                if (Security.Remember)
+                    activeCookie.Expires = DateTime.Now.AddMonths(4);
+                else
+                    activeCookie.Expires = DateTime.Now.AddHours(8);
                 Security.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
             }
             else if (activeCookie["LoggedIn"].Equals("True"))
             {
-                activeCookie.Expires = DateTime.Now.AddHours(8);
+                if (Security.Remember)
+                    activeCookie.Expires = DateTime.Now.AddMonths(4);
+                else
+                    activeCookie.Expires = DateTime.Now.AddHours(8);
                 Security.ID = activeCookie["ID"];
                 Security.IsLoggedIn = true;
                 Security.Cookie = activeCookie;
@@ -94,8 +104,11 @@ namespace StateTemplateV5Beta.Controllers
             {
                 Security.Cookie = activeCookie = new HttpCookie("Status");
             }
-            
-            activeCookie.Expires = DateTime.Now.AddHours(8);
+
+            if (Security.Remember)
+                activeCookie.Expires = DateTime.Now.AddMonths(4);
+            else
+                activeCookie.Expires = DateTime.Now.AddHours(8);
             activeCookie["LoggedIn"] = "True";
             activeCookie["ID"] = Security.ID = ID;
             HttpContext.Current.Response.Cookies.Set(activeCookie);
@@ -111,7 +124,10 @@ namespace StateTemplateV5Beta.Controllers
             if (activeCookie!=null)
             {
                 activeCookie["LoggedIn"] = "False";
-                activeCookie.Expires = DateTime.Now;
+                if (Security.Remember)
+                    activeCookie.Expires = DateTime.Now.AddMonths(4);
+                else
+                    activeCookie.Expires = DateTime.Now.AddHours(8);
                 HttpContext.Current.Response.Cookies.Remove("Status");
             }
         }
