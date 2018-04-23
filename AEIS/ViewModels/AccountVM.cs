@@ -10,6 +10,7 @@ namespace StateTemplateV5Beta.ViewModels
     public class AccountVM
     {
         #region Properties
+        public string Email { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string Organization { get; }
@@ -19,6 +20,7 @@ namespace StateTemplateV5Beta.ViewModels
         public AccountVM(string uId)
         {
             AccountInfo accountInfo = new AccountInfo(uId);
+            Email = accountInfo.Email;
             FirstName = accountInfo.FirstName;
             LastName = accountInfo.LastName;
             Organization = accountInfo.Organization;

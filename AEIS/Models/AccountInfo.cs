@@ -10,6 +10,7 @@ namespace StateTemplateV5Beta.Models
     public class AccountInfo
     {
         #region Properties
+        public string Email { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string Organization { get; }
@@ -23,12 +24,14 @@ namespace StateTemplateV5Beta.Models
 
             if (user != null)
             {
+                Email = user.ID;
                 FirstName = user.FName;
                 LastName = user.LName;
                 Organization = user.Organization;
             }
             else
             {
+                Email = "NULL USER";
                 FirstName = "NULL USER";
                 LastName = "NULL USER";
                 Organization = "NULL USER";
