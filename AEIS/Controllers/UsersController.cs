@@ -63,7 +63,6 @@ namespace StateTemplateV5Beta.Controllers
                 return BadRequest();
             }
             user.LastUsed = DateTime.Now;
-            ;
 
             db.Entry(user).State = EntityState.Modified;
 

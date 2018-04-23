@@ -11,7 +11,7 @@ namespace StateTemplateV5Beta.Controllers
         public static Controllers.SecurityController active = null;
         public ActionResult Index()
         {
-            return View();
+            return View();//TODO: logged in vs not logged in
         }
 
         public ActionResult Justification(string name)
@@ -43,16 +43,31 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult ChartAnalysis()
         {
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
         public ActionResult TextAnalysis()
         {
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 
         public ActionResult Account()
         {
+            session();
+            if (!active.CheckLogin())
+            {
+                return RedirectToAction("Index");
+            }
             return View();
         }
 

@@ -28,7 +28,25 @@ namespace StateTemplateV5Beta.Controllers
             }
                 
         }
-		[HttpPost]
+        [HttpPost]
+        public ActionResult PutUser(User user)
+        {
+            using (var context = new DBUContext())
+            {
+                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
+                if (getUser != null)
+                {
+                    FillBlanks(user, getUser);
+                    HttpCookie pass = SController.Login(user.ID);
+                    UController.PutUser(user.ID,user);
+
+                    return View("LoggedIn");
+                }
+                return View("LoginFail");
+            }
+
+        }
+        [HttpPost]
 		public ActionResult LoginCheck(string userName, string password)
 		{
 			using (var context = new DBUContext())
@@ -52,5 +70,10 @@ namespace StateTemplateV5Beta.Controllers
 					return View("LoginFail");
 			}
 		}
+        private void FillBlanks(User New, User Old)
+        {
+            New.Created = Old.Created;
+
+        }
     }
 }

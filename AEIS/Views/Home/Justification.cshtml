@@ -1,19 +1,16 @@
 ﻿@{
-    if(!MvcApplication.active.CheckLogin())
-    {
-        Response.Redirect("~/Home/Index");
-    }
+    var active = StateTemplateV5Beta.Controllers.HomeController.active;
     ViewBag.Title = "Justification";
 
 
     Layout = "~/Views/Shared/_Layout.cshtml";
     var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
     var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var Name = MvcApplication.environment.GetSectionCount();
+    var Name = ucontroller.GetU(active.GetID()).FName + " " + ucontroller.GetU(active.GetID()).LName;
     var Public = MvcApplication.environment.GetQuestionCount();
     var Internal = MvcApplication.environment.GetDBSource();
     var Accessibility = MvcApplication.environment.GetInitCatalog();
-    var System = ucontroller.GetU(MvcApplication.active.GetID()).Orginization;
+    var System = ucontroller.GetU(active.GetID()).Organization;
     var Total = MvcApplication.environment.GetSectionName(1);
 }
 <style>
