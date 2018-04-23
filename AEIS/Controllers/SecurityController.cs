@@ -27,7 +27,14 @@ namespace StateTemplateV5Beta.Controllers
             }
             return value;
         }
-
+        public void SetRemember(bool RB)
+        {
+            Security.Remember = RB;
+        }
+        public bool GetRemember()
+        {
+            return Security.Remember;
+        }
         public bool CheckLogin()
         {
             bool check = false;

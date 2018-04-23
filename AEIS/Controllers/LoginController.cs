@@ -47,7 +47,7 @@ namespace StateTemplateV5Beta.Controllers
 
         }
         [HttpPost]
-		public ActionResult LoginCheck(string userName, string password)
+		public ActionResult LoginCheck(string userName, string password, bool RememberBox)
 		{
 			using (var context = new DBUContext())
 			{				
@@ -60,7 +60,9 @@ namespace StateTemplateV5Beta.Controllers
 						var query = (from s in context.Users where s.ID == userName && s.PassHash.Equals(encodedPassword) select s).FirstOrDefault();
 						if(query != null)
 						{
+                            
                             SController.Login(userName);
+                            SController.SetRemember(RememberBox);
                             return View("LoggedIn");
 						}
 						ViewBag.ErrorMessage = "Invalid User Name or Password";

@@ -16,8 +16,7 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId)
         {
             DBAContext dBAContext = new DBAContext();
-            // TODO: fix db query... currently gets all answers with given aId. I just want to know how many different answers there are.
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';");
+            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT count(*) FROM Answers WHERE UId='" + uId + "';");
             
             int numOfSystems = answers.Count();
             string userId = HomeController.active.GetID();
@@ -43,8 +42,7 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId, int numOfSystems)
         {
             DBAContext dBAContext = new DBAContext();
-            // TODO: fix db query... currently gets all answers with given aId. I just want to know how many different answers there are.
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';");
+            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT DISTINCT count(*) FROM Answers WHERE UId='" + uId + "';");
 
             if (numOfSystems > answers.Count())
                 numOfSystems = answers.Count();

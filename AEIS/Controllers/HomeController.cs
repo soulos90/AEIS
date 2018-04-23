@@ -14,7 +14,12 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult Index()
         {
-            return View();//TODO: Logged in vs not logged in views
+            session();
+            if (active.CheckLogin())
+            {
+                return View();//loggedin
+            }
+            return View();//not logged in//TODO: Logged in vs not logged in views
         }
 
         public ActionResult Registration()

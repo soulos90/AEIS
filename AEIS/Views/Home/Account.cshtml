@@ -5,7 +5,7 @@
     var userC = new StateTemplateV5Beta.Controllers.UsersController();
     var active = StateTemplateV5Beta.Controllers.HomeController.active;
     var User = userC.GetU(active.GetID());
-    var FirstName = User.FName;
+    var FirstName = active.GetRemember().ToString();
     var LastName = User.LName;
     var Organization = User.Organization;
     var Email = User.ID;
