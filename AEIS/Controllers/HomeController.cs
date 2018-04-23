@@ -8,7 +8,7 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class HomeController : Controller
     {
-        public static Controllers.SecurityController active = null;
+        public static SecurityController active = null;
         public ActionResult Index()
         {
             return View();//TODO: logged in vs not logged in
