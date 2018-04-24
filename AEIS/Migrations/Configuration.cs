@@ -5,27 +5,27 @@ namespace StateTemplateV5Beta.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<StateTemplateV5Beta.Models.SurveyContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<StateTemplateV5Beta.Models.DBAContext>
     {
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
         }
 
-        protected override void Seed(StateTemplateV5Beta.Models.SurveyContext context)
-        {
-            //  This method will be called after migrating to the latest version.
+        //protected override void Seed(StateTemplateV5Beta.Models.DBAContext context)
+        //{
+        //    //  This method will be called after migrating to the latest version.
 
-            //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
-            //  to avoid creating duplicate seed data. E.g.
-            //
-            //    context.People.AddOrUpdate(
-            //      p => p.FullName,
-            //      new Person { FullName = "Andrew Peters" },
-            //      new Person { FullName = "Brice Lambson" },
-            //      new Person { FullName = "Rowan Miller" }
-            //    );
-            //
-        }
+        //    //  You can use the DbSet<T>.AddOrUpdate() helper extension method 
+        //    //  to avoid creating duplicate seed data. E.g.
+        //    //
+        //    //    context.People.AddOrUpdate(
+        //    //      p => p.FullName,
+        //    //      new Person { FullName = "Andrew Peters" },
+        //    //      new Person { FullName = "Brice Lambson" },
+        //    //      new Person { FullName = "Rowan Miller" }
+        //    //    );
+        //    //
+        //}
     }
 }

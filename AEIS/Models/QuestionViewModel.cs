@@ -23,9 +23,9 @@ namespace StateTemplateV5Beta.Models
         [Required]
         public string Question { get; set; }
         //[Display(Name = "Survey?")]
-        public bool Answer { get; set; }
+        public Nullable<bool> Answer { get; set; }
         public int CurrentID { get; set; }
-        public int Key { get; set; }
+        public int aID { get; set; }
         public string ProgramName { get; set; }
         
     }

@@ -26,10 +26,9 @@
                     <label class="control-label">
                         @Html.LabelFor(x => x.Answer)
                     </label>
-                    <div class="controls">
+                    <div class="controls">                          
                         @Html.RadioButtonFor(x => x.Answer, true)
                         Yes
-
                     </div>
                     <div class="controls">
                         @Html.RadioButtonFor(x => x.Answer, false)
@@ -37,6 +36,7 @@
                         <div class="hidden">
                             @Html.TextBoxFor(m => m.CurrentID)
                             @Html.TextBoxFor(m => m.ProgramName)
+                            @Html.TextBoxFor(m => m.aID)
                         </div>
                     </div>
                 </div>

@@ -14,7 +14,7 @@ namespace StateTemplateV5Beta.Models
         public DateTime LastUsed { get; set; }
         public string programName { get; set; }     
       
-        public bool Value { get; set; }
+        public Nullable<bool> Value { get; set; }
 
         public Answer()
         {
@@ -22,7 +22,7 @@ namespace StateTemplateV5Beta.Models
         }
 
     }
-   
+
     public class DBAContext : DbContext
     {
         public DbSet<Answer> Answers { get; set; }
