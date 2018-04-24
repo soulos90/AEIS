@@ -4,9 +4,8 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
-@model StateTemplateV5Beta.Models.Security
 @{
-    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model);
+    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
     bool loggedIn = SU.CheckLogin();
     
 }
@@ -159,23 +158,22 @@
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
                 @if (loggedIn)
-                {
+                {<!--TODO: pass security model along with links-->
                     <li class="nav-item">
-                        <a onclick=@{Html.ActionLink("Text Analysis", "TextAnalysis", "Home", routeValues: null, htmlAttributes: Model);} class="first-level-link" value=@Model><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Text Analysis</a><!--TODO: fix this garbage-->
+                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
                     </li>
-                <li class="nav-item">
-                    <a href="~/Home/ChartAnalysis" class="first-level-link" value=@Model><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
-                </li>
-                <li class="nav-item">
-                    <a href="~/Home/Inventory" class="first-level-link" value=@Model><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
-                </li>
-                <li class="nav-item">
-                    <a href="~/Home/Account" class="first-level-link" value=@Model><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
-                </li>
-                <!-- TODO: add logout functionality to logout button -->
-                <li class="nav-item">
-                    <a href="~/Home" class="first-level-link" value="@Model"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
-                </li>
+                    <li class="nav-item">
+                        <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
+                    </li>
+                    <li class="nav-item"><!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
+                        <a href="~/Home/Index" onclick=@{SU.Logout();} class="first-level-link" ><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
+                    </li>
                 }
                 else
                 {
