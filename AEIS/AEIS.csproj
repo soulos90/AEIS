@@ -158,6 +158,8 @@
     <Compile Include="ViewModels\AccountVM.cs" />
     <Compile Include="ViewModels\InventoryVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
+    <Compile Include="ViewModels\RegistrationVM.cs" />
+    <Compile Include="ViewModels\VMP.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />

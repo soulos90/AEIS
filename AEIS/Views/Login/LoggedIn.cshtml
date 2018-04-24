@@ -1,6 +1,7 @@
-﻿
+﻿@model StateTemplateV5Beta.Models.Security
 @{
-    Response.Redirect("~/Home/Inventory");
+    
+    Response.Redirect("~/Home/Index", @Model);
 }
 
 <h2>LoggedIn</h2>

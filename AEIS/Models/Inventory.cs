@@ -15,9 +15,8 @@ namespace StateTemplateV5Beta.Models
         // gets ALL systems from a given uId
         public Inventory(string uId)
         {
-            DBAContext dBAContext = new DBAContext();
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT count(DISTINCT a.AId) FROM Answers a WHERE UId='" + uId + "';");          
-            int numOfSystems = answers.Count();
+            AnswersController AC = new AnswersController();
+            int numOfSystems = AC.Next(uId);
 
             getSections();
             getSystems(uId, numOfSystems);
@@ -26,11 +25,10 @@ namespace StateTemplateV5Beta.Models
         // gets a given number of systems from a given uId
         public Inventory(string uId, int numOfSystems)
         {
-            DBAContext dBAContext = new DBAContext();
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT count(Distinct a.AID) FROM Answers a WHERE UId='" + uId + "';");
+            AnswersController AC = new AnswersController();
 
-            if (numOfSystems > answers.Count())
-                numOfSystems = answers.Count();
+            if (numOfSystems > AC.Next(uId))
+                numOfSystems = AC.Next(uId);
 
             getSections();
             getSystems(uId, numOfSystems);

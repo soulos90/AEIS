@@ -18,6 +18,10 @@ namespace StateTemplateV5Beta.Controllers
         {
             active = new Security();
         }
+        public SecurityController(Security Active)
+        {
+            active = Active;
+        }
         public string GetID()
         {
             string value = "";
@@ -34,6 +38,10 @@ namespace StateTemplateV5Beta.Controllers
         public bool GetRemember()
         {
             return Security.Remember;
+        }
+        public Security GetActive()
+        {
+            return active;
         }
         public bool CheckLogin()
         {

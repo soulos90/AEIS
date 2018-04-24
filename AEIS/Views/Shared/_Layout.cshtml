@@ -4,8 +4,11 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
-@{ 
-    bool loggedIn = (StateTemplateV5Beta.Controllers.HomeController.active == null) ? false : true;
+@model StateTemplateV5Beta.Models.Security
+@{
+    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model);
+    bool loggedIn = SU.CheckLogin();
+    
 }
 <html class="no-js" lang="en">
 <!--<![endif]-->
@@ -87,12 +90,12 @@
                             <li><div class="header-cagov-logo"><a href="/"><img src="/Content/stateTemplate/images/Ca-Gov-Logo-Gold.svg" alt="CA.gov" /></a></div></li>
                             <li><a href="/"><span class="ca-gov-icon-home" aria-hidden="true"></span><span class="sr-only">Home</span></a></li>
 
-						<!--
-                            <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
-                            <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
-                            <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
-                            <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
-						-->
+                            <!--
+                                <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
+                                <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
+                                <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
+                                <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
+                            -->
                         </ul>
                     </div>
                     <div class="half settings-links">
@@ -155,32 +158,32 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
-                    @if (loggedIn)
-                    {
+                @if (loggedIn)
+                {
                     <li class="nav-item">
-                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
+                        <a onclick=@{Html.ActionLink("Text Analysis", "TextAnalysis", "Home", routeValues: null, htmlAttributes: Model);} class="first-level-link" value=@Model><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Text Analysis</a><!--TODO: fix this garbage-->
                     </li>
-                    <li class="nav-item">
-                        <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
-                    </li>
-                    <!-- TODO: add logout functionality to logout button -->
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
-                    </li>
-                    }
-                    else
-                    {
-                    <!--TODO: make the size of the login button smaller when it's the only one displayed -->
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
-                    </li>
-                    }
+                <li class="nav-item">
+                    <a href="~/Home/ChartAnalysis" class="first-level-link" value=@Model><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
+                </li>
+                <li class="nav-item">
+                    <a href="~/Home/Inventory" class="first-level-link" value=@Model><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                </li>
+                <li class="nav-item">
+                    <a href="~/Home/Account" class="first-level-link" value=@Model><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
+                </li>
+                <!-- TODO: add logout functionality to logout button -->
+                <li class="nav-item">
+                    <a href="~/Home" class="first-level-link" value="@Model"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
+                </li>
+                }
+                else
+                {
+                <!--TODO: make the size of the login button smaller when it's the only one displayed -->
+                <li class="nav-item">
+                    <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                </li>
+                }
                 </ul>
             </nav>
         </div>

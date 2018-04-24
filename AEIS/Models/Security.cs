@@ -14,7 +14,7 @@ namespace StateTemplateV5Beta.Models
         public Security()
         {
             IsLoggedIn = false;
-            ID = "";
+            ID = null;
             Cookie = null;
             Remember = false;
         }

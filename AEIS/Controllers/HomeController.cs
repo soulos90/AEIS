@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using StateTemplateV5Beta.Models;
 
 using StateTemplateV5Beta.ViewModels;
 
@@ -10,119 +11,119 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class HomeController : Controller
     {
-        public static SecurityController active = null;
 
-        public ActionResult Index()
+        public ActionResult Index(Security active)
         {
-            session();
-            if (active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (Active.CheckLogin())
             {
-                return View();//loggedin
+                return View(active);//loggedin
             }
-            return View();//not logged in//TODO: Logged in vs not logged in views
+            return View(active);//not logged in//TODO: Logged in vs not logged in views
         }
 
-        public ActionResult Registration()
+        public ActionResult Registration(Security active)
         {
-            session();
-            if (active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
             return View();
         }
 
-        public ActionResult ForgotPassword()
+        public ActionResult ForgotPassword(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
-            return View();
+            return View(active);
         }
 
         [HttpGet]
-        public ActionResult Account()
+        public ActionResult Account(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
             
-            string uId = active.GetID();
+            string uId = Active.GetID();
 
-            AccountVM model = new AccountVM(uId);
+            AccountVM model = new AccountVM(uId,active);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Inventory()
+        public ActionResult Inventory(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
             
-            string uId = active.GetID();
+            string uId = Active.GetID();
 
-            InventoryVM model = new InventoryVM(uId);
+            InventoryVM model = new InventoryVM(uId,active);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult ChartAnalysis()
+        public ActionResult ChartAnalysis(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
-            string uId = active.GetID();
+            string uId = Active.GetID();
 
-            InventoryVM model = new InventoryVM(uId, 6);
+            InventoryVM model = new InventoryVM(uId, 6,active);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult TextAnalysis()
+        public ActionResult TextAnalysis(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
-            string uId = active.GetID();
+            string uId = Active.GetID();
 
-            InventoryVM model = new InventoryVM(uId, 6);
+            InventoryVM model = new InventoryVM(uId, 6,active);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Justification(string btnPrint)
+        public ActionResult Justification(string btnPrint,Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            SecurityController Active = new SecurityController(session(active));
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return RedirectToAction("Index",active);
             }
-            string uId = active.GetID();
+            string uId = Active.GetID();
 
-            JustificationVM model = new JustificationVM(uId, btnPrint);
+            JustificationVM model = new JustificationVM(uId, btnPrint,active);
             return View(model);
         }
 
-        public ActionResult About()
+        public ActionResult About(Security active)
         {
-            return View();
+            return View(active);
         }
 
-        private void session()
+        private Security session(Security active)
         {
             if(active==null)
-                active = new SecurityController();
+                active = new Security();
+            return active;
         }
     }
 }

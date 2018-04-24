@@ -7,7 +7,7 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class AccountVM
+    public class AccountVM : VMP
     {
         #region Properties
         public string Email { get; }
@@ -17,7 +17,7 @@ namespace StateTemplateV5Beta.ViewModels
         #endregion
 
         #region Constructor
-        public AccountVM(string uId)
+        public AccountVM(string uId, Security active) : base(active)
         {
             AccountInfo accountInfo = new AccountInfo(uId);
             Email = accountInfo.Email;

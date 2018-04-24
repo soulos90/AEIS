@@ -21,7 +21,7 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     HttpCookie pass = SController.Login(user.ID);
                     UController.PostUser(user);
-
+                    //TODO: redirect in a way that creates a security token
                     return View("LoggedIn");
                 }
                 return View("LoginFail");
