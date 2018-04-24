@@ -12,7 +12,7 @@ namespace StateTemplateV5Beta.Controllers
     public class SecurityController
     {
         private UsersController user = new UsersController();
-        private static Security active;
+        private Security active;
         private HttpCookie activeCookie;
         public SecurityController()
         {
@@ -27,17 +27,17 @@ namespace StateTemplateV5Beta.Controllers
             string value = "";
             if (CheckLogin())
             {
-                value = Security.ID;
+                value = active.ID;
             }
             return value;
         }
         public void SetRemember(bool RB)
         {
-            Security.Remember = RB;
+            active.Remember = RB;
         }
         public bool GetRemember()
         {
-            return Security.Remember;
+            return active.Remember;
         }
         public Security GetActive()
         {
@@ -49,48 +49,48 @@ namespace StateTemplateV5Beta.Controllers
             if (active==null)
             {
                 active = new Security();
-                Security.IsLoggedIn = check;
+                active.IsLoggedIn = check;
             }
             if(activeCookie == null)
                 activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null && Security.Cookie==null)
+            if (activeCookie == null && active.Cookie==null)
             {
                 activeCookie = new HttpCookie("Status");
-                if (Security.Remember)
+                if (active.Remember)
                     activeCookie.Expires = DateTime.Now.AddMonths(4);
                 else
                     activeCookie.Expires = DateTime.Now.AddHours(8);
                 activeCookie["LoggedIn"] = "False";
-                Security.Cookie = activeCookie;
+                active.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
             }
             else if(activeCookie == null)
             {
-                activeCookie = Security.Cookie;
+                activeCookie = active.Cookie;
             }
 
-            if (Security.IsLoggedIn == true)
+            if (active.IsLoggedIn == true)
             {
                 check = true;
-                activeCookie["ID"] = Security.ID;
+                activeCookie["ID"] = active.ID;
                 activeCookie["LoggedIn"] = "True";
-                activeCookie["Hash"] = user.GetU(Security.ID).PassHash;
-                if (Security.Remember)
+                activeCookie["Hash"] = user.GetU(active.ID).PassHash;
+                if (active.Remember)
                     activeCookie.Expires = DateTime.Now.AddMonths(4);
                 else
                     activeCookie.Expires = DateTime.Now.AddHours(8);
-                Security.Cookie = activeCookie;
+                active.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
             }
             else if (activeCookie["LoggedIn"].Equals("True"))
             {
-                if (Security.Remember)
+                if (active.Remember)
                     activeCookie.Expires = DateTime.Now.AddMonths(4);
                 else
                     activeCookie.Expires = DateTime.Now.AddHours(8);
-                Security.ID = activeCookie["ID"];
-                Security.IsLoggedIn = true;
-                Security.Cookie = activeCookie;
+                active.ID = activeCookie["ID"];
+                active.IsLoggedIn = true;
+                active.Cookie = activeCookie;
                 HttpContext.Current.Response.Cookies.Set(activeCookie);
                 check = true;
             }
@@ -103,29 +103,29 @@ namespace StateTemplateV5Beta.Controllers
             {
                 active = new Security();
             }
-            Security.IsLoggedIn = true;
+            active.IsLoggedIn = true;
             if (activeCookie == null)
                 activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null && Security.Cookie == null)
+            if (activeCookie == null && active.Cookie == null)
             {
                 activeCookie = new HttpCookie("Status");
-                Security.Cookie = activeCookie;
+                active.Cookie = activeCookie;
             }
             else if (activeCookie == null)
             {
-                activeCookie = Security.Cookie;
+                activeCookie = active.Cookie;
             }
             else
             {
-                Security.Cookie = activeCookie = new HttpCookie("Status");
+                active.Cookie = activeCookie = new HttpCookie("Status");
             }
 
-            if (Security.Remember)
+            if (active.Remember)
                 activeCookie.Expires = DateTime.Now.AddMonths(4);
             else
                 activeCookie.Expires = DateTime.Now.AddHours(8);
             activeCookie["LoggedIn"] = "True";
-            activeCookie["ID"] = Security.ID = ID;
+            activeCookie["ID"] = active.ID = ID;
             HttpContext.Current.Response.Cookies.Set(activeCookie);
             return activeCookie;
         }
@@ -135,11 +135,11 @@ namespace StateTemplateV5Beta.Controllers
             {
                  active = new Security();
             }
-            Security.IsLoggedIn = false;
+            active.IsLoggedIn = false;
             if (activeCookie!=null)
             {
                 activeCookie["LoggedIn"] = "False";
-                if (Security.Remember)
+                if (active.Remember)
                     activeCookie.Expires = DateTime.Now.AddMonths(4);
                 else
                     activeCookie.Expires = DateTime.Now.AddHours(8);
