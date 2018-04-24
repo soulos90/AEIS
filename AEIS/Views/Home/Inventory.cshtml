@@ -46,19 +46,19 @@
                 @for (int i = 0; i < Model.Systems.Length; i++)
                 {
                 <tr>
-                    <td>@Model.Systems[i].Name</td>
+                    <td style="vertical-align:middle">@Model.Systems[i].Name</td>
                     @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
                     {
-                    <td>@Model.Systems[i].SectionScores[j]</td>
+                    <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
                     }
-                    <td>@Model.Systems[i].ScoreTotal</td>
+                    <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
 
-                    <td style="text-align:center">
+                    <td style="text-align:center; vertical-align:middle">
                         <button type="button" id="btnEdit" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
                             <i class="ca-gov-icon-pencil-edit"></i>
                         </button>
                     </td>
-                    <td style="text-align:center">
+                    <td style="text-align:center; vertical-align:middle">
                         
                             <button type="submit" name="btnPrint" value="@i" class="btn btn-primary btn-sm" title="Print">
                                 <i class="ca-gov-icon-print"></i>
@@ -66,7 +66,7 @@
                         
                         
                     </td>
-                    <td style="text-align:center">
+                    <td style="text-align:center; vertical-align:middle">
                         <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
                             <i class="ca-gov-icon-close-fill"></i>
                         </button>

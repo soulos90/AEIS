@@ -11,7 +11,7 @@ namespace StateTemplateV5Beta.Models
         public DateTime Created { get; set; }
         public DateTime LastUsed { get; set; }
         public string programName { get; set; }
-        public bool Value { get; set; }
+        public Nullable<bool> Value { get; set; }
         public Answer()
         {
 

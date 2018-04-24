@@ -22,13 +22,19 @@ namespace StateTemplateV5Beta.Models
             {
                 Name = a.programName;
                 int sectionNum = e.GetQuestionSection(a.QId);
-                int scoreDivisor = 9;
 
                 if (a.Value == true)
-                    SectionScores[sectionNum] += e.GetQuestionYV(a.QId - 1) / scoreDivisor;
+                    SectionScores[sectionNum] += e.GetQuestionYV(a.QId - 1);
                 else if (a.Value == false)
-                    SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1) / scoreDivisor;
+                    SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1);
             }
+
+            int scoreDivisor = 9;
+            for (int i = 0; i < SectionScores.Length; i++)
+            {
+                SectionScores[i] /= scoreDivisor;
+            }
+            
         }
     }
 }
