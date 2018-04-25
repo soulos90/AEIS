@@ -221,10 +221,10 @@ namespace StateTemplateV5Beta.Controllers
                         InventoryVM modelo = new InventoryVM(userName.Trim(), SController.GetActive());
                         return View("Inventory", modelo);
                     }
-                    ViewBag.ErrorMessage = "Invalid Password";
+                    ViewBag.ErrorMessage = "Invalid User Name or Password";
                     return View("Index", model);
                 }
-                ViewBag.ErrorMessage = "Invalid User Name";
+                ViewBag.ErrorMessage = "Invalid User Name or Password";
                 return View("Index", model);
             }
         }

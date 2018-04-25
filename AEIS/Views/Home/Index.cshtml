@@ -32,10 +32,12 @@
 							</div>
 							<input id="password" class="form-control" type="password" name="password" placeholder="Enter Your Password">
 						</div>
-                            <input id="active" type="hidden" name="active" value=@Model />
-                        <div>
-
-                        </div>
+                             
+						<div class="input-group m-t-md">
+							<div class="d-flex" style="color:red">
+								@ViewBag.ErrorMessage
+							</div>
+						</div>
 						<small id="email-feedback" class="feedback" style="display:none">Email not registered, please register to continue.</small>
 					</div>
 					<div class="row">
