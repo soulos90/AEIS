@@ -172,7 +172,7 @@
                         <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
                     </li>
                     <li class="nav-item"><!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
-                        <a href="~/Home/Index" onclick=@{SU.Logout();} class="first-level-link" ><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
+                        <a href="~/Home/Index" class="first-level-link" onclick=@{SU.Logout();}><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
                     </li>
                 }
                 else

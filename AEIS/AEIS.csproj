@@ -152,12 +152,15 @@
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\InventoryItem.cs" />
+    <Compile Include="Models\SecurityCombined.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModels\AccountVM.cs" />
     <Compile Include="ViewModels\InventoryVM.cs" />
+    <Compile Include="ViewModels\IVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
-    <Compile Include="ViewModels\VMP.cs" />
+    <Compile Include="ViewModels\LoginVM.cs" />
+    <Compile Include="ViewModels\SecurityVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />

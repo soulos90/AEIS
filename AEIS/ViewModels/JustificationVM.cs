@@ -7,24 +7,22 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class JustificationVM : VMP
+    public class JustificationVM : IVM
     {
-        #region Properties
         public string[] SectionTitles { get; }
         public string SystemName { get; }
         public int[] SectionScores { get; }
         public int ScoreTotal { get; }
-        #endregion
+        public Security Active { get; }
 
-        #region Constructor
-        public JustificationVM(string uId, string aId, Security active) : base(active)
+        public JustificationVM(string uId, string aId, Security active)
         {
             Inventory inventory = new Inventory(uId, aId);
             SectionTitles = inventory.SectionTitles;
             SystemName = inventory.Systems[0].Name;
             SectionScores = inventory.Systems[0].SectionScores;
             ScoreTotal = inventory.Systems[0].ScoreTotal;
+            Active = active;
         }
-        #endregion
     }
 }
