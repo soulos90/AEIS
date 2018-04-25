@@ -134,7 +134,7 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult Justification(string btnPrint,Security active)
+        public ActionResult Justification(Security active)
         {
             IVM model;
             active = session(active);
@@ -147,7 +147,27 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             string uId = Active.GetID();
-            model = new JustificationVM(uId, btnPrint, active);
+            model = new JustificationVM(uId, "0", active);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Justification(string btnPrint, Security active)
+        {
+            IVM model;
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+
+            if (!Active.CheckLogin())
+            {
+                model = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", model);
+            }
+
+            string uId = Active.GetID();
+            string aId = Request.Form["btnJustification"];
+            model = new JustificationVM(uId, aId, active);
 
             return View(model);
         }

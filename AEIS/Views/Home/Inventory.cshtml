@@ -10,8 +10,8 @@
 }
 
 <div class="section">
-    
-    <div class="container">     
+
+    <div class="container">
         <div class="row m-b-sm">
             <div class="col-xs-9">
                 <h1>AEIS System Inventory</h1>
@@ -31,48 +31,59 @@
             <div class="col-xs-12">
                 <table class="table table-bordered" style="white-space:nowrap;">
                     <thead>
-                        <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
+                        <tr bgcolor="#F1F1F1" style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
                             <th style="text-align:center">Application / System Name</th>
 
                             @for (int i = 0; i < Model.SectionTitles.Length; i++)
                             {
-                            <th style="text-align:center">@Model.SectionTitles[i]</th>
+                                <th style="text-align:center">@Model.SectionTitles[i]</th>
                             }
 
                             <th style="text-align:center">Total</th>
                         </tr>
                     </thead>
 
-                @for (int i = 0; i < Model.Systems.Length; i++)
-                {
-                <tr>
-                    <td style="vertical-align:middle">@Model.Systems[i].Name</td>
-                    @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                    @for (int i = 0; i < Model.Systems.Length; i++)
                     {
-                    <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
-                    }
-                    <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
 
-                    <td style="text-align:center; vertical-align:middle">
-                        <button type="button" id="btnEdit" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                            <i class="ca-gov-icon-pencil-edit"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center; vertical-align:middle">
-                        
-                            <button type="submit" name="btnPrint" value="@i" class="btn btn-primary btn-sm" title="Print">
-                                <i class="ca-gov-icon-print"></i>
-                            </button>
-                        
-                        
-                    </td>
-                    <td style="text-align:center; vertical-align:middle">
-                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
-                            <i class="ca-gov-icon-close-fill"></i>
-                        </button>
-                    </td>
-                </tr>
-                }
+                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7":"")">
+
+                            <td style="vertical-align:middle">@Model.Systems[i].Name</td>
+                            @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                            {
+                                <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
+                            }
+                            <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
+
+                            <td style="text-align:center; vertical-align:middle">
+                                <button type="button" id="btnEdit" class="btn btn-primary btn-sm" title="Edit Survey" onclick="editSelectedForm()">
+                                    <i class="ca-gov-icon-pencil-edit"></i>
+                                </button>
+                            </td>
+                            <td style="text-align:center; vertical-align:middle">
+                                @using (Html.BeginForm("Justification", "Home", FormMethod.Post))
+                                {
+                                    if (Model.Systems[i].HasUnanswered)
+                                    {
+                                    <button type="submit" name="btnJustification" value="@i" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                        <i class="ca-gov-icon-print"></i>
+                                    </button>
+                                    }
+                                    else
+                                    {
+                                    <button type="submit" name="btnJustification" value="@i" class="btn btn-primary btn-sm" title="Print Justification">
+                                        <i class="ca-gov-icon-print"></i>
+                                    </button>
+                                    }
+                                }
+                            </td>
+                            <td style="text-align:center; vertical-align:middle">
+                                <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
+                                    <i class="ca-gov-icon-close-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
 
                 </table>
             </div> <!-- end system table column -->

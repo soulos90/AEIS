@@ -10,6 +10,7 @@ namespace StateTemplateV5Beta.Models
         public string Name { get; }
         public int[] SectionScores { get; }
         public int ScoreTotal { get { return SectionScores.Sum(); } }
+        public bool HasUnanswered { get; }
         
         public InventoryItem(string uId, string aId)
         {
@@ -20,13 +21,15 @@ namespace StateTemplateV5Beta.Models
 
             foreach (Answer a in answers)
             {
-                Name = a.programName;
+                Name = a.programName.Trim();
                 int sectionNum = e.GetQuestionSection(a.QId);
 
                 if (a.Value == true)
                     SectionScores[sectionNum] += e.GetQuestionYV(a.QId - 1);
                 else if (a.Value == false)
                     SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1);
+                else if (e.GetQuestionRO(a.QId - 1) == "0" || e.GetQuestionRO(a.QId - 1) == null)
+                    HasUnanswered = true;
             }
 
             int scoreDivisor = 9;

@@ -459,7 +459,6 @@
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
     <Folder Include="Views\Chart\" />
-    <Folder Include="Views\ScoreCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
