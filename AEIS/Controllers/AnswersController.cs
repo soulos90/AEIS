@@ -159,10 +159,11 @@ namespace StateTemplateV5Beta.Controllers
             return Ok(answer);
         }
 
-        public int Next(string id)//this id is just email not a touple
+        // returns next available AId for new survey
+        public int GetNextAId(string uId)
         {
-
-            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId like(%" + id + "%);").Count();
+            int numOfAnswers = db.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();         
+            return numOfAnswers / Models.Environment.NumQus;
         }
 
         protected override void Dispose(bool disposing)

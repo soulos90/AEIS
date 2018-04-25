@@ -14,8 +14,8 @@ namespace StateTemplateV5Beta.Models
         public InventoryItem(string uId, string aId)
         {
             DBAContext dBAContext = new DBAContext();
-            Environment e = new Environment();
             IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT * FROM Answers WHERE AId='" + aId + "' AND UId='" + uId + "';");
+            Environment e = new Environment();
             SectionScores = new int[Environment.NumSec];
 
             foreach (Answer a in answers)
