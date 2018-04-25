@@ -7,7 +7,7 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class InventoryVM
+    public class InventoryVM : VMP
     {
         #region Properties
         public string[] SectionTitles { get; }
@@ -16,7 +16,7 @@ namespace StateTemplateV5Beta.ViewModels
 
         #region Constructors
         // gets all systems from a uId
-        public InventoryVM(string uId)
+        public InventoryVM(string uId, Security active) : base(active)
         {
             Inventory inventory = new Inventory(uId);
             SectionTitles = inventory.SectionTitles;
@@ -24,7 +24,7 @@ namespace StateTemplateV5Beta.ViewModels
         }
 
         // gets 'numOfSystems' number of systems from a uId
-        public InventoryVM(string uId, int numOfSystems)
+        public InventoryVM(string uId, int numOfSystems, Security active) :base(active)
         {
             Inventory inventory = new Inventory(uId, numOfSystems);
             SectionTitles = inventory.SectionTitles;

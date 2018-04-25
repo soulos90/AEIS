@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using StateTemplateV5Beta.Models;
 
 using StateTemplateV5Beta.ViewModels;
 
@@ -10,119 +11,228 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class HomeController : Controller
     {
-        public static SecurityController active = null;
-
-        public ActionResult Index()
+        UsersController UController = new UsersController();
+        public ActionResult Index(Security active)
         {
-            session();
-            if (active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            VMP model = new VMP(active);
+            if (Active.CheckLogin())
             {
-                return View();//loggedin
+                return View(model);//loggedin
             }
-            return View();//not logged in//TODO: Logged in vs not logged in views
+            return View(model);//not logged in//TODO: Logged in vs not logged in views probably involved making a IndexVM with a bool
         }
 
-        public ActionResult Registration()
+        public ActionResult Registration(Security active)
         {
-            session();
-            if (active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            VMP model = new VMP(active);
+            if (Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return View("Index",model);
             }
-            return View();
+            return View(model);
         }
 
-        public ActionResult ForgotPassword()
+        public ActionResult ForgotPassword(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            VMP model = new VMP(active);
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                return View("Index",model);
             }
-            return View();
-        }
-
-        [HttpGet]
-        public ActionResult Account()
-        {
-            session();
-            if (!active.CheckLogin())
-            {
-                return RedirectToAction("Index");
-            }
-            
-            string uId = active.GetID();
-
-            AccountVM model = new AccountVM(uId);
             return View(model);
         }
 
         [HttpGet]
-        public ActionResult Inventory()
+        public ActionResult Account(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                VMP model = new VMP(active);
+                return View("Index", active);
             }
-            
-            string uId = active.GetID();
+            else
+            {
+                string uId = Active.GetID();
 
-            InventoryVM model = new InventoryVM(uId);
-            return View(model);
+                AccountVM model = new AccountVM(uId, active);
+                return View(model);
+            }
         }
 
         [HttpGet]
-        public ActionResult ChartAnalysis()
+        public ActionResult Inventory(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                VMP model = new VMP(active);
+                return View("Index", active);
             }
-            string uId = active.GetID();
+            else
+            {
+                string uId = Active.GetID();
 
-            InventoryVM model = new InventoryVM(uId, 6);
-            return View(model);
+                InventoryVM model = new InventoryVM(uId, active);
+                return View(model);
+            }
         }
 
         [HttpGet]
-        public ActionResult TextAnalysis()
+        public ActionResult ChartAnalysis(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                VMP model = new VMP(active);
+                return View("Index", active);
             }
-            string uId = active.GetID();
+            else
+            {
 
-            InventoryVM model = new InventoryVM(uId, 6);
-            return View(model);
+                string uId = Active.GetID();
+
+                InventoryVM model = new InventoryVM(uId, 6, active);
+                return View(model);
+            }
         }
 
         [HttpGet]
-        public ActionResult Justification(string btnPrint)
+        public ActionResult TextAnalysis(Security active)
         {
-            session();
-            if (!active.CheckLogin())
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            if (!Active.CheckLogin())
             {
-                return RedirectToAction("Index");
+                VMP model = new VMP(active);
+                return View("Index", active);
             }
-            string uId = active.GetID();
+            else
+            {
+                string uId = Active.GetID();
 
-            JustificationVM model = new JustificationVM(uId, btnPrint);
+                InventoryVM model = new InventoryVM(uId, 6, active);
+                return View(model);
+            }
+        }
+
+        [HttpGet]
+        public ActionResult Justification(string btnPrint,Security active)
+        {
+            active = session(active);
+            SecurityController Active = new SecurityController(active);
+            if (!Active.CheckLogin())
+            {
+                VMP model = new VMP(active);
+                return View("Index",model);
+            }
+            else
+            {
+                string uId = Active.GetID();
+
+                JustificationVM model = new JustificationVM(uId, btnPrint, active);
+                return View(model);
+            }
+        }
+
+        public ActionResult About(Security active)
+        {
+            VMP model = new VMP(session(active));
             return View(model);
         }
 
-        public ActionResult About()
-        {
-            return View();
-        }
-
-        private void session()
+        private Security session(Security active)
         {
             if(active==null)
-                active = new SecurityController();
+                active = new Security();
+            return active;
+        }
+        
+        [HttpPost]
+        public ActionResult PostUser(User user, Security active)
+        {
+            active = session(active);
+            SecurityController SController = new SecurityController(active);
+            VMP model = new VMP(active);
+            using (var context = new DBUContext())
+            {
+                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
+                if (getUser == null)
+                {
+                    HttpCookie pass = SController.Login(user.ID);
+                    UController.PostUser(user);
+                    model = new VMP(SController.GetActive());
+                    return View("Index",model);
+                }
+                return View("Index",model);
+            }
+
+        }
+        [HttpPost]
+        public ActionResult PutUser(User user, Security active)
+        {
+            active = session(active);
+            SecurityController SController = new SecurityController(active);
+            VMP model = new VMP(active);
+            using (var context = new DBUContext())
+            {
+                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
+                if (getUser != null)
+                {
+                    FillBlanks(user, getUser);
+                    HttpCookie pass = SController.Login(user.ID);
+                    model = new VMP(SController.GetActive());
+                    UController.PutUser(user.ID, user);
+
+                    return View("Index",model);
+                }
+                return View("Index",model);
+            }
+
+        }
+        [HttpPost]
+        public ActionResult LoginCheck(string userName, string password, bool RememberBox, Security active)
+        {
+            active = session(active);
+            SecurityController SController = new SecurityController(active);
+            VMP model = new VMP(active);
+            using (var context = new DBUContext())
+            {
+                var getUser = (from s in context.Users where s.ID == userName select s).FirstOrDefault();
+                if (getUser != null)
+                {
+                    var saltHash = getUser.PassSalt;
+                    var encodedPassword = new UsersController().HashPassword(password, saltHash);
+
+                    var query = (from s in context.Users where s.ID == userName && s.PassHash.Equals(encodedPassword) select s).FirstOrDefault();
+                    if (query != null)
+                    {
+
+                        SController.Login(userName);
+                        SController.SetRemember(RememberBox);
+                        model = new VMP(SController.GetActive());
+                        return View("Index", model);//TODO: deal with security token
+                    }
+                    ViewBag.ErrorMessage = "Invalid Password";
+                    return View("Index", model);
+                }
+                ViewBag.ErrorMessage = "Invalid User Name";
+                return View("Index", model);
+            }
+        }
+        private void FillBlanks(User New, User Old)
+        {
+            New.Created = Old.Created;
+
         }
     }
 }

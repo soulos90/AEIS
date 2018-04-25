@@ -162,7 +162,7 @@ namespace StateTemplateV5Beta.Controllers
         public int Next(string id)//this id is just email not a touple
         {
 
-            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + id + ";").Count();
+            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId like(%" + id + "%);").Count();
         }
 
         protected override void Dispose(bool disposing)

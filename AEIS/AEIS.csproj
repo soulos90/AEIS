@@ -141,7 +141,6 @@
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -158,6 +157,7 @@
     <Compile Include="ViewModels\AccountVM.cs" />
     <Compile Include="ViewModels\InventoryVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
+    <Compile Include="ViewModels\VMP.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
@@ -441,9 +441,7 @@
     <Content Include="Views\Home\ChartAnalysis.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
-    <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
-    <Content Include="Views\Login\LoginFail.cshtml" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
   </ItemGroup>

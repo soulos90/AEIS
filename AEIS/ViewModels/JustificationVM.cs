@@ -7,7 +7,7 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class JustificationVM
+    public class JustificationVM : VMP
     {
         #region Properties
         public string[] SectionTitles { get; }
@@ -17,7 +17,7 @@ namespace StateTemplateV5Beta.ViewModels
         #endregion
 
         #region Constructor
-        public JustificationVM(string uId, string aId)
+        public JustificationVM(string uId, string aId, Security active) : base(active)
         {
             Inventory inventory = new Inventory(uId, aId);
             SectionTitles = inventory.SectionTitles;
