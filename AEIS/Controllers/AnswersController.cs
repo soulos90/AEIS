@@ -37,8 +37,6 @@ namespace StateTemplateV5Beta.Controllers
         public Answer GetA(string id)
         {
             Answer answer = db.Answers.Find(id);
-            if (answer != null)
-                PutAnswer(id, answer);
             return answer;
         }
         // PUT: api/Answers/5

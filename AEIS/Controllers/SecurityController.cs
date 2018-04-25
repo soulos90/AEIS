@@ -139,10 +139,6 @@ namespace StateTemplateV5Beta.Controllers
             if (activeCookie!=null)
             {
                 activeCookie["LoggedIn"] = "False";
-                if (active.Remember)
-                    activeCookie.Expires = DateTime.Now.AddMonths(4);
-                else
-                    activeCookie.Expires = DateTime.Now.AddHours(8);
                 HttpContext.Current.Response.Cookies.Remove("Status");
             }
         }

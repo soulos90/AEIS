@@ -19,7 +19,8 @@ namespace StateTemplateV5Beta.Controllers
             VMP model = new VMP(active);
             if (Active.CheckLogin())
             {
-                return View(model);//loggedin
+                InventoryVM modelo = new InventoryVM(Active.GetID(), Active.GetActive());
+                return View("Inventory",modelo);//loggedin
             }
             return View(model);//not logged in//TODO: Logged in vs not logged in views probably involved making a IndexVM with a bool
         }
@@ -56,7 +57,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 VMP model = new VMP(active);
-                return View("Index", active);
+                return View("Index", model);
             }
             else
             {
@@ -75,7 +76,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 VMP model = new VMP(active);
-                return View("Index", active);
+                return View("Index", model);
             }
             else
             {
@@ -94,7 +95,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 VMP model = new VMP(active);
-                return View("Index", active);
+                return View("Index", model);
             }
             else
             {
@@ -114,7 +115,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 VMP model = new VMP(active);
-                return View("Index", active);
+                return View("Index", model);
             }
             else
             {
@@ -203,24 +204,22 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult LoginCheck(string userName, string password, bool RememberBox, Security active)
         {
             active = session(active);
+            var UC = new UsersController();
             SecurityController SController = new SecurityController(active);
             VMP model = new VMP(active);
             using (var context = new DBUContext())
             {
-                var getUser = (from s in context.Users where s.ID == userName select s).FirstOrDefault();
-                if (getUser != null)
+                var user = UC.GetU(userName);
+                if (user != null)
                 {
-                    var saltHash = getUser.PassSalt;
-                    var encodedPassword = new UsersController().HashPassword(password, saltHash);
-
-                    var query = (from s in context.Users where s.ID == userName && s.PassHash.Equals(encodedPassword) select s).FirstOrDefault();
-                    if (query != null)
+                    var saltHash = user.PassSalt;
+                    var encodedPassword = UC.HashPassword(password, saltHash);
+                    if (user.PassHash.Trim() == encodedPassword.Trim())
                     {
-
                         SController.Login(userName);
                         SController.SetRemember(RememberBox);
-                        model = new VMP(SController.GetActive());
-                        return View("Index", model);//TODO: deal with security token
+                        InventoryVM modelo = new InventoryVM(userName.Trim(), SController.GetActive());
+                        return View("Inventory", modelo);
                     }
                     ViewBag.ErrorMessage = "Invalid Password";
                     return View("Index", model);

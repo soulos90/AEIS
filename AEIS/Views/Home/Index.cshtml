@@ -10,7 +10,7 @@
 </div>
 <main class="main-primary">
 	<!-- Begin Main Content -->
-	@using (Html.BeginForm("LoginCheck", "", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	@using (Html.BeginForm("LoginCheck", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 	{
 		@Html.ValidationSummary(false, "", new { @class = "" })
 		<div class="row p-b-md">
