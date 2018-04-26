@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using StateTemplateV5Beta.Controllers;
-
 namespace StateTemplateV5Beta.Models
 {
     public class Inventory
@@ -36,6 +34,7 @@ namespace StateTemplateV5Beta.Models
 
             getSections();
             getSystems(uId, numOfSystems);
+            // TODO: sort sections by ScoreTotal
         }
 
         // gets a specific system and stores it into Systems[0].
@@ -52,9 +51,7 @@ namespace StateTemplateV5Beta.Models
             SectionTitles = new string[Environment.NumSec];
 
             for (int i = 0; i < SectionTitles.Length; i++)
-            {
                 SectionTitles[i] = e.GetSectionName(i);
-            }
         }
 
         private void getSystems(string uId, int numOfSystems)
@@ -62,10 +59,7 @@ namespace StateTemplateV5Beta.Models
             Systems = new InventoryItem[numOfSystems];
 
             for (int i = 0; i < Systems.Length; i++)
-            {
                 Systems[i] = new InventoryItem(uId, i.ToString());
-            }
         }
-
     }
 }

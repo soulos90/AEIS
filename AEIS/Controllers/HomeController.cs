@@ -115,6 +115,17 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);           
         }
 
+        [HttpPost]
+        public ActionResult ChartAnalysis(int numOfSystems, Security active)
+        {
+            IVM model;
+            
+            string uId = "Demo";
+            model = new InventoryVM(uId, numOfSystems, active);
+
+            return View(model);
+        }
+
         [HttpGet]
         public ActionResult TextAnalysis(Security active)
         {
