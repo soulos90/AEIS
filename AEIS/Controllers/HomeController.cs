@@ -9,6 +9,7 @@ using StateTemplateV5Beta.ViewModels;
 
 namespace StateTemplateV5Beta.Controllers
 {
+    // TODO: HOME CONTROLLER - add return redirects where needed
     public class HomeController : Controller
     {
         UsersController UController = new UsersController();
@@ -21,10 +22,10 @@ namespace StateTemplateV5Beta.Controllers
             if (Active.CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model); //logged in
+                return View("Inventory", model); //logged in    // change to redirect
             }
-
-            return View(model);//not logged in//TODO: Logged in vs not logged in views probably involved making a IndexVM with a bool
+            //TODO: Logged in vs not logged in views probably involved making a IndexVM with a bool
+            return View(model);//not logged in
         }
 
         public ActionResult Registration(Security active)
@@ -36,7 +37,7 @@ namespace StateTemplateV5Beta.Controllers
             if (Active.CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model);
+                return View("Inventory", model);    // change to redirect
             }
 
             return View(model);
@@ -51,7 +52,7 @@ namespace StateTemplateV5Beta.Controllers
             if (Active.CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model);
+                return View("Inventory", model);    // change to redirect
             }
 
             return View(model);
@@ -67,7 +68,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -86,7 +87,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -105,7 +106,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -124,7 +125,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -143,7 +144,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -162,7 +163,7 @@ namespace StateTemplateV5Beta.Controllers
             if (!Active.CheckLogin())
             {
                 model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
 
             string uId = Active.GetID();
@@ -190,7 +191,7 @@ namespace StateTemplateV5Beta.Controllers
         {
             active = session(active);
             SecurityController SController = new SecurityController(active);
-            IVM model = new SecurityVM(active);
+            IVM model = new LoginVM(active.IsLoggedIn, active);
 
             using (var context = new DBUContext())
             {
@@ -199,10 +200,10 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     HttpCookie pass = SController.Login(user.ID);
                     UController.PostUser(user);
-                    model = new SecurityVM(SController.GetActive());
+                    model = new LoginVM(active.IsLoggedIn, active);
                 }
 
-                return View("Index",model);
+                return View("Index",model); // change to redirect
             }
         }
 
@@ -211,7 +212,7 @@ namespace StateTemplateV5Beta.Controllers
         {
             active = session(active);
             SecurityController SController = new SecurityController(active);
-            IVM model = new SecurityVM(active);
+            IVM model = new LoginVM(active.IsLoggedIn, active);
 
             using (var context = new DBUContext())
             {
@@ -220,11 +221,11 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     user.Created = getUser.Created;
                     HttpCookie pass = SController.Login(user.ID);
-                    model = new SecurityVM(SController.GetActive());
+                    model = new LoginVM(active.IsLoggedIn, SController.GetActive());
                     UController.PutUser(user.ID, user);
                 }
 
-                return View("Index",model);
+                return View("Index",model); // change to redirect
             }
         }
 
@@ -234,7 +235,7 @@ namespace StateTemplateV5Beta.Controllers
             active = session(active);
             var UC = new UsersController();
             SecurityController SController = new SecurityController(active);
-            IVM model = new SecurityVM(active);
+            IVM model = new LoginVM(active.IsLoggedIn, active);
 
             using (var context = new DBUContext())
             {
@@ -248,12 +249,12 @@ namespace StateTemplateV5Beta.Controllers
                         SController.Login(userName);
                         SController.SetRemember(RememberBox);
                         model = new InventoryVM(userName.Trim(), SController.GetActive());
-                        return View("Inventory", model);
+                        return View("Inventory", model);    // change to redirect
                     }
                 }
 
                 ViewBag.ErrorMessage = "Invalid User Name or Password";
-                return View("Index", model);
+                return View("Index", model);    // change to redirect
             }
         }
     }
