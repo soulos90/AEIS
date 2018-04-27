@@ -12,8 +12,8 @@ namespace StateTemplateV5Beta.Models
         public string UId { get; set; }
         public DateTime Created { get; set; }
         public DateTime LastUsed { get; set; }
-        public string programName { get; set; }     
-      
+
+        public string programName { get; set; }           
         public Nullable<bool> Value { get; set; }
 
         public Answer()
