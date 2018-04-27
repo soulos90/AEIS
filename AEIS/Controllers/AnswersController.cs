@@ -41,14 +41,14 @@ namespace StateTemplateV5Beta.Controllers
         }
         // PUT: api/Answers/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutAnswer(string id, Answer answer)
+        public IHttpActionResult PutAnswer(string uId, Answer answer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != answer.UId)
+            if (uId != answer.UId)
             {
                 return BadRequest();
             }
@@ -63,7 +63,7 @@ namespace StateTemplateV5Beta.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AnswerExists(id))
+                if (!AnswerExists(uId))
                 {
                     return NotFound();
                 }
@@ -173,9 +173,9 @@ namespace StateTemplateV5Beta.Controllers
             base.Dispose(disposing);
         }
 
-        private bool AnswerExists(string id)
+        private bool AnswerExists(string uId)
         {
-            return db.Answers.Count(e => e.UId == id) > 0;
+            return db.Answers.Count(e => e.UId == uId) > 0;
         }
     }
 }

@@ -9,14 +9,11 @@ namespace StateTemplateV5Beta.Models
 {
     public class AccountInfo
     {
-        #region Properties
         public string Email { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string Organization { get; }
-        #endregion
 
-        #region Constructor
         public AccountInfo(string uId)
         { 
             UsersController usersController = new UsersController();
@@ -37,6 +34,5 @@ namespace StateTemplateV5Beta.Models
                 Organization = "NULL USER";
             }
         }
-        #endregion
     }
 }

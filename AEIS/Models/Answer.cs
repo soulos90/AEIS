@@ -12,12 +12,13 @@ namespace StateTemplateV5Beta.Models
         public DateTime LastUsed { get; set; }
         public string programName { get; set; }
         public Nullable<bool> Value { get; set; }
+
         public Answer()
         {
 
         }
-
     }
+
     public class DBAContext : DbContext
     {
         public DbSet<Answer> Answers { get; set; }
