@@ -1,49 +1,81 @@
-﻿@{
+﻿@model StateTemplateV5Beta.ViewModels.InventoryVM
+@{
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    string[] db = new string[6] { "name", "##", "##", "##", "##", "##" };
+    // TODO: INVENTORY - pass value of clicked system to print page w/ button
+    // TODO: INVENTORY - implement add system button
+    // TODO: INVENTORY - add proper link to edit form button
+    // TODO: INVENTORY - change to grid for pagination(?)
 }
 
 <div class="section">
-    <h1 class="text-center">AEIS System Inventory</h1>
-    <div class="row p-b-lg">
-        <div class="offset-quarter half">
-            <table class="table table-bordered" style="white-space:nowrap;">
-                <thead>
-                    <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <th style="text-align:center">Application / System Name</th>
-                        <th style="text-align:center">Public Services</th>
-                        <th style="text-align:center">Internal Services</th>
-                        <th style="text-align:center">Accessibility</th>
-                        <th style="text-align:center">Life Span</th>
-                        <th style="text-align:center">Total</th>
-                    </tr>
-                </thead>
+    
+    <div class="container">     
+        <div class="row m-b-sm">
+            <div class="col-xs-9">
+                <h1>AEIS System Inventory</h1>
+            </div>
+            <!-- Add New System Button -->
+            <div class="col-xs-3" style="text-align:right">
+                <h1>
+                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" onclick="window.location.href='/Home/Inventory'">
+                        Add New System
+                    </button>
+                </h1>
+            </div>
+        </div>
 
-                @foreach (var item in db)
+        <!-- Inventory System Table -->
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered" style="white-space:nowrap;">
+                    <thead>
+                        <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            <th style="text-align:center">Application / System Name</th>
+
+                            @for (int i = 0; i < Model.SectionTitles.Length; i++)
+                            {
+                            <th style="text-align:center">@Model.SectionTitles[i]</th>
+                            }
+
+                            <th style="text-align:center">Total</th>
+                        </tr>
+                    </thead>
+
+                @for (int i = 0; i < Model.Systems.Length; i++)
                 {
-                    <tr>
-                        <td>@db[0]</td>
-                        <td>@db[1]</td>
-                        <td>@db[2]</td>
-                        <td>@db[3]</td>
-                        <td>@db[4]</td>
-                        <td>@db[5]</td>
-                        <td style="text-align:center">
-                            <button type="button" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                                <i class="ca-gov-icon-pencil-edit"></i>
+                <tr>
+                    <td>@Model.Systems[i].Name</td>
+                    @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                    {
+                    <td>@Model.Systems[i].SectionScores[j]</td>
+                    }
+                    <td>@Model.Systems[i].ScoreTotal</td>
+
+                    <td style="text-align:center">
+                        <button type="button" id="btnEdit" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
+                            <i class="ca-gov-icon-pencil-edit"></i>
+                        </button>
+                    </td>
+                    <td style="text-align:center">
+                        
+                            <button type="submit" name="btnPrint" value="@i" class="btn btn-primary btn-sm" title="Print">
+                                <i class="ca-gov-icon-print"></i>
                             </button>
-                        </td>
-                        <td style="text-align:center">
-                            <button type="button" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Delete @db[0] ?')">
-                                <i class="ca-gov-icon-close-fill"></i>
-                            </button>
-                        </td>
-                    </tr>
+                        
+                        
+                    </td>
+                    <td style="text-align:center">
+                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
+                            <i class="ca-gov-icon-close-fill"></i>
+                        </button>
+                    </td>
+                </tr>
                 }
 
-            </table>
-        </div> <!-- end offset -->
-    </div> <!-- end row -->
+                </table>
+            </div> <!-- end system table column -->
+        </div> <!-- end system table row -->
+    </div> <!-- end container -->
 </div> <!-- end section -->

@@ -1,120 +1,125 @@
-﻿@{
-    if(!MvcApplication.active.CheckLogin())
-    {
-        Response.Redirect("~/Home/Index");
-    }
+﻿@model StateTemplateV5Beta.ViewModels.JustificationVM
+@{
     ViewBag.Title = "Justification";
-
-
     Layout = "~/Views/Shared/_Layout.cshtml";
-    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
-    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var Name = MvcApplication.environment.GetSectionCount();
-    var Public = MvcApplication.environment.GetQuestionCount();
-    var Internal = MvcApplication.environment.GetDBSource();
-    var Accessibility = MvcApplication.environment.GetInitCatalog();
-    var System = ucontroller.GetU(MvcApplication.active.GetID()).Orginization;
-    var Total = MvcApplication.environment.GetSectionName(1);
+
+    var systemHeight = "190px";
+    var servicesHeight = "190px";
+    var impactHeight = "190px";
 }
+<!-- TODO: move to CSS -->
 <style>
     #JustificationPage {
         border: 2px solid black;
-        height: 1100px;
+        height: 1040px;
         width: 850px;
+        padding-top: -40px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    #Description{
+        height: 190px;
+    }
+
+    #Services{
+        height: 190px;
+    }
+
+    #Impact{
+        height: 190px;
     }
 </style>
 <main class="main-primary">
-	<div class="container" id="JustificationPage">
-		<div class="section" id="printable">
-			<h1>Summary / Justification</h1>
-        
-			<div class="row">
-				<h2 class="text-center">AEIS Assessment for '@Name'</h2>
-                
-                <!-- Breakdown -->
-				<div class="col-xs-5">
-					<table class="table">
-						<thead>
-							<tr>
-								<th colspan="3" class="text-center">AEIS Breakdown</th>
-							</tr>
-						</thead>
-						<tr>
-							<td class="text-right" style="width: 65%">Public Services:</td>
-							<td style="width: 15%"></td>
-							<td class="bg-primary text-center"><strong>@Public</strong></td>
-						</tr>
-						<tr>
-							<td class="text-right">Internal Services:</td>
-							<td></td>
-							<td class="bg-primary text-center"><strong>@Internal</strong></td>
-						</tr>
-						<tr>
-							<td class="text-right">Accessibility Testing:</td>
-							<td></td>
-							<td class="bg-primary text-center"><strong>@Accessibility</strong></td>
-						</tr>
-						<tr>
-							<td class="text-right">System Life Span:</td>
-							<td></td>
-							<td class="bg-primary text-center"><strong>@System</strong></td>
-						</tr>
-						<tr>
-							<td class="text-right">Total:</td>
-							<td></td>
-							<td class="bg-primary text-center"><strong>@Total</strong></td>
-						</tr>
-					</table>
-				</div> <!-- end breakdown column -->
 
-                <!-- System Descripton -->
-				<div class="col-xs-7">
-					<div class="panel panel-primary" style="height:100%;">
-						<div class="panel-heading text-center"><strong>System Description:</strong></div>
-                        <div class="panel-body">
-                            <input id="SysDesc" class="form-control" type="text" placeholder="System Description">
-                        </div>
-					</div>
-				</div> <!-- end system description column -->
-			</div> <!-- end breakdown and description row -->
-            
-            <!-- Services -->
-			<div class="row">
-                <div class="col-xs-12">
-				    <div class="panel panel-primary">
-					    <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-					    <div class="panel-body" style="height:90px;"></div>
-				    </div> <!-- end panel -->
+    <div class="section hidden-print">
+        <div class="container">
+            <div class="row m-b-sm" style="vertical-align:middle">
+                <div class="col-xs-9">
+                    <h1>Summary / Justification</h1>
                 </div>
-			</div> <!-- end services row -->
-			
+                <!-- Print button -->
+                <div class="col-xs-3" style="text-align:right">
+                    <h1><button class="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
+                    <script>
+                        function myFunction(divName) {
+                            var printContents = document.getElementById(divName).innerHTML;
+                            var originalContents = document.body.innerHTML;
+
+                            document.body.innerHTML = printContents;
+
+                            window.print();
+
+                            document.body.innerHTML = originalContents;
+                        }
+                    </script>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end section -->
+    <!-- Printable Justification Page -->
+    <div class="container m-t-sm m-b-sm" id="JustificationPage">
+        <div class="section" id="printable">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@Model.SystemName'</strong></h2>
+                </div>
+            </div>
+
+            <!-- AEIS Breakdown -->
+            <div class="row">
+                <div class="col-xs-5">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th colspan="3" class="text-center">AEIS Breakdown</th>
+                            </tr>
+                        </thead>
+
+                        @for (int i = 0; i < @Model.SectionTitles.Length; i++)
+                        {
+                            <tr>
+                                <td class="text-right" style="width: 65%">@Model.SectionTitles[i]:</td>
+                                <td style="width: 15%"></td>
+                                <td class="bg-primary text-center"><strong>@Model.SectionScores[i]</strong></td>
+                            </tr>
+                        }
+                        <tr>
+                            <td class="text-right">Total:</td>
+                            <td></td>
+                            <td class="bg-primary text-center"><strong>@Model.ScoreTotal</strong></td>
+                        </tr>
+                    </table>
+                </div> <!-- end breakdown column -->
+                <!-- System Descripton -->
+                <div class="col-xs-7">
+                    <div class="panel panel-primary" style="height:100%;">
+                        <div class="panel-heading text-center"><strong>System Description:</strong></div>
+                        <div class="panel-body" style="height: @systemHeight"></div>
+                    </div> <!-- end system description panel -->
+                </div> <!-- end system description column -->
+            </div> <!-- end breakdown and description row -->
+
+            <!-- Services -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
+                        <div class="panel-body" style="height: @servicesHeight"></div>
+                    </div> <!-- end services panel -->
+                </div> <!-- end services column -->
+            </div> <!-- end services row -->
+
             <!-- Impact -->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-                        <div class="panel-body" style="height:90px;"></div>
-                    </div>
-                </div> <!-- end panel -->
+                        <div class="panel-body" style="height: @impactHeight"></div>
+                    </div> <!-- end impact panel -->
+                </div> <!-- end impact column -->
             </div> <!-- end impact row -->
 
-            </div> <!-- end section -->
-	</div> <!-- end container -->
-
-    <!-- Print button -->
-	<div>
-        <button onclick="myFunction('printable')">Print this page</button>
-        <script>
-            function myFunction(divName) {
-                var printContents = document.getElementById(divName).innerHTML;
-                var originalContents = document.body.innerHTML;
-
-                document.body.innerHTML = printContents;
-
-                window.print();
-
-                document.body.innerHTML = originalContents;
-            }
-        </script>
-    </div>
+        </div> <!-- end section -->
+    </div> <!-- end container -->
 </main>

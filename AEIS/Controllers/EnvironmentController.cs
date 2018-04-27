@@ -19,7 +19,7 @@ namespace StateTemplateV5Beta.Controllers
         {
             return Models.Environment.NumSec;
         }
-        public string GetQuestionCount()
+        public int GetQuestionCount()
         {
             return Models.Environment.NumQus;
         }
@@ -43,11 +43,11 @@ namespace StateTemplateV5Beta.Controllers
         {
             return Env.GetSectionName(i-1);
         }
-        public string GetSectionFirst(int i)
+        public int GetSectionFirst(int i)
         {
             return Env.GetSectionFirst(i-1);
         }
-        public string GetSectionLast(int i)
+        public int GetSectionLast(int i)
         {
             return Env.GetSectionLast(i-1);
         }
@@ -55,11 +55,11 @@ namespace StateTemplateV5Beta.Controllers
         {
             return Env.GetQuestionText(i - 1);
         }
-        public string GetQuestionYesVal(int i)
+        public int GetQuestionYesVal(int i)
         {
             return Env.GetQuestionYV(i-1);
         }
-        public string GetQuestionNoVal(int i)
+        public int GetQuestionNoVal(int i)
         {
             return Env.GetQuestionNV(i-1);
         }

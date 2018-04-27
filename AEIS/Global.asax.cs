@@ -14,12 +14,10 @@ namespace StateTemplateV5Beta
     
     public class MvcApplication : System.Web.HttpApplication
     {
-        public static Controllers.SecurityController active;
         public static Controllers.EnvironmentController environment;
         protected void Application_Start()
         {
             environment = new Controllers.EnvironmentController();
-            active = new Controllers.SecurityController();
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);

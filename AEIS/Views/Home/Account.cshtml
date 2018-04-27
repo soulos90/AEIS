@@ -1,63 +1,70 @@
-﻿
+﻿@model StateTemplateV5Beta.ViewModels.AccountVM
 @{
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    var FirstName = "John";
-    var LastName = "Smith";
-    var Organization = "CSUS";
 }
 
 <div class="section">
 
     <h1>Account Settings</h1>
     <!-- Account Information -->
-    <div class="panel panel-primary">
-        <div class="panel-heading"><h2>Account Information</h2></div>
-        <div class="row p-t p-l-md">
-            <label>First Name</label><br />
-        </div>
-        <div class="row p-l-md">
-            <input type="text" style="width:250px" value=@FirstName id="first-name" name="firstName" tabindex="1">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Last Name</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="text" style="width:250px" value=@LastName id="last-name" name="lastName" tabindex="2">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Organization</label>
-        </div>
-        <div class="row p-b p-l-md">
-            <input type="text" style="width:250px" value=@Organization id="org" name="organization" tabindex="3">
-        </div>
-    </div> <!-- end account container -->
-    <!-- Change Password -->
-    <div class="panel panel-primary">
-        <div class="panel-heading"><h2>Change Password</h2></div>
-        <div class="row p-t p-l-md">
-            <label>Current password</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="currentPassword" tabindex="4">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>New password</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="password" style="width:250px" placeholder="New password" id="new-password" name="newPassword" tabindex="5">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Reenter password</label>
-        </div>
-        <div class="row p-b p-l-md">
-            <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6">
-        </div>
-    </div> <!-- end password container -->
+    @using (Html.BeginForm("PutUser", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.ValidationSummary(false, "", new { @class = "" })
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h2>Account Information</h2></div>
+            <div class="row p-t p-l-md">
+                <label>Email</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value=@Model.Email id="Email" name="ID" tabindex="1">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>First Name</label><br />
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value=@Model.FirstName id="first-name" name="FName" tabindex="2">
+            </div>
 
-    <input type="submit" value="Save Changes" class="btn btn-lg btn-primary" />
+            <div class="row p-t p-l-md">
+                <label>Last Name</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value=@Model.LastName id="last-name" name="LName" tabindex="3">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>Organization</label>
+            </div>
+            <div class="row p-b p-l-md">
+                <input type="text" style="width:250px" value=@Model.Organization id="org" name="Organization" tabindex="4"><!--TODO:only printing 1 word if a multi word string (probably true for other fields)-->
+            </div>
+        </div> <!-- end account container -->
+        <!-- Change Password -->
+        <div class="panel panel-primary"><!--TODO: change password functionality-->
+            <div class="panel-heading"><h2>Change Password</h2></div>
+            <div class="row p-t p-l-md">
+                <label>Current password</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="currentPassword" tabindex="5">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>New password</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="password" style="width:250px" placeholder="New password" id="new-password" name="newPassword" tabindex="6">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>Reenter password</label>
+            </div>
+            <div class="row p-b p-l-md">
+                <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="7">
+            </div>
+        </div> <!-- end password container -->
 
+        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary"/>
 
+    }
+    @Scripts.Render("~/Scripts/register-check.js")
 </div> <!-- end section -->
 

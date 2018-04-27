@@ -39,12 +39,14 @@ namespace StateTemplateV5Beta.Controllers
                 viewModel.Question = Controller.GetQuestionText(1);
                 viewModel.CurrentID = 1;
                 viewModel.ProgramName = model.Name;
-                //viewModel.aID = AnswerController.Next(MvcApplication.active.GetID());
-                viewModel.aID = 9005;
+                //TODO: switch to the correct stuff after testing
+                viewModel.aID = AnswerController.Next(Security.ID);
+                
+                //viewModel.aID = 9007;
 
                 using (var context = new DBAContext())
                 {
-                    Answer CheckAnswer = (from t in context.Answers where ((viewModel.ProgramName == t.programName) & (1 == t.QId) & (viewModel.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (1 == t.QId) & (viewModel.aID == t.AId)) select t).FirstOrDefault();
                     if (CheckAnswer != null)
                         viewModel.Answer = CheckAnswer.Value;
                 }
@@ -63,10 +65,6 @@ namespace StateTemplateV5Beta.Controllers
         //This is for when someone presses the Previous button
         public ActionResult PreviousQuestion(SurveyQuestionViewModel model)
         {
-            var PreviousQuestionPress = new StateTemplateV5Beta.Controllers.EnvironmentController();
-            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-            var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
-
             if (!ModelState.IsValid)
             {
 
@@ -74,6 +72,9 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
             {
+                var PreviousQuestionPress = new StateTemplateV5Beta.Controllers.EnvironmentController();
+                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
 
                 int i = model.CurrentID;
                 viewModel.aID = model.aID;
@@ -82,19 +83,16 @@ namespace StateTemplateV5Beta.Controllers
                 using (var context = new DBAContext())
                 {
 
-                    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
-                    //TODO: Make the answer a check box so that it can be null/ skiped
-                    //If the question was not answered then it get a value of null
+                    //If the question was not answered then it gets a value of null
                     Answer PreviousAnswer = new Answer();
                     PreviousAnswer.QId = model.CurrentID;
                     PreviousAnswer.Value = model.Answer;
-                    PreviousAnswer.programName = model.ProgramName;
-                    //TODO: FIX 
+                    PreviousAnswer.programName = model.ProgramName;                      
+                    PreviousAnswer.UId = Security.ID;
+                    //PreviousAnswer.UId = "Moo5"; test
 
-                    //PreviousAnswer.AId = model.aID;                    
-                    //PreviousAnswer.UId = MvcApplication.active.GetID();
-                    PreviousAnswer.UId = "Moo5";
                     PreviousAnswer.AId = model.aID;
 
                     //if the answer exists use Put
@@ -120,12 +118,15 @@ namespace StateTemplateV5Beta.Controllers
                 //Checks to see if the Answer exists
                 using (var context = new DBAContext())
                 {
-                    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
                     //if it exists set the value for the question then load it in
                     if (CheckAnswer != null)
                         viewModel.Answer = CheckAnswer.Value;
 
+                    int Answers = (from t in context.Answers where ((model.ProgramName == t.programName) & (model.aID == t.AId)) select t).Count();
+                    viewModel.Percent = (Answers / PreviousQuestionPress.GetQuestionCount() * 100);
+                    viewModel.NumberofQuestions = PreviousQuestionPress.GetQuestionCount();
                 }
 
                 if (i == 0)
@@ -141,11 +142,6 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
         {
-            var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
-            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-            viewModel.ProgramName = model.ProgramName;
-            viewModel.aID = model.aID;
-
             if (!ModelState.IsValid)
             {
 
@@ -153,26 +149,30 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
             {
-                //Save the Answer to the question just answered.
+
+                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+                var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
                 var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
+
+                viewModel.ProgramName = model.ProgramName;
+                viewModel.aID = model.aID;
                 int i = model.CurrentID;
 
+                //Save the Answer to the question just answered.
                 using (var context = new DBAContext())
                 {
                     //checks to see if the answer exists
-                    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
                     //Checks to see if the question was answered if it wasnt then it should save an answer
                     //If the question was not answered then it get a value of null
                     Answer PreviousAnswer = new Answer();
                     PreviousAnswer.QId = model.CurrentID;
                     PreviousAnswer.Value = model.Answer;
-                    PreviousAnswer.programName = model.ProgramName;
-                    //TODO: FIX 
-                    //PreviousAnswer.AId = model.aID;                    
-                    //PreviousAnswer.UId = MvcApplication.active.GetID();
-                    PreviousAnswer.UId = "Moo5";
+                    PreviousAnswer.programName = model.ProgramName;            
+                    PreviousAnswer.UId = Security.ID;
                     PreviousAnswer.AId = model.aID;
+                    //PreviousAnswer.UId = "Moo5"; for testing
 
                     //if the answer exists use Put
                     if (CheckAnswer != null)
@@ -198,7 +198,12 @@ namespace StateTemplateV5Beta.Controllers
                 //checks to see if the next question has an answer already
                 using (var context = new DBAContext())
                 {
-                    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+
+                    int Answers = (from t in context.Answers where ((Security.ID == t.UId) & (model.aID == t.AId)) select t).Count();
+
+                    viewModel.Percent = (Answers / Controller.GetQuestionCount());
+                    viewModel.NumberofQuestions = Controller.GetQuestionCount();
 
                     //sets the value for the next answer to the answer that exists
                     if (CheckAnswer != null)
@@ -213,9 +218,10 @@ namespace StateTemplateV5Beta.Controllers
                     return RedirectToAction("Summary", "Survey", viewModel);
 
                 }
-            }
 
             return RedirectToAction("SurveyQuestions", viewModel);
+            }
+
         }
 
 

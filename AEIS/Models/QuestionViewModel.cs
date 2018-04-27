@@ -27,6 +27,8 @@ namespace StateTemplateV5Beta.Models
         public int CurrentID { get; set; }
         public int aID { get; set; }
         public string ProgramName { get; set; }
+        public int Percent { get; set; }
+        public int NumberofQuestions { get; set; }
         
     }
 }

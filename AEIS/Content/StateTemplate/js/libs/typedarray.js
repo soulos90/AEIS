@@ -633,7 +633,7 @@
       var tmp = Array(len);
       for (var i = 0; i < len; ++i)
         tmp[i] = t._getter(i);
-      return tmp.join(separator === undefined ? ',' : separator); // Hack for IE7
+      return tmp.join(separator === undefined ? ',' : separator);
     }});
 
     // %TypedArray%.prototype.keys ( )
@@ -836,7 +836,7 @@
       var tmp = Array(len);
       for (var i = 0; i < len; ++i)
         tmp[i] = t._getter(i);
-      if (comparefn) tmp.sort(comparefn); else tmp.sort(); // Hack for IE8/9
+      if (comparefn) tmp.sort(comparefn); else tmp.sort();
       for (i = 0; i < len; ++i)
         t._setter(i, tmp[i]);
       return t;

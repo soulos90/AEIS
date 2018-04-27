@@ -63,7 +63,6 @@ namespace StateTemplateV5Beta.Controllers
                 return BadRequest();
             }
             user.LastUsed = DateTime.Now;
-            ;
 
             db.Entry(user).State = EntityState.Modified;
 
@@ -93,9 +92,9 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return BadRequest(ModelState);
             }
-            user.LastUsed = user.created = DateTime.Now;
+            user.LastUsed = user.Created = DateTime.Now;
             user.PassSalt = GenerateSalt();
-            user.Passhash = HashPassword(user.Passhash,user.PassSalt);
+            user.PassHash = HashPassword(user.PassHash,user.PassSalt);
             db.Users.Add(user);
             try
             {
