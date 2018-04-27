@@ -13,10 +13,11 @@ namespace StateTemplateV5Beta.Controllers
     public class HomeController : Controller
     {
         UsersController UController = new UsersController();
-        public ActionResult Index(Security active)
+        public ActionResult Index(string actives, string activeLog, string activeRem)
         {
+            
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             IVM model = new LoginVM(active.IsLoggedIn, active);
-            active = session(active);
             SecurityController Active = new SecurityController(active);
 
             if (Active.CheckLogin())
@@ -28,9 +29,9 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);//not logged in
         }
 
-        public ActionResult Registration(Security active)
+        public ActionResult Registration(string actives, string activeLog, string activeRem)
         {
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
@@ -43,9 +44,9 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        public ActionResult ForgotPassword(Security active)
+        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)
         {
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
@@ -59,10 +60,10 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult Account(Security active)
+        public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -78,10 +79,10 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult Inventory(Security active)
+        public ActionResult Inventory(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -97,10 +98,10 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChartAnalysis(Security active)
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -116,21 +117,21 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChartAnalysis(int numOfSystems, Security active)
+        public ActionResult ChartAnalysis(int numOfSystems, string actives, string activeLog, string activeRem)
         {
             IVM model;
             
             string uId = "Demo";
-            model = new InventoryVM(uId, numOfSystems, active);
+            model = new InventoryVM(uId, numOfSystems, session(actives, activeLog.Equals("True"), activeRem.Equals("True")));
 
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult TextAnalysis(Security active)
+        [HttpPost]
+        public ActionResult TextAnalysis(string actives,string activeLog,string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives,activeLog.Equals("True"),activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -145,11 +146,11 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Justification(Security active)
+        [HttpPost]
+        public ActionResult Justification(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -165,10 +166,10 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult Justification(string btnPrint, Security active)
+        public ActionResult Justification(string btnPrint, string actives, string activeLog, string activeRem)
         {
             IVM model;
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -183,10 +184,10 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
-
-        public ActionResult About(Security active)
+        [HttpPost]
+        public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
         {
-            IVM model = new SecurityVM(session(active));
+            IVM model = new SecurityVM(session(actives, activeLog.Equals("True"), activeRem.Equals("True")));
             return View(model);
         }
 
@@ -196,7 +197,12 @@ namespace StateTemplateV5Beta.Controllers
                 active = new Security();
             return active;
         }
-        
+        private Security session(string active,bool activeLog,bool rem)
+        {
+            Security Active;
+            Active = new Security(active,activeLog,rem);
+            return Active;
+        }
         [HttpPost]
         public ActionResult PostUser(User user, Security active)
         {
@@ -209,7 +215,7 @@ namespace StateTemplateV5Beta.Controllers
                 var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
                 if (getUser == null)
                 {
-                    HttpCookie pass = SController.Login(user.ID);
+                    SController.Login(user.ID);
                     UController.PostUser(user);
                     model = new LoginVM(active.IsLoggedIn, active);
                 }
@@ -231,7 +237,7 @@ namespace StateTemplateV5Beta.Controllers
                 if (getUser != null)
                 {
                     user.Created = getUser.Created;
-                    HttpCookie pass = SController.Login(user.ID);
+                    SController.Login(user.ID);
                     model = new LoginVM(active.IsLoggedIn, SController.GetActive());
                     UController.PutUser(user.ID, user);
                 }
@@ -241,32 +247,31 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult LoginAuthentication(string userName, string password, bool RememberBox, Security active)
+        public ActionResult LoginAuthentication(string userName, string password, bool RememberBox)
         {
-            active = session(active);
+            Security active = new Security();
             var UC = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-
-            using (var context = new DBUContext())
+            
+            var user = UC.GetU(userName);
+            if (user != null)
             {
-                var user = UC.GetU(userName);
-                if (user != null)
+                var saltHash = user.PassSalt;
+                var encodedPassword = UC.HashPassword(password, saltHash);
+                if (user.PassHash.Trim() == encodedPassword.Trim())
                 {
-                    var saltHash = user.PassSalt;
-                    var encodedPassword = UC.HashPassword(password, saltHash);
-                    if (user.PassHash.Trim() == encodedPassword.Trim())
-                    {
-                        SController.Login(userName);
-                        SController.SetRemember(RememberBox);
-                        model = new InventoryVM(userName.Trim(), SController.GetActive());
-                        return View("Inventory", model);    // change to redirect
-                    }
+                    SController.Login(userName);
+                    SController.SetRemember(RememberBox);
+                    model = new InventoryVM(userName.Trim(), SController.GetActive());
+                    return View("Inventory", model);    // change to redirect
                 }
+                else ViewBag.ErrorMessage = "Incorrect Password";
 
-                ViewBag.ErrorMessage = "Invalid User Name or Password";
-                return View("Index", model);    // change to redirect
             }
+            else ViewBag.ErrorMessage = "Invalid User Name";
+            return View("Index", model);    // change to redirect
+            
         }
     }
 }
