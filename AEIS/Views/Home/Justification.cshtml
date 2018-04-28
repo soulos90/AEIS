@@ -7,6 +7,7 @@
     var servicesHeight = "190px";
     var impactHeight = "190px";
 }
+<!-- TODO: implement drop down where user can change selected the system from this page -->
 <!-- TODO: move to CSS -->
 <style>
     #JustificationPage {
@@ -18,18 +19,30 @@
         padding-right: 40px;
     }
 
-    #Description{
+    #Description {
         height: 190px;
     }
 
-    #Services{
+    #Services {
         height: 190px;
     }
 
-    #Impact{
+    #Impact {
         height: 190px;
     }
 </style>
+<script>
+    function myFunction(divName) {
+        var printContents = document.getElementById(divName).innerHTML;
+        var originalContents = document.body.innerHTML;
+
+        document.body.innerHTML = printContents;
+
+        window.print();
+
+        document.body.innerHTML = originalContents;
+    }
+</script>
 <main class="main-primary">
 
     <div class="section hidden-print">
@@ -41,18 +54,6 @@
                 <!-- Print button -->
                 <div class="col-xs-3" style="text-align:right">
                     <h1><button class="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
-                    <script>
-                        function myFunction(divName) {
-                            var printContents = document.getElementById(divName).innerHTML;
-                            var originalContents = document.body.innerHTML;
-
-                            document.body.innerHTML = printContents;
-
-                            window.print();
-
-                            document.body.innerHTML = originalContents;
-                        }
-                    </script>
                 </div> <!-- end col -->
             </div> <!-- end row -->
         </div> <!-- end container -->
@@ -99,7 +100,6 @@
                     </div> <!-- end system description panel -->
                 </div> <!-- end system description column -->
             </div> <!-- end breakdown and description row -->
-
             <!-- Services -->
             <div class="row">
                 <div class="col-xs-12">
@@ -109,7 +109,6 @@
                     </div> <!-- end services panel -->
                 </div> <!-- end services column -->
             </div> <!-- end services row -->
-
             <!-- Impact -->
             <div class="row">
                 <div class="col-xs-12">

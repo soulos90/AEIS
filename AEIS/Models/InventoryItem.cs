@@ -32,6 +32,9 @@ namespace StateTemplateV5Beta.Models
                     HasUnanswered = true;
             }
 
+            if (answers.Count() < Environment.NumQus)
+                HasUnanswered = true;
+
             int scoreDivisor = 9;
             for (int i = 0; i < SectionScores.Length; i++)
             {

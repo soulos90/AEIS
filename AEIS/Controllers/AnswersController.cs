@@ -39,6 +39,11 @@ namespace StateTemplateV5Beta.Controllers
             Answer answer = db.Answers.Find(id);
             return answer;
         }
+        public Answer GetAnswer(string uId, int aId)
+        {
+            Answer answer = (from t in db.Answers where ((uId == t.UId) & (aId == t.AId) & (1 == t.QId)) select t).FirstOrDefault();
+            return answer;
+        }
         // PUT: api/Answers/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutAnswer(string uId, Answer answer)
@@ -160,8 +165,12 @@ namespace StateTemplateV5Beta.Controllers
         // returns next available AId for new survey
         public int GetNextAId(string uId)
         {
-            int numOfAnswers = db.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();         
-            return numOfAnswers / Models.Environment.NumQus;
+            var result = (from Answers in db.Answers
+                          orderby Answers.AId
+                          where Answers.UId == uId
+                          select Answers.AId).Distinct().ToList();
+
+            return result.Count();
         }
 
         protected override void Dispose(bool disposing)

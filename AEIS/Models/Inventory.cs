@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data.Entity.Core.Objects;
 
 namespace StateTemplateV5Beta.Models
 {
@@ -14,9 +15,13 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId)
         {
             DBAContext dBAContext = new DBAContext();
-            
-            int numOfAnswers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();
-            int numOfSystems = numOfAnswers / Environment.NumQus;
+
+            var result = (from Answers in dBAContext.Answers
+                          orderby Answers.AId
+                          where Answers.UId == uId
+                          select Answers.AId).Distinct().ToList();
+
+                int numOfSystems = result.Count();
 
             getSections();
             getSystems(uId, numOfSystems);
@@ -26,15 +31,19 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId, int numOfSystems)
         {
             DBAContext dBAContext = new DBAContext();
-            int numOfAnswers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();
-            numOfAnswers /= Environment.NumQus;
+            var result = (from Answers in dBAContext.Answers
+                          orderby Answers.AId
+                          where Answers.UId == uId
+                          select Answers.AId).Distinct().ToList();
 
-            if (numOfSystems > numOfAnswers)
-                numOfSystems = numOfAnswers;
-
+            if (numOfSystems > result.Count())
+                numOfSystems = result.Count();
+            else if (numOfSystems <= 0)
+                numOfSystems = 1;
+                
             getSections();
             getSystems(uId, numOfSystems);
-            // TODO: sort sections by ScoreTotal
+            // TODO: sort systems by ScoreTotal
         }
 
         // gets a specific system and stores it into Systems[0].

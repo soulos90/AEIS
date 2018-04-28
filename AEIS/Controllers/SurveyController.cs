@@ -12,47 +12,56 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
-        // Name Survey
-        public ActionResult NameSurvey(Security active)
+        public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
             {
-                IVM model = new QuestionVM();
-                return RedirectToAction("Index", "Home", model);
+                IVM modelo = new LoginVM(active.IsLoggedIn, active);
+                return RedirectToAction("Index", "Home", modelo);
             }
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult StartSurvey(QuestionVM model, Security active)
+        public ActionResult StartSurvey(QuestionVM model, string actives, string activeLog, string activeRem)
         {
-            if (!ModelState.IsValid)
-                return View("NameSurvey");
-
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (Active.CheckLogin())
             {
-                model = new QuestionVM();
-                return RedirectToAction("Index", "Home", model);
+                IVM modelo = new InventoryVM(Active.GetID(), Active.GetActive());
+                return View("Inventory", "Home", modelo); //logged in    // change to redirect
             }
+
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
-            string userId = Active.GetID();
-
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
-            surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
-            surveyQuestionVM.QId = 1;
-            surveyQuestionVM.ProgramName = model.Name;
-            surveyQuestionVM.AId = aController.GetNextAId(userId);
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
+
+            if (Request.Form["btnEditSurvey"] != null)
+            {
+                Answer a = aController.GetAnswer(userId, int.Parse(Request.Form["btnEditSurvey"]));
+                surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
+                surveyQuestionVM.AId = a.AId;
+                surveyQuestionVM.QId = a.QId;
+                surveyQuestionVM.ProgramName = a.programName;
+            }
+            else
+            {
+                surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
+                surveyQuestionVM.AId = aController.GetNextAId(userId);
+                surveyQuestionVM.QId = 1;
+                surveyQuestionVM.ProgramName = model.Name;
+            }
 
             using (var context = new DBAContext())
             {
@@ -61,25 +70,26 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
-
+            
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult PreviousQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult PreviousQuestion(SurveyQuestionVM model, string actives, string activeLog, string activeRem)
         {
             if (!ModelState.IsValid)           
                 return View("SurveyQuestions", model);
 
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
             {
-                IVM modelo = new QuestionVM();
+                IVM modelo = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home", modelo);
             }
 
-            string userId = Active.GetID();
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
@@ -101,7 +111,10 @@ namespace StateTemplateV5Beta.Controllers
                 Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.QId == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
                 //if the answer exists use Put, otherwise use Post
                 if (CheckAnswer != null)
+                {
+                    previousAnswer.Created = CheckAnswer.Created;
                     aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                }
                 else
                     aController.PostAnswer(previousAnswer);
             }
@@ -109,6 +122,10 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.ProgramName = model.ProgramName;
             surveyQuestionVM.QId = model.QId;
             i--;
+
+            if (i <= 0)
+                return RedirectToAction("Inventory", "Home");
+
             surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
             surveyQuestionVM.QId = i;
 
@@ -125,60 +142,66 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
-
-            if (i == 0)
-                return RedirectToAction("Summary", surveyQuestionVM);
             
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
         [HttpPost]
-        public ActionResult NextQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult NextQuestion(SurveyQuestionVM model, string actives, string activeLog, string activeRem)
         {
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            active = session(active);
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
             {
-                IVM modelo = new QuestionVM();
-                return RedirectToAction("Index", "Home", modelo);
+                IVM modelo = new LoginVM(active.IsLoggedIn, active);
+                return RedirectToAction("Index", "Home", modelo); 
             }
 
-            string userId = Active.GetID();
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
             var eController = new EnvironmentController();
             var aController = new AnswersController();
 
-            surveyQuestionVM.ProgramName = model.ProgramName;
             surveyQuestionVM.AId = model.AId;
+            surveyQuestionVM.ProgramName = model.ProgramName;
             int i = model.QId;
-
             //Save the Answer to the question just answered.
             using (var context = new DBAContext())
             {                
-                Answer PreviousAnswer = new Answer();
-                PreviousAnswer.QId = model.QId;
-                PreviousAnswer.Value = model.Value;
-                PreviousAnswer.programName = model.ProgramName;            
-                PreviousAnswer.UId = userId;
-                PreviousAnswer.AId = model.AId;
+                Answer previousAnswer = new Answer();
+                previousAnswer.QId = model.QId;
+                previousAnswer.Value = model.Value;
+                previousAnswer.programName = model.ProgramName;            
+                previousAnswer.UId = userId;
+                previousAnswer.AId = model.AId;
 
                 //checks to see if the answer exists
                 Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
                 //if the answer exists use Put, otherwise use Post
                 if (CheckAnswer != null)
-                    aController.PutAnswer(PreviousAnswer.UId, PreviousAnswer);
+                {
+                    previousAnswer.Created = CheckAnswer.Created;
+                    aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                }
                 else
-                    aController.PostAnswer(PreviousAnswer);
+                    aController.PostAnswer(previousAnswer);
             }
                 
             // gets the next question
             surveyQuestionVM.QId = model.QId;
             i = surveyQuestionVM.QId;
             i++;
+
+            //redirects to the summary when it reachs the end
+            int End = eController.GetQuestionCount();
+            if (i > End)
+                return RedirectToAction("Inventory", "Home");
+
             surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
             surveyQuestionVM.QId = i;
 
@@ -196,11 +219,6 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
-
-            //redirects to the summary when it reachs the end
-            int End = eController.GetQuestionCount();
-            if (i > End)
-                return RedirectToAction("Summary", surveyQuestionVM);
 
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
@@ -245,6 +263,12 @@ namespace StateTemplateV5Beta.Controllers
             if (active == null)
                 active = new Security();
             return active;
+        }
+        private Security session(string active, bool activeLog, bool rem)
+        {
+            Security Active;
+            Active = new Security(active, activeLog, rem);
+            return Active;
         }
     }
 }

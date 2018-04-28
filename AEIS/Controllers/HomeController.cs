@@ -96,6 +96,24 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
+        // Not yet implemented
+        public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
+        {
+            IVM model;
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            SecurityController Active = new SecurityController(active);
+
+            if (!Active.CheckLogin())
+            {
+                model = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", model);    // change to redirect
+            }
+
+            string uId = Active.GetID();
+
+            model = new InventoryVM(uId, active);
+            return RedirectToAction("Inventory", model);
+        }
 
         [HttpGet]
         public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
@@ -266,12 +284,10 @@ namespace StateTemplateV5Beta.Controllers
                     model = new InventoryVM(userName.Trim(), SController.GetActive());
                     return View("Inventory", model);    // change to redirect
                 }
-                else ViewBag.ErrorMessage = "Incorrect Password";
-
             }
-            else ViewBag.ErrorMessage = "Invalid User Name";
-            return View("Index", model);    // change to redirect
-            
+
+            ViewBag.ErrorMessage = "Invalid User Name or Password";
+            return View("Index", model);    // change to redirect           
         }
     }
 }
