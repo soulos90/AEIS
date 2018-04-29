@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using StateTemplateV5Beta.Models;
@@ -15,7 +16,7 @@ namespace StateTemplateV5Beta.Controllers
         UsersController UController = new UsersController();
         public ActionResult Index(string actives, string activeLog, string activeRem)
         {
-            
+
             Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             IVM model = new LoginVM(active.IsLoggedIn, active);
             SecurityController Active = new SecurityController(active);
@@ -75,7 +76,7 @@ namespace StateTemplateV5Beta.Controllers
             string uId = Active.GetID();
             model = new AccountVM(uId, active);
 
-            return View(model);     
+            return View(model);
         }
 
         [HttpGet]
@@ -96,6 +97,7 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
+
         // Not yet implemented
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
@@ -129,27 +131,20 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             string uId = Active.GetID();
-            model = new InventoryVM(uId, 6, active);
 
-            return View(model);           
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(6);
+            InventoryVM model = new InventoryVM(inventory, active);
+
+            return View(model);
         }
 
         [HttpPost]
         public ActionResult ChartAnalysis(int numOfSystems, string actives, string activeLog, string activeRem)
         {
             IVM model;
-            
-            string uId = "Demo";
-            model = new InventoryVM(uId, numOfSystems, session(actives, activeLog.Equals("True"), activeRem.Equals("True")));
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult TextAnalysis(string actives,string activeLog,string activeRem)
-        {
-            IVM model;
-            Security active = session(actives,activeLog.Equals("True"),activeRem.Equals("True"));
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -159,12 +154,38 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             string uId = Active.GetID();
-            model = new InventoryVM(uId, 6, active);
+
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(int.Parse(Request.Form["numOfSystems"]));
+            InventoryVM model = new InventoryVM(inventory, active);
 
             return View(model);
         }
 
-        [HttpPost]
+        [HttpGet]
+        public ActionResult TextAnalysis(string actives, string activeLog, string activeRem)
+        {
+            IVM model;
+            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            SecurityController Active = new SecurityController(active);
+
+            if (!Active.CheckLogin())
+            {
+                model = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", model);    // change to redirect
+            }
+
+            string uId = Active.GetID();
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(6);
+            InventoryVM model = new InventoryVM(inventory, active);
+
+            return View(model);
+        }
+
+        [HttpGet]
         public ActionResult Justification(string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -202,6 +223,7 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
+
         [HttpPost]
         public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
         {
@@ -211,16 +233,18 @@ namespace StateTemplateV5Beta.Controllers
 
         private Security session(Security active)
         {
-            if(active==null)
+            if (active == null)
                 active = new Security();
             return active;
         }
-        private Security session(string active,bool activeLog,bool rem)
+
+        private Security session(string active, bool activeLog, bool rem)
         {
             Security Active;
-            Active = new Security(active,activeLog,rem);
+            Active = new Security(active, activeLog, rem);
             return Active;
         }
+
         [HttpPost]
         public ActionResult PostUser(User user, Security active)
         {
@@ -238,7 +262,7 @@ namespace StateTemplateV5Beta.Controllers
                     model = new LoginVM(active.IsLoggedIn, active);
                 }
 
-                return View("Index",model); // change to redirect
+                return View("Index", model); // change to redirect
             }
         }
 
@@ -260,7 +284,7 @@ namespace StateTemplateV5Beta.Controllers
                     UController.PutUser(user.ID, user);
                 }
 
-                return View("Index",model); // change to redirect
+                return View("Index", model); // change to redirect
             }
         }
 
@@ -268,26 +292,28 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult LoginAuthentication(string userName, string password, bool RememberBox)
         {
             Security active = new Security();
-            var UC = new UsersController();
+            var UController = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-            
-            var user = UC.GetU(userName);
-            if (user != null)
-            {
-                var saltHash = user.PassSalt;
-                var encodedPassword = UC.HashPassword(password, saltHash);
-                if (user.PassHash.Trim() == encodedPassword.Trim())
-                {
-                    SController.Login(userName);
-                    SController.SetRemember(RememberBox);
-                    model = new InventoryVM(userName.Trim(), SController.GetActive());
-                    return View("Inventory", model);    // change to redirect
-                }
-            }
 
-            ViewBag.ErrorMessage = "Invalid User Name or Password";
-            return View("Index", model);    // change to redirect           
+            using (var context = new DBUContext())
+            {
+                var user = UController.GetU(userName);
+                if (user != null)
+                {
+                    var saltHash = user.PassSalt;
+                    var encodedPassword = UController.HashPassword(password, saltHash);
+                    if (user.PassHash.Trim() == encodedPassword.Trim())
+                    {
+                        SController.Login(userName);
+                        SController.SetRemember(RememberBox);
+                        model = new InventoryVM(userName.Trim(), SController.GetActive());
+                        return View("Inventory", model);    // change to redirect
+                    }
+                }
+
+                ViewBag.ErrorMessage = "Invalid User Name or Password";
+                return View("Index", model);    // change to redirect           
+            }
         }
-    }
 }

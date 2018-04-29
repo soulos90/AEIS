@@ -2,6 +2,9 @@
 @{
     ViewBag.Title = "ChartAnalysis";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // TODO: validate text box to make sure it's an integer
+    // TODO: find way to pass model to GetChart for dynamic chart generation
 }
 
 <style>
@@ -16,18 +19,18 @@
     <row class="container">
         @using (Html.BeginForm("ChartAnalysis", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
-        <row m-b-sm>
-            <div class="col-lg-9"><h1>AEIS Inventory Chart Analysis</h1></div>
-            <div class="col-lg-3">
-                <label>Number of Systems on Chart</label>
-            </div>
-        </row>
-        <row p-l-md>
-            <div class="col-lg-9"></div>
-            <div class="col-lg-3">
-                <input type="text" name="numOfSystems" value="@Model.Systems.Length" tabindex="1">
-            </div>
-        </row>
+            <row m-b-sm>
+                <div class="col-lg-9"><h1>AEIS Inventory Chart Analysis</h1></div>
+                <div class="col-lg-3">
+                    <label>Number of Systems on Chart</label>
+                </div>
+            </row>
+            <row p-l-md>
+                <div class="col-lg-9"></div>
+                <div class="col-lg-3">
+                    <input type="text" name="numOfSystems" value="@Model.Systems.Length" tabindex="1">
+                </div>
+            </row>
         }
         <!-- TODO: pass model to GetChart -->
         <div class="row" style="text-align:center">

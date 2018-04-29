@@ -3,8 +3,7 @@
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
-    // TODO: INVENTORY - implement add system button
-    // TODO: INVENTORY - add proper link to edit form button
+
     // TODO: INVENTORY - change to grid for pagination(?)
 }
 
@@ -57,7 +56,7 @@
                             <td style="text-align:center; vertical-align:middle">
                                 @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post))
                                 {
-                                <button type="submit" name="btnEditSurvey" value ="@i" class="btn btn-primary btn-sm" title="Edit Survey">
+                                <button type="submit" name="btnEditSurvey" value ="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Edit Survey">
                                     <i class="ca-gov-icon-pencil-edit"></i>
                                 </button>
                                 }
@@ -67,13 +66,13 @@
                                 {
                                     if (Model.Systems[i].HasUnanswered)
                                     {
-                                    <button type="submit" name="btnJustification" value="@i" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                    <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
                                         <i class="ca-gov-icon-print"></i>
                                     </button>
                                     }
                                     else
                                     {
-                                    <button type="submit" name="btnJustification" value="@i" class="btn btn-primary btn-sm" title="Print Justification">
+                                    <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Print Justification">
                                         <i class="ca-gov-icon-print"></i>
                                     </button>
                                     }
@@ -81,7 +80,7 @@
                             </td>
                             <!-- TODO: implement delete -->
                             <td style="text-align:center; vertical-align:middle">
-                                <button type="button" name="btnDeleteSurvey" value ="@i" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
+                                <button type="button" name="btnDeleteSurvey" value ="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
                                     <i class="ca-gov-icon-close-fill"></i>
                                 </button>
                             </td>

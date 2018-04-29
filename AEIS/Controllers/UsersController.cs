@@ -26,9 +26,9 @@ namespace StateTemplateV5Beta.Controllers
 
         // GET: api/Users/5
         [ResponseType(typeof(User))]
-        public IHttpActionResult GetUser(string id)
+        public IHttpActionResult GetUser(string uId)
         {
-            User user = db.Users.Find(id);
+            User user = db.Users.Find(uId);
             user.LastUsed = DateTime.Now;
 
             if (user == null)
@@ -38,9 +38,9 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(user);
         }
-        public User GetU(string id)
+        public User GetU(string uId)
         {
-            User user = db.Users.Find(id);
+            User user = db.Users.Find(uId);
             return user;
         }
         // PUT: api/Users/5

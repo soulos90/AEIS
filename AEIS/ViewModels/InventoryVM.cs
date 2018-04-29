@@ -9,23 +9,23 @@ namespace StateTemplateV5Beta.ViewModels
 {
     public class InventoryVM : IVM
     {
-        public string[] SectionTitles { get; }
         public InventoryItem[] Systems { get; }
+        public string[] SectionTitles { get; }
         public Security Active { get; }
 
         // gets all systems from a uId
         public InventoryVM(string uId, Security active)
         {
             Inventory inventory = new Inventory(uId);
-            SectionTitles = inventory.SectionTitles;
+
             Systems = inventory.Systems;
+            SectionTitles = inventory.SectionTitles;
             Active = active;
         }
 
-        // gets 'numOfSystems' number of systems from a uId
-        public InventoryVM(string uId, int numOfSystems, Security active)
+        // maps systems from inventory to VM
+        public InventoryVM(Inventory inventory, Security active)
         {
-            Inventory inventory = new Inventory(uId, numOfSystems);
             SectionTitles = inventory.SectionTitles;
             Systems = inventory.Systems;
             Active = active;

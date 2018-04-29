@@ -8,8 +8,10 @@ namespace StateTemplateV5Beta.Models
 {
     public class Inventory
     {
-        public string[] SectionTitles { get; set; }
         public InventoryItem[] Systems { get; set; }
+        public string[] SectionTitles { get; set; }
+
+        private Inventory() {}
 
         // gets ALL systems from a given uId
         public Inventory(string uId)
@@ -21,29 +23,10 @@ namespace StateTemplateV5Beta.Models
                           where Answers.UId == uId
                           select Answers.AId).Distinct().ToList();
 
-                int numOfSystems = result.Count();
+            int numOfSystems = result.Count();
 
             getSections();
             getSystems(uId, numOfSystems);
-        }
-
-        // gets a given number of systems from a given uId
-        public Inventory(string uId, int numOfSystems)
-        {
-            DBAContext dBAContext = new DBAContext();
-            var result = (from Answers in dBAContext.Answers
-                          orderby Answers.AId
-                          where Answers.UId == uId
-                          select Answers.AId).Distinct().ToList();
-
-            if (numOfSystems > result.Count())
-                numOfSystems = result.Count();
-            else if (numOfSystems <= 0)
-                numOfSystems = 1;
-                
-            getSections();
-            getSystems(uId, numOfSystems);
-            // TODO: sort systems by ScoreTotal
         }
 
         // gets a specific system and stores it into Systems[0].
@@ -69,6 +52,55 @@ namespace StateTemplateV5Beta.Models
 
             for (int i = 0; i < Systems.Length; i++)
                 Systems[i] = new InventoryItem(uId, i.ToString());
+        }
+
+        public void SortByTotalScore()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+            {
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].ScoreTotal < Systems[j + 1].ScoreTotal)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+            }
+        }
+
+        public void SortByLastUsed()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+            {
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].LastUsed < Systems[j + 1].LastUsed)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+            }
+        }
+
+        public Inventory GetTop(int num)
+        {
+            if (num > Systems.Length)
+                num = Systems.Length;
+            else if (num < 1)
+                num = 1;
+
+            Inventory inventory = new Inventory();
+            inventory.Systems = new InventoryItem[num];
+            inventory.SectionTitles = SectionTitles;
+
+            for (int i = 0; i < num; i++)
+                inventory.Systems[i] = Systems[i];
+
+            return inventory;
         }
     }
 }
