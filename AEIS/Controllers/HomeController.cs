@@ -17,7 +17,7 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult Index(string actives, string activeLog, string activeRem)
         {
 
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             IVM model = new LoginVM(active.IsLoggedIn, active);
             SecurityController Active = new SecurityController(active);
 
@@ -32,7 +32,7 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult Registration(string actives, string activeLog, string activeRem)
         {
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
@@ -47,7 +47,7 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)
         {
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
@@ -60,11 +60,11 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -79,11 +79,11 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpGet]
+        [HttpPost]
         public ActionResult Inventory(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -102,7 +102,7 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -117,11 +117,11 @@ namespace StateTemplateV5Beta.Controllers
             return RedirectToAction("Inventory", model);
         }
 
-        [HttpGet]
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
+        [HttpPost]
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems = 6)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -134,40 +134,17 @@ namespace StateTemplateV5Beta.Controllers
 
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
-            inventory = inventory.GetTop(6);
+            inventory = inventory.GetTop(numOfSystems);
             model = new InventoryVM(inventory, active);
 
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult ChartAnalysis(int numOfSystems, string actives, string activeLog, string activeRem)
-        {
-            IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
-            }
-
-            string uId = Active.GetID();
-
-            Inventory inventory = new Inventory(uId);
-            inventory.SortByTotalScore();
-            inventory = inventory.GetTop(int.Parse(Request.Form["numOfSystems"]));
-            model = new InventoryVM(inventory, active);
-
-            return View(model);
-        }
-
-        [HttpGet]
         public ActionResult TextAnalysis(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -189,7 +166,7 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult Justification(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -208,7 +185,7 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult Justification(string btnPrint, string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!Active.CheckLogin())
@@ -227,7 +204,7 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
         {
-            IVM model = new SecurityVM(session(actives, activeLog.Equals("True"), activeRem.Equals("True")));
+            IVM model = new SecurityVM(session(actives, activeLog, activeRem));
             return View(model);
         }
 
@@ -238,10 +215,22 @@ namespace StateTemplateV5Beta.Controllers
             return active;
         }
 
-        private Security session(string active, bool activeLog, bool rem)
+        private Security session(string active, string activeLog, string rem)
         {
             Security Active;
-            Active = new Security(active, activeLog, rem);
+            if(active == null)
+            {
+                active = "";
+            }
+            if(activeLog == null)
+            {
+                activeLog = "False";
+            }
+            if(rem == null)
+            {
+                rem = "False";
+            }
+            Active = new Security(active, activeLog.Equals("True"), rem.Equals("True"));
             return Active;
         }
 
