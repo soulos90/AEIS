@@ -60,7 +60,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpPost]
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -79,7 +78,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpPost]
         public ActionResult Inventory(string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -117,7 +115,6 @@ namespace StateTemplateV5Beta.Controllers
             return RedirectToAction("Inventory", model);
         }
 
-        [HttpPost]
         public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems = 6)
         {
             IVM model;
@@ -140,7 +137,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpPost]
         public ActionResult TextAnalysis(string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -162,26 +158,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpGet]
-        public ActionResult Justification(string actives, string activeLog, string activeRem)
-        {
-            IVM model;
-            Security active = session(actives, activeLog, activeRem);
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
-            }
-
-            string uId = Active.GetID();
-            model = new JustificationVM(uId, "0", active);
-
-            return View(model);
-        }
-
-        [HttpPost]
         public ActionResult Justification(string btnPrint, string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -201,10 +177,12 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        [HttpPost]
         public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
         {
-            IVM model = new SecurityVM(session(actives, activeLog, activeRem));
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+            Active.CheckLogin();
+            IVM model = new SecurityVM(active);
             return View(model);
         }
 
@@ -304,6 +282,6 @@ namespace StateTemplateV5Beta.Controllers
                 ViewBag.ErrorMessage = "Invalid User Name or Password";
                 return View("Index", model);    // change to redirect           
             }
-        }
+        }//TODO: make a 404 page
     }
 }

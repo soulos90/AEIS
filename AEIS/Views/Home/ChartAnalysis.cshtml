@@ -19,6 +19,7 @@
     <row class="container">
         @using (Html.BeginForm("ChartAnalysis", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
+            @Html.ValidationSummary(false, "", new { @class = "" })
             <row m-b-sm>
                 <div class="col-lg-9"><h1>AEIS Inventory Chart Analysis</h1></div>
                 <div class="col-lg-3">
@@ -28,7 +29,11 @@
             <row p-l-md>
                 <div class="col-lg-9"></div>
                 <div class="col-lg-3">
-                    <input type="text" name="numOfSystems" value="@Model.Systems.Length" tabindex="1">
+                    <input type="hidden" value=@Model.Active.ID name="actives" />
+                    <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
+                    <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
+                    <input type="text" name="numOfSystems" placeholder=@Model.Systems.Length tabindex="1">
+                    <input type="submit" value="Update Chart #" class="btn" tabindex="2" />
                 </div>
             </row>
         }
