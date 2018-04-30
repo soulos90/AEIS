@@ -135,7 +135,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(6);
-            InventoryVM model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active);
 
             return View(model);
         }
@@ -158,7 +158,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(int.Parse(Request.Form["numOfSystems"]));
-            InventoryVM model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active);
 
             return View(model);
         }
@@ -180,7 +180,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(6);
-            InventoryVM model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active);
 
             return View(model);
         }
@@ -316,4 +316,5 @@ namespace StateTemplateV5Beta.Controllers
                 return View("Index", model);    // change to redirect           
             }
         }
+    }
 }
