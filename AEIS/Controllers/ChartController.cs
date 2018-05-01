@@ -11,47 +11,38 @@ namespace StateTemplateV5Beta.Controllers
     {
         public ActionResult GetChart()
         {
+            InventoryVM model = new
+            InventoryVM("demo", 6, new Models.Security());
             var key = new Chart(width: 800, height: 600)
-                
-                .AddTitle("AEIS Inventory Analysis")
+
+
+                key.AddTitle("AEIS Inventory Analysis");
                 for (int i=0; i<model.SectionTitles.Length; i++)
                     {
-                        int[] newSectionInfo;
-                        .AddSeries(
-                        ChartType: "StackedColumn",
-                        legend: "AESI Inventory Analysis",
-                        if(i == 0)
-                {
-                    xValue: ModelBinderAttribute.SectionTitles,
-                }
+                string[] systemNames = new string[model.Systems.Length];
+                int[] sectionScore = new int[model.Systems.Length];
+
                 for (int j = 0; j < model.System.Length; j++)
                 {
-                    newSectionInfo = new int[SectionTitle.Length];
-                    newSectionInfo[i] = ModelBinderAttribute.system[j].SectionScores[i]
-                        }
-                yValues: newsectionInfo)
-                    }
-                .AddSeries(
-                    chartType: "StackedColumn",
-                    legend: "AEIS Inventory Analysis",
-                    xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
-                    yValues: new[] { "33", "33", "17", "33", "33", "27" })
-               
-                    .AddSeries(
-                    chartType: "StackedColumn",
-                    legend: "AEIS Inventory Analysis",
-                    yValues: new[] { "11", "11", "11", "11", "11", "11" })
-
-                    .AddSeries(
-                    chartType: "StackedColumn",
-                    legend: "AEIS Inventory Analysis",
-                    yValues: new[] { "22", "9", "22", "2", "22", "22" })
-
-                    .AddSeries(
-                    chartType: "StackedColumn",
-                    legend: "AEIS Inventory Analysis",
-                    yValues: new[] { "28", "28", "28", "28", "6", "6" })
-                .Write();
+                    systemNames[j] = model.Systems[j].Name;
+                    sectionScore[j] = medel.Systems[j].SectionScores[i];
+                }
+                if (i == 0)
+                {
+                    key.AddSeries(
+                        chartType: "StackedColumn",
+                        legend: "AEIS Inventory Analysis",
+                        xValue: systemNames,
+                        yValues: sectionScore);
+                }else
+                {
+                    key.AddSeries(
+                        chartType: "stackedColumn",
+                        legend: "AEIS Inventory Analysis",
+                        yValues: sectionScore);
+                }
+                }
+                    
             return null;
         }
 
