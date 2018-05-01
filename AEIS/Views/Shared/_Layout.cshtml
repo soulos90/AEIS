@@ -5,9 +5,14 @@
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
 @{
-    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
-    bool loggedIn = SU.CheckLogin();
-    
+    var cookie = HttpContext.Current.Request.Cookies.Get("UserInfo");
+    bool loggedIn = true;
+
+    if (cookie == null || cookie.Values["LoggedIn"] != "True")
+    {
+        loggedIn = false;
+    }
+
 }
 <html class="no-js" lang="en">
 <!--<![endif]-->
@@ -71,7 +76,7 @@
                 <button type="button" class="close" data-toggle="collapse" data-target="#locationSettings" aria-expanded="false" aria-controls="locationSettings" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <div class="form-group form-inline"><!--TODO: do we have location stuff? probably remove this stuff-->
+                <div class="form-group form-inline">
                     <label for="locationZipCode">Saving your location allows us to provide you with more relevant information.</label>
                     <input type="input" class="form-control" id="locationZipCode" placeholder="Zip Code">
                     <button type="button" class="btn btn-primary">Set Location</button>
@@ -85,7 +90,7 @@
                 <div class="group">
                     <div class="half">
 
-                        <ul class="utility-links social-media-links"><!--TODO: make this photo link to DOR not to us--><!--TODO: not sure what file its in but the bar abve layout has an image that links to us that should link to CA.gov and a home link that needs to submit a form to stay logged in-->
+                        <ul class="utility-links social-media-links">
                             <li><div class="header-cagov-logo"><a href="/"><img src="/Content/stateTemplate/images/Ca-Gov-Logo-Gold.svg" alt="CA.gov" /></a></div></li>
                             <li><a href="/"><span class="ca-gov-icon-home" aria-hidden="true"></span><span class="sr-only">Home</span></a></li>
 
@@ -157,60 +162,32 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
-                @if (loggedIn)
-                {<!--TODO: add about section-->
-                    <li class="nav-item"><!--TODO: make these not ugly af-->
-                        @using (Html.BeginForm("TextAnalysis", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            @Html.ValidationSummary(false, "", new { @class = "" })
-                            <input type="hidden" value=@Model.Active.ID name="actives" />
-                            <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
-                            <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
-                            <a><input  type="submit" value="TextAnalysis" class="ca-gov-icon-read-book" aria-hidden="true">Text Analysis</a>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        @using (Html.BeginForm("ChartAnalysis", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            @Html.ValidationSummary(false, "", new { @class = "" })
-                            <input type="hidden" value=@Model.Active.ID name="actives" />
-                            <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
-                            <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
-                            <a><input type="submit" value="Chart Analysis"class="ca-gov-icon-bar-chart" aria-hidden="true">Chart Analysis</a>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        @using (Html.BeginForm("Inventory", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            @Html.ValidationSummary(false, "", new { @class = "" })
-                            <input type="hidden" value=@Model.Active.ID name="actives" />
-                            <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
-                            <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
-                            <a><input type="submit" value="Inventory" class="ca-gov-icon-clipboard" aria-hidden="true">Inventory</a>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        @using (Html.BeginForm("Account", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                        {
-                            @Html.ValidationSummary(false, "", new { @class = "" })
-                            <input type="hidden" value=@Model.Active.ID name="actives" />
-                            <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
-                            <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
-                            <a><input type="submit" value="Account Settings" class="ca-gov-icon-gear" aria-hidden="true">Account Settings</a>
-                            }
-                        }
-                    </li>
-                    <li class="nav-item"><!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
-                        <a href="~/Home/Index" class="first-level-link" onclick=@{SU.Logout();}><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
-                    </li>
-                }
-                else
-                {
-                <!--TODO: add about section, make the size of the login button smaller when it's the only one displayed -->
-                <li class="nav-item">
-                    <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
-                </li>
-                }
+                    @if (loggedIn)
+                    {<!--TODO: pass security model along with links-->
+                        <li class="nav-item">
+                            <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
+                            <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <!--TODO: make the size of the login button smaller when it's the only one displayed -->
+                        <li class="nav-item">
+                            <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                        </li>
+                    }
                 </ul>
             </nav>
         </div>

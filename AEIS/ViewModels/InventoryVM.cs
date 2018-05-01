@@ -13,6 +13,8 @@ namespace StateTemplateV5Beta.ViewModels
         public string[] SectionTitles { get; }
         public Security Active { get; }
 
+        public InventoryVM() { }
+
         // gets all systems from a uId
         public InventoryVM(string uId, Security active)
         {
