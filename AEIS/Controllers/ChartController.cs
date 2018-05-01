@@ -14,6 +14,23 @@ namespace StateTemplateV5Beta.Controllers
             var key = new Chart(width: 800, height: 600)
                 
                 .AddTitle("AEIS Inventory Analysis")
+                for (int i=0; i<model.SectionTitles.Length; i++)
+                    {
+                        int[] newSectionInfo;
+                        .AddSeries(
+                        ChartType: "StackedColumn",
+                        legend: "AESI Inventory Analysis",
+                        if(i == 0)
+                {
+                    xValue: ModelBinderAttribute.SectionTitles,
+                }
+                for (int j = 0; j < model.System.Length; j++)
+                {
+                    newSectionInfo = new int[SectionTitle.Length];
+                    newSectionInfo[i] = ModelBinderAttribute.system[j].SectionScores[i]
+                        }
+                yValues: newsectionInfo)
+                    }
                 .AddSeries(
                     chartType: "StackedColumn",
                     legend: "AEIS Inventory Analysis",
@@ -38,8 +55,8 @@ namespace StateTemplateV5Beta.Controllers
             return null;
         }
 
-        private Object TextBoxes(
+        private Object TextBoxes()
     Object Index
-)
+
     }
 }
