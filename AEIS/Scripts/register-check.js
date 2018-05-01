@@ -20,6 +20,7 @@
 }
 
 function checkLength() {
+    check();
     var textBox = document.getElementById("password");
     var textLength = textBox.value.length;
 

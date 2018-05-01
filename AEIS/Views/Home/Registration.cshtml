@@ -3,8 +3,7 @@
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
     
-    // TODO: fix bug - comparing passwords doesn't work when 'password' is changed. It doesn't check against 'reenter-password' to make sure they match.
-}
+    }
 
 <div class="section">
 
@@ -47,7 +46,7 @@
                 <label>Password</label>
             </div>
             <div class="row p-l-md">
-                <input type="password" placeholder="Password" id="password" name="Passhash" tabindex="5" onchange='checkLength();'>
+                <input type="password" placeholder="Password" id="password" name="Passhash" tabindex="5" onchange="checkLength();">
                 <span id='pw_message'></span>
             </div>
             <div class="row p-t p-l-md">
