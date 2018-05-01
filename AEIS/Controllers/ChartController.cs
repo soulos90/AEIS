@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Helpers;
+using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.Controllers
 {

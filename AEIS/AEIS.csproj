@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Environment.cs" />
+    <Compile Include="Models\InventoryVM.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
