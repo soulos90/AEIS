@@ -1,4 +1,4 @@
-﻿using StateTemplateV5Beta.Models; 
+﻿using StateTemplateV5Beta.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,34 +12,22 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
-        public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
+        public ActionResult NameSurvey(Security active)
         {
             if (!ModelState.IsValid)
                 return View();
 
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                IVM modelo = new LoginVM(active.IsLoggedIn, active);
-                return RedirectToAction("Index", "Home", modelo);
-            }
+            if (!IsLoggedIn())
+                return RedirectToAction("Index", "Home");
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult StartSurvey(QuestionVM model, string actives, string activeLog, string activeRem)
+        public ActionResult StartSurvey(QuestionVM model, Security active)
         {
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
-            SecurityController Active = new SecurityController(active);
-
-            if (Active.CheckLogin())
-            {
-                IVM modelo = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", "Home", modelo); //logged in    // change to redirect
-            }
+            if (!IsLoggedIn())
+                return RedirectToAction("Index", "Home");
 
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
@@ -70,23 +58,17 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
-            
+
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult PreviousQuestion(SurveyQuestionVM model, string actives, string activeLog, string activeRem)
+        public ActionResult PreviousQuestion(SurveyQuestionVM model, Security active)
         {
-            if (!ModelState.IsValid)           
+            if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                IVM modelo = new LoginVM(active.IsLoggedIn, active);
-                return RedirectToAction("Index", "Home", modelo);
-            }
+            if (!IsLoggedIn())
+                return RedirectToAction("Index", "Home");
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
@@ -118,7 +100,7 @@ namespace StateTemplateV5Beta.Controllers
                 else
                     aController.PostAnswer(previousAnswer);
             }
-                
+
             surveyQuestionVM.ProgramName = model.ProgramName;
             surveyQuestionVM.QId = model.QId;
             i--;
@@ -142,24 +124,18 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
-            
+
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
         [HttpPost]
-        public ActionResult NextQuestion(SurveyQuestionVM model, string actives, string activeLog, string activeRem)
+        public ActionResult NextQuestion(SurveyQuestionVM model, Security active)
         {
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            Security active = session(actives, activeLog.Equals("True"), activeRem.Equals("True"));
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                IVM modelo = new LoginVM(active.IsLoggedIn, active);
-                return RedirectToAction("Index", "Home", modelo); 
-            }
+            if (!IsLoggedIn())
+                return RedirectToAction("Index", "Home");
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
@@ -172,11 +148,11 @@ namespace StateTemplateV5Beta.Controllers
             int i = model.QId;
             //Save the Answer to the question just answered.
             using (var context = new DBAContext())
-            {                
+            {
                 Answer previousAnswer = new Answer();
                 previousAnswer.QId = model.QId;
                 previousAnswer.Value = model.Value;
-                previousAnswer.programName = model.ProgramName;            
+                previousAnswer.programName = model.ProgramName;
                 previousAnswer.UId = userId;
                 previousAnswer.AId = model.AId;
 
@@ -191,7 +167,7 @@ namespace StateTemplateV5Beta.Controllers
                 else
                     aController.PostAnswer(previousAnswer);
             }
-                
+
             // gets the next question
             surveyQuestionVM.QId = model.QId;
             i = surveyQuestionVM.QId;
@@ -237,7 +213,6 @@ namespace StateTemplateV5Beta.Controllers
 
             using (var context = new DBAContext())
             {
-                //TODO: If there were questions that didnt have any yes or no. It would return an error
                 //int End = Convert.ToInt16(Controller.GetQuestionCount());
                 //int YesTotal = 0;
                 //int NoTotal = 0;
@@ -264,11 +239,26 @@ namespace StateTemplateV5Beta.Controllers
                 active = new Security();
             return active;
         }
-        private Security session(string active, bool activeLog, bool rem)
+
+        public bool IsLoggedIn()
         {
-            Security Active;
-            Active = new Security(active, activeLog, rem);
-            return Active;
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            UsersController usersController = new UsersController();
+            User user = null;
+            string decodedHash = null;
+
+            if (cookie != null)
+            {
+                string decodedUser = HttpUtility.HtmlDecode(cookie.Values["ID"]);
+                user = usersController.GetU(decodedUser);
+                decodedHash = HttpUtility.HtmlDecode(cookie.Values["Hash"]);
+            }
+
+            if (user == null || cookie == null || cookie.Values["LoggedIn"] != "True" ||
+                cookie.Values["ID"] == null || decodedHash != user.PassHash.Trim())
+                return false;
+
+            return true;
         }
     }
 }

@@ -4,9 +4,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
 
+    // light blue: 9FC7DA
+    // primary blue: 046B99
+    // dark blue: 035376
     // TODO: INVENTORY - change to grid for pagination(?)
 }
-
 <style type="text/css">
     #submit {
         background-color: #046B99;
@@ -61,7 +63,6 @@
                                     <th style="text-align:center"><button type="submit" id="submit" name="sort" value="@i">@Model.SectionTitles[i]</button></th>
                                 }
                             }
-
                             @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
                             {
                                 <th style="text-align:center"><button type="submit" id="submit" name="sort" value="totalScore">Total</button></th>
@@ -72,7 +73,7 @@
                     @for (int i = 0; i < Model.Systems.Length; i++)
                     {
 
-                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7":"")">
+                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
 
                             <td style="vertical-align:middle">@Model.Systems[i].Name</td>
                             @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
