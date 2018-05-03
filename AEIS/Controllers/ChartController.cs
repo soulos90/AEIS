@@ -9,7 +9,7 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class ChartController : Controller
     {
-        public ActionResult GetChart()
+        public ActionResult GetChart(string user,string num)
         {
             var key = new Chart(width: 800, height: 600)
                 
@@ -17,7 +17,7 @@ namespace StateTemplateV5Beta.Controllers
                 .AddSeries(
                     chartType: "StackedColumn",
                     legend: "AEIS Inventory Analysis",
-                    xValue: new[] { "MyMedical 2.0", "Project CALculate", "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
+                    xValue: new[] { user, num, "MyCalTravel", "iTracker Online", "Contruction Manager", "DataShare Pub" },
                     yValues: new[] { "33", "33", "17", "33", "33", "27" })
                
                     .AddSeries(

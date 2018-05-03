@@ -2,7 +2,6 @@
 @{
     ViewBag.Title = "ChartAnalysis";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
     // TODO: validate text box to make sure it's an integer
     // TODO: find way to pass model to GetChart for dynamic chart generation
 }
@@ -39,7 +38,7 @@
         }
         <!-- TODO: pass model to GetChart -->
         <div class="row" style="text-align:center">
-            <img src="/Chart/GetChart" />
+            <img src="/Chart/GetChart?user=@Model.Active.ID&num=@Model.Systems.Length" />
         </div>
     </row>
 </div>
