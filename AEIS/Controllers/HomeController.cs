@@ -162,7 +162,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(numOfSystems);
-            model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active,numOfSystems);
 
             return View(model);
         }

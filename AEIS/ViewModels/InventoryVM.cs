@@ -12,6 +12,7 @@ namespace StateTemplateV5Beta.ViewModels
         public InventoryItem[] Systems { get; }
         public string[] SectionTitles { get; }
         public Security Active { get; }
+        public int num { get; }
 
         // gets all systems from a uId
         public InventoryVM(string uId, Security active)
@@ -23,6 +24,14 @@ namespace StateTemplateV5Beta.ViewModels
             Active = active;
         }
 
+        // maps systems from inventory to VM
+        public InventoryVM(Inventory inventory, Security active, int Num)
+        {
+            SectionTitles = inventory.SectionTitles;
+            Systems = inventory.Systems;
+            Active = active;
+            num = Num;
+        }
         // maps systems from inventory to VM
         public InventoryVM(Inventory inventory, Security active)
         {
