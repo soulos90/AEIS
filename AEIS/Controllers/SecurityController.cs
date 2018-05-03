@@ -51,29 +51,8 @@ namespace StateTemplateV5Beta.Controllers
                 active = new Security();
                 active.IsLoggedIn = check;
             }
-            activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null)
-            {
-                activeCookie = new HttpCookie("Status");
-                SetEX();
-                activeCookie["LoggedIn"] = "False";
-            }
-            
-            if (active.IsLoggedIn == true)
-            {
-                check = true;
-                activeCookie["ID"] = active.ID;
-                activeCookie["LoggedIn"] = "True";
-                SetEX();
-            }
-            else if (activeCookie["LoggedIn"].Equals("True"))
-            {
-                SetEX();
-                active.ID = activeCookie["ID"];
-                active.IsLoggedIn = true;
-                check = true;
-            }
-            return check;
+           
+            return active.IsLoggedIn;
         }
 
         public void Login(string ID)
@@ -82,52 +61,20 @@ namespace StateTemplateV5Beta.Controllers
             {
                 active = new Security();
             }
+            active.ID = ID;
             active.IsLoggedIn = true;
-            if (activeCookie == null)
-                activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null)
-            {
-                activeCookie = new HttpCookie("Status");
-            }
-
-            SetEX();
-            activeCookie["LoggedIn"] = "True";
-            activeCookie["ID"] = active.ID = ID;
         }
         public void Login(Security ID)
         {
             active = ID;
             active.IsLoggedIn = true;
-            if (activeCookie == null)
-                activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null)
-            {
-                activeCookie = new HttpCookie("Status");
-            }
-
-            SetEX();
-            activeCookie["LoggedIn"] = "True";
-            activeCookie["ID"] = active.ID;
         }
-        public void Logout()
-        {
-            if (active==null)
-            {
-                 active = new Security();
-            }
-            active.IsLoggedIn = false;
-            if (activeCookie!=null)
-            {
-                activeCookie["LoggedIn"] = "False";
-                HttpContext.Current.Response.Cookies.Remove("Status");
-            }
-        }
-        private void SetEX()
+        public DateTime GetEX()
         {
             if (active.Remember)
-                activeCookie.Expires = DateTime.Now.AddMonths(4);
+                return DateTime.Now.AddMonths(4);
             else
-                activeCookie.Expires = DateTime.Now.AddHours(8);
+                return DateTime.Now.AddHours(8);
         }
     }
 }

@@ -21,7 +21,7 @@ namespace StateTemplateV5Beta.Controllers
             IVM model = new LoginVM(active.IsLoggedIn, active);
             SecurityController Active = new SecurityController(active);
 
-            if (Active.CheckLogin())
+            if ((IsLoggedIn(Active).CheckLogin()))
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
                 return View("Inventory", model); //logged in    // change to redirect
@@ -36,7 +36,7 @@ namespace StateTemplateV5Beta.Controllers
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
-            if (Active.CheckLogin())
+            if (IsLoggedIn(Active).CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
                 return View("Inventory", model);    // change to redirect
@@ -45,13 +45,13 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)
+        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)//TODO: implement
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
-            if (Active.CheckLogin())
+            if (IsLoggedIn(Active).CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
                 return View("Inventory", model);    // change to redirect
@@ -66,7 +66,7 @@ namespace StateTemplateV5Beta.Controllers
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
@@ -78,34 +78,16 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        public ActionResult Inventory(string actives, string activeLog, string activeRem)
+        public ActionResult Inventory(string sort, string actives, string activeLog, string activeRem)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
-            }
-
-            string uId = Active.GetID();
-            model = new InventoryVM(uId, active);
-
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Inventory(string sort, string actives, string activeLog, string activeRem)
-        {
-            Security active = session(actives, activeLog, activeRem);
-            SecurityController Active = new SecurityController(active);
-
-            if (!Active.CheckLogin())
-            {
-                LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", lmodel);    // change to redirect
             }
 
             Inventory inventory = new Inventory(Active.GetID());
@@ -121,19 +103,19 @@ namespace StateTemplateV5Beta.Controllers
             else if (int.TryParse(sort, out section))
                 inventory.SortBySectionScore(section);
 
-            InventoryVM model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active);
 
             return View(model);
         }
 
-        // Not yet implemented
-        public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
+        
+        public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)//TODO: implement
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
@@ -151,7 +133,7 @@ namespace StateTemplateV5Beta.Controllers
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
@@ -173,7 +155,7 @@ namespace StateTemplateV5Beta.Controllers
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
@@ -194,7 +176,7 @@ namespace StateTemplateV5Beta.Controllers
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!Active.CheckLogin())
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 model = new LoginVM(active.IsLoggedIn, active);
                 return View("Index", model);    // change to redirect
@@ -246,43 +228,43 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult PostUser(User user, Security active)
         {
             active = session(active);
+            UsersController u = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-
-            using (var context = new DBUContext())
+            
+            var getUser = u.GetU(user.ID.Trim());
+            if (getUser == null)
             {
-                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
-                if (getUser == null)
-                {
-                    SController.Login(user.ID);
-                    UController.PostUser(user);
-                    model = new LoginVM(active.IsLoggedIn, active);
-                }
-
-                return View("Index", model); // change to redirect
+                SController.Login(user.ID);
+                Login(SController);
+                UController.PostUser(user);
+                model = new LoginVM(active.IsLoggedIn, active);
             }
+
+            return View("Index", model); // change to redirect
+            
         }
 
         [HttpPost]
         public ActionResult PutUser(User user, Security active)
         {
             active = session(active);
+            UsersController u = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-
-            using (var context = new DBUContext())
+            
+            var getUser = u.GetU(user.ID.Trim());
+            if (getUser != null)
             {
-                var getUser = (from s in context.Users where s.ID == user.ID select s).FirstOrDefault();
-                if (getUser != null)
-                {
-                    user.Created = getUser.Created;
-                    SController.Login(user.ID);
-                    model = new LoginVM(active.IsLoggedIn, SController.GetActive());
-                    UController.PutUser(user.ID, user);
-                }
-
-                return View("Index", model); // change to redirect
+                user.Created = getUser.Created;
+                SController.Login(user.ID);
+                Login(SController);
+                model = new LoginVM(active.IsLoggedIn, SController.GetActive());
+                UController.PutUser(user.ID, user);
             }
+
+            return View("Index", model); // change to redirect
+            
         }
 
         [HttpPost]
@@ -304,6 +286,7 @@ namespace StateTemplateV5Beta.Controllers
                     {
                         SController.Login(userName);
                         SController.SetRemember(RememberBox);
+                        Login(SController);
                         model = new InventoryVM(userName.Trim(), SController.GetActive());
                         return View("Inventory", model);    // change to redirect
                     }
@@ -312,6 +295,51 @@ namespace StateTemplateV5Beta.Controllers
                 ViewBag.ErrorMessage = "Invalid User Name or Password";
                 return View("Index", model);    // change to redirect           
             }
-        }//TODO: make a 404 page
+        }
+        public ActionResult Logout()
+        {
+            HttpCookie cookie = new HttpCookie("UserInfo");
+            cookie.Values["LoggedIn"] = "False";
+            cookie.Values["ID"] = null;
+            cookie.Expires = DateTime.Now.AddDays(-1d);
+            Response.Cookies.Add(cookie);
+
+            return RedirectToAction("Index");
+        }
+
+        private void Login(SecurityController active)
+        {
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+
+            if (cookie == null || cookie.Values["LoggedIn"] != "True")
+                cookie = new HttpCookie("UserInfo");
+
+            cookie.Values["LoggedIn"] = "True";
+            cookie.Values["ID"] = active.GetID();
+            cookie.Values["Remember"] = active.GetRemember().ToString();
+            cookie.Expires = active.GetEX();
+            Response.Cookies.Add(cookie);
+        }
+        public SecurityController IsLoggedIn(SecurityController active)
+        {
+            bool value = false;
+            string decodedUser = "";
+            bool remember = false;
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            if (cookie != null)
+            {
+                decodedUser = HttpUtility.HtmlDecode(cookie.Values["ID"]);
+                value = HttpUtility.HtmlDecode(cookie.Values["LoggedIn"]).Equals("True");
+                remember = HttpUtility.HtmlDecode(cookie.Values["Remember"]).Equals("True");
+            }
+            if(value)
+            {
+                active.Login(decodedUser);
+                active.SetRemember(remember);
+            }
+            return active;
+        }
+
+        //TODO: make a 404 page
     }
 }
