@@ -8,6 +8,7 @@ namespace StateTemplateV5Beta.Models
 {
     public class Inventory
     {
+        // TODO: add ascending / descending sorts
         public InventoryItem[] Systems { get; set; }
         public string[] SectionTitles { get; set; }
 
@@ -52,6 +53,38 @@ namespace StateTemplateV5Beta.Models
 
             for (int i = 0; i < Systems.Length; i++)
                 Systems[i] = new InventoryItem(uId, i.ToString());
+        }
+
+        public void SortByName()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+            {
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].Name.CompareTo(Systems[j + 1].Name) == 1)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+            }
+        }
+
+        public void SortBySectionScore(int sectionNum)
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+            {
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].SectionScores[sectionNum] < Systems[j + 1].SectionScores[sectionNum])
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+            }
         }
 
         public void SortByTotalScore()

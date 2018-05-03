@@ -96,6 +96,36 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult Inventory(string sort, string actives, string activeLog, string activeRem)
+        {
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!Active.CheckLogin())
+            {
+                LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", lmodel);    // change to redirect
+            }
+
+            Inventory inventory = new Inventory(Active.GetID());
+            inventory.SortByLastUsed();
+            int section;
+
+            if (sort == "name")
+                inventory.SortByName();
+            else if (sort == "lastUsed")
+                inventory.SortByLastUsed();
+            else if (sort == "totalScore")
+                inventory.SortByTotalScore();
+            else if (int.TryParse(sort, out section))
+                inventory.SortBySectionScore(section);
+
+            InventoryVM model = new InventoryVM(inventory, active);
+
+            return View(model);
+        }
+
         // Not yet implemented
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
@@ -196,15 +226,15 @@ namespace StateTemplateV5Beta.Controllers
         private Security session(string active, string activeLog, string rem)
         {
             Security Active;
-            if(active == null)
+            if (active == null)
             {
                 active = "";
             }
-            if(activeLog == null)
+            if (activeLog == null)
             {
                 activeLog = "False";
             }
-            if(rem == null)
+            if (rem == null)
             {
                 rem = "False";
             }
