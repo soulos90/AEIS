@@ -237,6 +237,8 @@ namespace StateTemplateV5Beta.Controllers
             {
                 SController.Login(user.ID);
                 Login(SController);
+                user.PassSalt = u.GenerateSalt();
+                user.PassHash = u.HashPassword(user.PassHash,user.PassSalt);
                 UController.PostUser(user);
                 model = new LoginVM(active.IsLoggedIn, active);
             }
@@ -259,6 +261,8 @@ namespace StateTemplateV5Beta.Controllers
                 user.Created = getUser.Created;
                 SController.Login(user.ID);
                 Login(SController);
+                user.PassSalt = getUser.PassSalt;
+                user.PassHash = u.HashPassword(user.PassHash,user.PassSalt);
                 model = new LoginVM(active.IsLoggedIn, SController.GetActive());
                 UController.PutUser(user.ID, user);
             }
@@ -275,26 +279,27 @@ namespace StateTemplateV5Beta.Controllers
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
 
-            using (var context = new DBUContext())
+            
+            var user = UController.GetU(userName);
+            if (user != null)
             {
-                var user = UController.GetU(userName);
-                if (user != null)
+                var saltHash = user.PassSalt;
+                var encodedPassword = UController.HashPassword(password, saltHash);
+                if (user.PassHash.Trim() == encodedPassword.Trim())
                 {
-                    var saltHash = user.PassSalt;
-                    var encodedPassword = UController.HashPassword(password, saltHash);
-                    if (user.PassHash.Trim() == encodedPassword.Trim())
-                    {
-                        SController.Login(userName);
-                        SController.SetRemember(RememberBox);
-                        Login(SController);
-                        model = new InventoryVM(userName.Trim(), SController.GetActive());
-                        return View("Inventory", model);    // change to redirect
-                    }
+                    SController.Login(userName);
+                    SController.SetRemember(RememberBox);
+                    Login(SController);
+                    model = new InventoryVM(userName.Trim(), SController.GetActive());
+                    return View("Inventory", model);    // change to redirect
                 }
-
-                ViewBag.ErrorMessage = "Invalid User Name or Password";
-                return View("Index", model);    // change to redirect           
+                else
+                    ViewBag.ErrorMessage = "Invalid Password";
             }
+            else
+                ViewBag.ErrorMessage = "Invalid User Name"; 
+            return View("Index", model);    // change to redirect           
+            
         }
         public ActionResult Logout()
         {

@@ -22,7 +22,9 @@
         <div class="row p-l-md">
             <input type="text" style="width:250px" value="@Model.Email" id="Email" name="ID" tabindex="1">
         </div>
-        <input type="hidden" name="active" value="@Model.Active" />
+        <input type="hidden" name="actives" value="@Model.Active.ID" />
+        <input type="hidden" name="activeLog" value="@Model.Active.IsLoggedIn.ToString()" />
+        <input type="hidden" name="activeRem" value="@Model.Active.Remember.ToString()" />
         <div class="row p-t p-l-md">
             <label>First Name</label><br />
         </div>
