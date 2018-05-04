@@ -13,10 +13,11 @@ namespace StateTemplateV5Beta.Controllers
     {
         public ActionResult GetChart(string user,string num)
         {
-            Inventory model = new Inventory("user");
-            model.GetTop(int.Parse(num));
+            Inventory model = new Inventory(user);
+            model.SortByTotalScore();
+            model = model.GetTop(int.Parse(num));
 
-            var key = new Chart(width: 800, height: 600);
+            var key = new Chart(width: 1280, height: 720);
             key.AddTitle("AEIS Inventory Analysis");
 
             if (model.Systems.Length == 0)
@@ -43,7 +44,7 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     key.AddSeries(
                          chartType: "StackedColumn",
-                         legend: "AEIS Inventory Analysis",
+                         name: model.SectionTitles[i],
                          xValue: systemNames,
                          yValues: sectionScore);
 
@@ -52,13 +53,14 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     key.AddSeries(
                         chartType: "StackedColumn",
-                        legend: "AEIS Inventory Analysis",
+                        name: model.SectionTitles[i],
                         yValues: sectionScore);
                 }
             }
 
-            key.SetXAxis("System", 0, 6);
+            key.SetXAxis("System", 0, (model.Systems.Length == 0) ? 6 : model.Systems.Length + 1);
             key.SetYAxis("Score", 0, 100);
+            key.AddLegend();
             key.Write("png");
             return null;
         }

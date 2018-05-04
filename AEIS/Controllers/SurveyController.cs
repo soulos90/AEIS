@@ -12,26 +12,37 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
-        public ActionResult NameSurvey(Security active)
+        UsersController UController = new UsersController();
+        public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
         {
-            if (!ModelState.IsValid)
-                return View();
+            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
+            SecurityController Active = new SecurityController(active);
 
-            if (!IsLoggedIn())
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
                 return RedirectToAction("Index", "Home");
+            }
 
-            return View();
+            QuestionVM model = new QuestionVM(active);
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult StartSurvey(QuestionVM model, Security active)
+        public ActionResult StartSurvey(string actives, string activeLog, string activeRem, QuestionVM model)
         {
-            if (!IsLoggedIn())
+
+            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM model = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
 
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
 
@@ -62,19 +73,26 @@ namespace StateTemplateV5Beta.Controllers
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult PreviousQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            if (!IsLoggedIn())
+
+            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
 
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
@@ -129,17 +147,23 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult NextQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            if (!IsLoggedIn())
+            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
             var eController = new EnvironmentController();
             var aController = new AnswersController();
 
@@ -239,25 +263,157 @@ namespace StateTemplateV5Beta.Controllers
             return active;
         }
 
-        public bool IsLoggedIn()
+        private Security session(string active, string activeLog, string rem)
         {
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            UsersController usersController = new UsersController();
-            User user = null;
-            string decodedHash = null;
-
-            if (cookie != null)
+            Security Active;
+            if (active == null)
             {
-                string decodedUser = HttpUtility.HtmlDecode(cookie.Values["ID"]);
-                user = usersController.GetU(decodedUser);
-                decodedHash = HttpUtility.HtmlDecode(cookie.Values["Hash"]);
+                active = "";
+            }
+            if (activeLog == null)
+            {
+                activeLog = "False";
+            }
+            if (rem == null)
+            {
+                rem = "False";
+            }
+            Active = new Security(active, activeLog.Equals("True"), rem.Equals("True"));
+            return Active;
+        }
+
+        [HttpPost]
+        public ActionResult PostUser(User user)
+        {
+            Security active = session(user.ID, "False", "False");
+            UsersController u = new UsersController();
+            SecurityController SC = new SecurityController(active);
+            IVM model = new LoginVM(active.IsLoggedIn, active);
+
+            var getUser = u.GetU(user.ID);
+            if (getUser == null)
+            {
+                SC.Login(user.ID);
+                Login(SC);
+                UController.PostUser(user);
+                model = new LoginVM(SC.CheckLogin(), SC.GetActive());
+                return View("Index", model);
             }
 
-            if (user == null || cookie == null || cookie.Values["LoggedIn"] != "True" ||
-                cookie.Values["ID"] == null || decodedHash != user.PassHash.Trim())
-                return false;
+            model = new SecurityVM(active);
+            return View("Registration", model);
+        }
 
-            return true;
+        [HttpPost]
+        public ActionResult PutUser(User user, string actives, string activeLog, string activeRem, string currentPassword)
+        {
+            Security active = session(actives, activeLog, activeRem);
+            UsersController u = new UsersController();
+            SecurityController SController = new SecurityController(active);
+            IVM model;
+
+            var getUser = u.GetU(SController.GetID().Trim());
+            if (getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)
+            {
+                user.PassSalt = getUser.PassSalt;
+                if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())
+                {
+                    user.Created = getUser.Created;
+                    SController.Login(user.ID);
+                    Login(SController);
+
+                    user.PassHash = u.HashPassword(user.PassHash, user.PassSalt);
+                    model = new LoginVM(active.IsLoggedIn, SController.GetActive());
+                    UController.PutUser(user.ID, user);
+                    return View("Index", model);
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Invalid Current Password";
+                }
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid New Email";
+            }
+
+            model = new AccountVM(SController.GetID(), SController.GetActive());
+            return View("Account", model);
+
+        }
+
+        [HttpPost]
+        public ActionResult LoginAuthentication(string userName, string password, bool RememberBox)
+        {
+            Security active = new Security();
+            var UController = new UsersController();
+            SecurityController SController = new SecurityController(active);
+            IVM model = new LoginVM(active.IsLoggedIn, active);
+
+
+            var user = UController.GetU(userName);
+            if (user != null)
+            {
+                var saltHash = user.PassSalt;
+                var encodedPassword = UController.HashPassword(password, saltHash);
+                if (user.PassHash.Trim() == encodedPassword.Trim())
+                {
+                    SController.Login(userName);
+                    SController.SetRemember(RememberBox);
+                    Login(SController);
+                    model = new InventoryVM(userName.Trim(), SController.GetActive());
+                    return View("Inventory", model);    // change to redirect
+                }
+                else
+                    ViewBag.ErrorMessage = "Invalid Password";
+            }
+            else
+                ViewBag.ErrorMessage = "Invalid User Name";
+            return View("Index", model);    // change to redirect           
+
+        }
+        public ActionResult Logout()
+        {
+            HttpCookie cookie = new HttpCookie("UserInfo");
+            cookie.Values["LoggedIn"] = "False";
+            cookie.Values["ID"] = null;
+            cookie.Expires = DateTime.Now.AddDays(-1d);
+            Response.Cookies.Add(cookie);
+
+            return RedirectToAction("Index");
+        }
+
+        private void Login(SecurityController active)
+        {
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+
+            if (cookie == null || cookie.Values["LoggedIn"] != "True")
+                cookie = new HttpCookie("UserInfo");
+
+            cookie.Values["LoggedIn"] = "True";
+            cookie.Values["ID"] = active.GetID();
+            cookie.Values["Remember"] = active.GetRemember().ToString();
+            cookie.Expires = active.GetEX();
+            Response.Cookies.Add(cookie);
+        }
+        public SecurityController IsLoggedIn(SecurityController active)
+        {
+            bool value = false;
+            string decodedUser = "";
+            bool remember = false;
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            if (cookie != null)
+            {
+                decodedUser = HttpUtility.HtmlDecode(cookie.Values["ID"]);
+                value = HttpUtility.HtmlDecode(cookie.Values["LoggedIn"]).Equals("True");
+                remember = HttpUtility.HtmlDecode(cookie.Values["Remember"]).Equals("True");
+            }
+            if (value)
+            {
+                active.Login(decodedUser);
+                active.SetRemember(remember);
+            }
+            return active;
         }
     }
 }

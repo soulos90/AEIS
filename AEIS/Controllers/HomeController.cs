@@ -85,8 +85,8 @@ namespace StateTemplateV5Beta.Controllers
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                //model = new LoginVM(active.IsLoggedIn, active);
+                RedirectToAction("Index");    // change to redirect
             }
 
             Inventory inventory = new Inventory(Active.GetID());
@@ -126,7 +126,30 @@ namespace StateTemplateV5Beta.Controllers
             return RedirectToAction("Inventory", model);
         }
 
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems = 6)
+        [HttpGet]
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
+        {
+            IVM model;
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                model = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", model);    // change to redirect
+            }
+
+            string uId = Active.GetID();
+
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(inventory.DefaultNum);
+            model = new InventoryVM(inventory, active);
+
+            return View(model);
+        }
+
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
@@ -143,7 +166,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(numOfSystems);
-            model = new InventoryVM(inventory, active,numOfSystems);
+            model = new InventoryVM(inventory, active);
 
             return View(model);
         }

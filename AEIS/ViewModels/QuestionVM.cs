@@ -18,6 +18,11 @@ namespace StateTemplateV5Beta.ViewModels
         //[Display(Name = "Survey Answer")]
         public string Answer { get; set; }
         public Security Active { get; set; }
+
+        public QuestionVM(Security active)
+        {
+            Active = active;
+        }
     }
 
     public class SurveyQuestionVM : IVM
@@ -33,5 +38,10 @@ namespace StateTemplateV5Beta.ViewModels
         public int Percent { get; set; }
         public int NumberofQuestions { get; set; }
         public Security Active { get; set; }
+
+        public SurveyQuestionVM(Security active)
+        {
+            Active = active;
+        }
     }
 }
