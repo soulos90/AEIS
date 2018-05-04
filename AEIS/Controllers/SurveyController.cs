@@ -211,8 +211,7 @@ namespace StateTemplateV5Beta.Controllers
             summaryVM.ProgramName = model.ProgramName;
             var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
 
-            using (var context = new DBAContext())
-            {
+            
                 //int End = Convert.ToInt16(Controller.GetQuestionCount());
                 //int YesTotal = 0;
                 //int NoTotal = 0;
@@ -229,7 +228,7 @@ namespace StateTemplateV5Beta.Controllers
                 //}
                 //ViewModel.Points = (YesTotal + NoTotal);
 
-            }
+            
             return View(summaryVM);
         }
 

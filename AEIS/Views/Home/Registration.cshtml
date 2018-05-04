@@ -3,7 +3,7 @@
     ViewBag.Title = "Registration";
     Layout = "~/Views/Shared/_Layout.cshtml";
     
-    }
+}
 
 <div class="section">
 
@@ -22,7 +22,9 @@
                 <input type="text" placeholder="Email" id="e-mail" name="ID" tabindex="1">
             </div>
             <div>
-                <input type="hidden" name="active" value=@Model />
+                <input type="hidden" name="actives" value=@Model.Active.ID />
+                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn />
+                <input type="hidden" name="activeRem" value=@Model.Active.Remember />
             </div>
             <div class="row p-t p-l-md">
                 <label>First name</label><br />
@@ -58,7 +60,7 @@
             </div>
         </div> <!-- end account container -->
 
-        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary" disabled="disabled" />
+        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary" disabled="disabled" tabindex="7"/>
     }
     @Scripts.Render("~/Scripts/register-check.js")
 </div> <!-- end section -->

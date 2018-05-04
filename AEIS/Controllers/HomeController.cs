@@ -26,7 +26,6 @@ namespace StateTemplateV5Beta.Controllers
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
                 return View("Inventory", model); //logged in    // change to redirect
             }
-            //TODO: Logged in vs not logged in views probably involved making a IndexVM with a bool
             return View(model);//not logged in
         }
 
@@ -63,7 +62,7 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             IVM model;
-            Security active = session(actives, activeLog, activeRem);
+            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
@@ -72,7 +71,7 @@ namespace StateTemplateV5Beta.Controllers
                 return View("Index", model);    // change to redirect
             }
 
-            string uId = Active.GetID();
+            string uId = Active.GetID().Trim();
             model = new AccountVM(uId, active);
 
             return View(model);
@@ -225,49 +224,55 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult PostUser(User user, Security active)
+        public ActionResult PostUser(User user)
         {
-            active = session(active);
+            Security active = session(user.ID, "False", "False");
             UsersController u = new UsersController();
-            SecurityController SController = new SecurityController(active);
+            SecurityController SC = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
             
-            var getUser = u.GetU(user.ID.Trim());
+            var getUser = u.GetU(user.ID);
             if (getUser == null)
             {
-                SController.Login(user.ID);
-                Login(SController);
-                user.PassSalt = u.GenerateSalt();
-                user.PassHash = u.HashPassword(user.PassHash,user.PassSalt);
+                SC.Login(user.ID);
+                Login(SC);
                 UController.PostUser(user);
-                model = new LoginVM(active.IsLoggedIn, active);
+                model = new LoginVM(SC.CheckLogin(), SC.GetActive());
+                return View("Index", model);
             }
 
-            return View("Index", model); // change to redirect
-            
+            model = new SecurityVM(active);
+            return View("Registration",model);
         }
 
         [HttpPost]
-        public ActionResult PutUser(User user, Security active)
+        public ActionResult PutUser(User user, string actives, string activeLog, string activeRem, string currentPassword)
         {
-            active = session(active);
+            Security active = session(actives, activeLog, activeRem);
             UsersController u = new UsersController();
             SecurityController SController = new SecurityController(active);
-            IVM model = new LoginVM(active.IsLoggedIn, active);
+            IVM model;
             
-            var getUser = u.GetU(user.ID.Trim());
-            if (getUser != null)
+            var getUser = u.GetU(SController.GetID().Trim());
+            user.PassSalt = getUser.PassSalt;
+            if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())
             {
                 user.Created = getUser.Created;
                 SController.Login(user.ID);
                 Login(SController);
-                user.PassSalt = getUser.PassSalt;
-                user.PassHash = u.HashPassword(user.PassHash,user.PassSalt);
+
+                user.PassHash = u.HashPassword(user.PassHash, user.PassSalt);
                 model = new LoginVM(active.IsLoggedIn, SController.GetActive());
                 UController.PutUser(user.ID, user);
+                return View("Index", model);
             }
-
-            return View("Index", model); // change to redirect
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid Current Password";
+            }
+            
+            model = new AccountVM(SController.GetID(),SController.GetActive());
+            return View("Account", model);
             
         }
 
