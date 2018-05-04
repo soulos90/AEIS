@@ -254,21 +254,28 @@ namespace StateTemplateV5Beta.Controllers
             IVM model;
             
             var getUser = u.GetU(SController.GetID().Trim());
-            user.PassSalt = getUser.PassSalt;
-            if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())
+            if (getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)
             {
-                user.Created = getUser.Created;
-                SController.Login(user.ID);
-                Login(SController);
+                user.PassSalt = getUser.PassSalt;
+                if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())
+                {
+                    user.Created = getUser.Created;
+                    SController.Login(user.ID);
+                    Login(SController);
 
-                user.PassHash = u.HashPassword(user.PassHash, user.PassSalt);
-                model = new LoginVM(active.IsLoggedIn, SController.GetActive());
-                UController.PutUser(user.ID, user);
-                return View("Index", model);
+                    user.PassHash = u.HashPassword(user.PassHash, user.PassSalt);
+                    model = new LoginVM(active.IsLoggedIn, SController.GetActive());
+                    UController.PutUser(user.ID, user);
+                    return View("Index", model);
+                }
+                else
+                {
+                    ViewBag.ErrorMessage = "Invalid Current Password";
+                }
             }
             else
             {
-                ViewBag.ErrorMessage = "Invalid Current Password";
+                ViewBag.ErrorMessage = "Invalid New Email";
             }
             
             model = new AccountVM(SController.GetID(),SController.GetActive());
