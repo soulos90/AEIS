@@ -1,4 +1,5 @@
-﻿@{
+﻿@model StateTemplateV5Beta.ViewModels.LoginVM
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -9,7 +10,7 @@
 </div>
 <main class="main-primary">
 	<!-- Begin Main Content -->
-	@using (Html.BeginForm("LoginCheck", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+	@using (Html.BeginForm("LoginAuthentication", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
 	{
 		@Html.ValidationSummary(false, "", new { @class = "" })
 		<div class="row p-b-md">
@@ -31,22 +32,26 @@
 							</div>
 							<input id="password" class="form-control" type="password" name="password" placeholder="Enter Your Password">
 						</div>
-
-
+                             
+						<div class="input-group m-t-md">
+							<div class="d-flex" style="color:red">
+								@ViewBag.ErrorMessage
+							</div>
+						</div>
 						<small id="email-feedback" class="feedback" style="display:none">Email not registered, please register to continue.</small>
 					</div>
 					<div class="row">
-						<div class="half">
-							<label class="form-check-inline p-l-md m-l-0 m-r-md">
-								<input class="hidden-up pos-abs" type="checkbox" name="RememberBox" value="True"><!--TODO make this box return True when checked False when unchecked (currently always false)-->
-								<i class="check-icon-checkbox">
-									<i class="ca-gov-icon-check-mark"></i>
-								</i>
+                        <div class="half">
+                            <label class="form-check-inline p-l-md m-l-0 m-r-md">
+                                <input class="hidden-up pos-abs" id="RememberBox" type="checkbox" name="RememberBox" value="true"><!--TODO make this box return True when checked False when unchecked (currently always false)-->
+                                <i class="check-icon-checkbox">
+                                    <i class="ca-gov-icon-check-mark"></i>
+                                </i>
 
-								Remember me
-							</label>
-
-						</div>
+                                Remember me
+                            </label>
+                            <input type="hidden" value="false" name="RememberBox" />
+                        </div>
 						<div class="half">
 
 							<a href="~/Home/ForgotPassword" class="pull-right">Forgot your password?</a>

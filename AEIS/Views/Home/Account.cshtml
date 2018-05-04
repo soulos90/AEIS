@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var active = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
 }
 
 <div class="section">
@@ -37,6 +38,9 @@
             </div>
             <div class="row p-b p-l-md">
                 <input type="text" style="width:250px" value=@Model.Organization id="org" name="Organization" tabindex="4"><!--TODO:only printing 1 word if a multi word string (probably true for other fields)-->
+            </div>
+            <div>
+                <input type="hidden" name="active" id="active" value=@Model.Active/>
             </div>
         </div> <!-- end account container -->
         <!-- Change Password -->

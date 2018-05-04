@@ -1,4 +1,4 @@
-﻿using StateTemplateV5Beta.Models; 
+﻿using StateTemplateV5Beta.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,230 +6,209 @@ using System.Reflection;
 using System.Web;
 using System.Web.Mvc;
 
+using StateTemplateV5Beta.ViewModels;
+
 namespace StateTemplateV5Beta.Controllers
 {
-
     public class SurveyController : Controller
     {
-        private DBAContext db = new DBAContext();
-
-        // GET: Default
-        public ActionResult Index()
+        public ActionResult NameSurvey(Security active)
         {
+            if (!ModelState.IsValid)
+                return View();
+
+            if (!isLoggedIn())
+                return RedirectToAction("Index", "Home");
+
             return View();
         }
 
         [HttpPost]
-        public ActionResult Page1(QuestionViewModel model)
+        public ActionResult StartSurvey(QuestionVM model, Security active)
         {
+            if (!isLoggedIn())
+                return RedirectToAction("Index", "Home");
 
-            if (!ModelState.IsValid)
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
+
+            if (Request.Form["btnEditSurvey"] != null)
             {
-
-                return View("Index");
+                Answer a = aController.GetAnswer(userId, int.Parse(Request.Form["btnEditSurvey"]));
+                surveyQuestionVM.Question = eController.GetQuestionText(1);
+                surveyQuestionVM.aID = a.AId;
+                surveyQuestionVM.CurrentID = a.QId;
+                surveyQuestionVM.ProgramName = a.programName;
             }
             else
             {
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-
-                var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
-                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
-                var User = new StateTemplateV5Beta.Controllers.UsersController();
-
-                viewModel.Question = Controller.GetQuestionText(1);
-                viewModel.CurrentID = 1;
-                viewModel.ProgramName = model.Name;
-                //TODO: switch to the correct stuff after testing
-                viewModel.aID = AnswerController.Next(Security.ID);
-                
-                //viewModel.aID = 9007;
-
-                using (var context = new DBAContext())
-                {
-                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (1 == t.QId) & (viewModel.aID == t.AId)) select t).FirstOrDefault();
-                    if (CheckAnswer != null)
-                        viewModel.Answer = CheckAnswer.Value;
-                }
-
-                return RedirectToAction("SurveyQuestions", viewModel);
+                surveyQuestionVM.Question = eController.GetQuestionText(1);
+                surveyQuestionVM.aID = aController.GetNextAId(userId);
+                surveyQuestionVM.CurrentID = 1;
+                surveyQuestionVM.ProgramName = model.Name;
             }
 
+            using (var context = new DBAContext())
+            {
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (1 == t.QId) & (surveyQuestionVM.aID == t.AId)) select t).FirstOrDefault();
+
+                if (CheckAnswer != null)
+                    surveyQuestionVM.Answer = CheckAnswer.Value;
+            }
+
+            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult SurveyQuestions(SurveyQuestionViewModel model)
-        {
-
-            return View(model);
-        }
-
-        //This is for when someone presses the Previous button
-        public ActionResult PreviousQuestion(SurveyQuestionViewModel model)
+        public ActionResult PreviousQuestion(SurveyQuestionVM model, Security active)
         {
             if (!ModelState.IsValid)
-            {
-
                 return View("SurveyQuestions", model);
-            }
-            else
+
+            if (!isLoggedIn())
+                return RedirectToAction("Index", "Home");
+
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+
+            int i = model.CurrentID;
+            surveyQuestionVM.aID = model.aID;
+
+            //checks to see if previous answer exists
+            using (var context = new DBAContext())
             {
-                var PreviousQuestionPress = new StateTemplateV5Beta.Controllers.EnvironmentController();
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
+                //If the question was not answered then it gets a value of null
+                Answer previousAnswer = new Answer();
+                previousAnswer.AId = model.AId;
+                previousAnswer.QId = model.QId;
+                previousAnswer.UId = userId;
+                previousAnswer.programName = model.ProgramName;
+                previousAnswer.Value = model.Value;
 
-                int i = model.CurrentID;
-                viewModel.aID = model.aID;
-
-                //checks to see if the answer exists
-                using (var context = new DBAContext())
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.QId == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                //if the answer exists use Put, otherwise use Post
+                if (CheckAnswer != null)
                 {
-
-                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-
-                    //If the question was not answered then it gets a value of null
-                    Answer PreviousAnswer = new Answer();
-                    PreviousAnswer.QId = model.CurrentID;
-                    PreviousAnswer.Value = model.Answer;
-                    PreviousAnswer.programName = model.ProgramName;                      
-                    PreviousAnswer.UId = Security.ID;
-                    //PreviousAnswer.UId = "Moo5"; test
-
-                    PreviousAnswer.AId = model.aID;
-
-                    //if the answer exists use Put
-                    if (CheckAnswer != null)
-                    {
-                        AnswerController.PutAnswer(PreviousAnswer.UId, PreviousAnswer);
-                    }
-
-                    //if not use Post
-                    else
-                    {
-                        AnswerController.PostAnswer(PreviousAnswer);
-                    }
-                }
-                
-
-                viewModel.ProgramName = model.ProgramName;
-                viewModel.CurrentID = model.CurrentID;
-                i--;
-                viewModel.Question = PreviousQuestionPress.GetQuestionText(i);
-                viewModel.CurrentID = i;
-
-                //Checks to see if the Answer exists
-                using (var context = new DBAContext())
-                {
-                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-
-                    //if it exists set the value for the question then load it in
-                    if (CheckAnswer != null)
-                        viewModel.Answer = CheckAnswer.Value;
-
-                    int Answers = (from t in context.Answers where ((model.ProgramName == t.programName) & (model.aID == t.AId)) select t).Count();
-                    viewModel.Percent = (Answers / PreviousQuestionPress.GetQuestionCount() * 100);
-                    viewModel.NumberofQuestions = PreviousQuestionPress.GetQuestionCount();
-                }
-
-                if (i == 0)
-                {
-                    return RedirectToAction("Summary", "Survey", viewModel);
-
+                    previousAnswer.Created = CheckAnswer.Created;
+                    aController.PutAnswer(previousAnswer.UId, previousAnswer);
                 }
                 else
-                    return RedirectToAction("SurveyQuestions", viewModel);
+                    aController.PostAnswer(previousAnswer);
             }
+
+            surveyQuestionVM.ProgramName = model.ProgramName;
+            surveyQuestionVM.QId = model.QId;
+            i--;
+
+            if (i <= 0)
+                return RedirectToAction("Inventory", "Home");
+
+            surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
+            surveyQuestionVM.QId = i;
+
+            using (var context = new DBAContext())
+            {
+                //Checks to see if the Answer exists
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+
+                //if it exists set the value for the question then load it in
+                if (CheckAnswer != null)
+                    surveyQuestionVM.Value = CheckAnswer.Value;
+
+                int Answers = (from t in context.Answers where ((model.ProgramName == t.programName) & (model.AId == t.AId)) select t).Count();
+                surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
+                surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
+            }
+
+            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
         [HttpPost]
-        public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
+        public ActionResult NextQuestion(SurveyQuestionVM model, Security active)
         {
             if (!ModelState.IsValid)
-            {
-
                 return View("SurveyQuestions", model);
-            }
-            else
+
+            if (!isLoggedIn())
+                return RedirectToAction("Index", "Home");
+
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            var eController = new EnvironmentController();
+            var aController = new AnswersController();
+
+            surveyQuestionVM.AId = model.AId;
+            surveyQuestionVM.ProgramName = model.ProgramName;
+            int i = model.QId;
+            //Save the Answer to the question just answered.
+            using (var context = new DBAContext())
             {
+                Answer previousAnswer = new Answer();
+                previousAnswer.QId = model.QId;
+                previousAnswer.Value = model.Value;
+                previousAnswer.programName = model.ProgramName;
+                previousAnswer.UId = userId;
+                previousAnswer.AId = model.AId;
 
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
-                var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
-
-                viewModel.ProgramName = model.ProgramName;
-                viewModel.aID = model.aID;
-                int i = model.CurrentID;
-
-                //Save the Answer to the question just answered.
-                using (var context = new DBAContext())
+                //checks to see if the answer exists
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                //if the answer exists use Put, otherwise use Post
+                if (CheckAnswer != null)
                 {
-                    //checks to see if the answer exists
-                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-
-                    //Checks to see if the question was answered if it wasnt then it should save an answer
-                    //If the question was not answered then it get a value of null
-                    Answer PreviousAnswer = new Answer();
-                    PreviousAnswer.QId = model.CurrentID;
-                    PreviousAnswer.Value = model.Answer;
-                    PreviousAnswer.programName = model.ProgramName;            
-                    PreviousAnswer.UId = Security.ID;
-                    PreviousAnswer.AId = model.aID;
-                    //PreviousAnswer.UId = "Moo5"; for testing
-
-                    //if the answer exists use Put
-                    if (CheckAnswer != null)
-                    {
-                        AnswerController.PutAnswer(PreviousAnswer.UId, PreviousAnswer);
-                    }
-
-                    //if not use Post
-                    else
-                    {
-                        AnswerController.PostAnswer(PreviousAnswer);
-                    }
+                    previousAnswer.Created = CheckAnswer.Created;
+                    aController.PutAnswer(previousAnswer.UId, previousAnswer);
                 }
-                
-
-                // gets the next question
-                viewModel.CurrentID = model.CurrentID;
-                i = viewModel.CurrentID;
-                i++;
-                viewModel.Question = Controller.GetQuestionText(i);
-                viewModel.CurrentID = i;
-
-                //checks to see if the next question has an answer already
-                using (var context = new DBAContext())
-                {
-                    Answer CheckAnswer = (from t in context.Answers where ((Security.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-
-                    int Answers = (from t in context.Answers where ((Security.ID == t.UId) & (model.aID == t.AId)) select t).Count();
-
-                    viewModel.Percent = (Answers / Controller.GetQuestionCount());
-                    viewModel.NumberofQuestions = Controller.GetQuestionCount();
-
-                    //sets the value for the next answer to the answer that exists
-                    if (CheckAnswer != null)
-                        viewModel.Answer = CheckAnswer.Value;
-
-                }
-
-                //redirects to the summary when it reachs the end
-                int End = Convert.ToInt16(Controller.GetQuestionCount());
-                if (i > End)
-                {
-                    return RedirectToAction("Summary", "Survey", viewModel);
-
-                }
-
-            return RedirectToAction("SurveyQuestions", viewModel);
+                else
+                    aController.PostAnswer(previousAnswer);
             }
 
+            // gets the next question
+            surveyQuestionVM.QId = model.QId;
+            i = surveyQuestionVM.QId;
+            i++;
+
+            //redirects to the summary when it reachs the end
+            int End = eController.GetQuestionCount();
+            if (i > End)
+                return RedirectToAction("Inventory", "Home");
+
+            surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
+            surveyQuestionVM.QId = i;
+
+            //checks to see if the next question has an answer already
+            using (var context = new DBAContext())
+            {
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+
+                int Answers = (from t in context.Answers where ((userId == t.UId) & (model.AId == t.AId)) select t).Count();
+
+                surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount());
+                surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
+
+                //sets the value for the next answer to the answer that exists
+                if (CheckAnswer != null)
+                    surveyQuestionVM.Value = CheckAnswer.Value;
+            }
+
+            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
+        public ActionResult SurveyQuestions(SurveyQuestionVM model)
+        {
+            return View(model);
+        }
 
         //TODO: Need to change it so that it is in line with the new models
-        public ActionResult Summary(SurveyQuestionViewModel model)
+        public ActionResult Summary(SurveyQuestionVM model)
         {
-            SummaryViewModel ViewModel = new SummaryViewModel();
-            ViewModel.ProgramName = model.ProgramName;
+            SummaryVM summaryVM = new SummaryVM();
+            summaryVM.ProgramName = model.ProgramName;
             var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
 
             using (var context = new DBAContext())
@@ -252,10 +231,26 @@ namespace StateTemplateV5Beta.Controllers
                 //ViewModel.Points = (YesTotal + NoTotal);
 
             }
-            return View(ViewModel);
+            return View(summaryVM);
+        }
+
+        private Security session(Security active)
+        {
+            if (active == null)
+                active = new Security();
+            return active;
+        }
+
+        public bool isLoggedIn()
+        {
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            bool isLoggedIn = true;
+
+            if (cookie == null || cookie.Values["LoggedIn"] != "True" ||
+                cookie.Values["ID"] == null)
+                isLoggedIn = false;
+
+            return isLoggedIn;
         }
     }
 }
-    
-    
-

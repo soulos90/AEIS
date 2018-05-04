@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-using StateTemplateV5Beta.Controllers;
-
 namespace StateTemplateV5Beta.Models
 {
     public class Inventory
@@ -16,8 +14,9 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId)
         {
             DBAContext dBAContext = new DBAContext();
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT count(DISTINCT a.AId) FROM Answers a WHERE UId='" + uId + "';");          
-            int numOfSystems = answers.Count();
+            
+            int numOfAnswers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();
+            int numOfSystems = numOfAnswers / Environment.NumQus;
 
             getSections();
             getSystems(uId, numOfSystems);
@@ -27,13 +26,15 @@ namespace StateTemplateV5Beta.Models
         public Inventory(string uId, int numOfSystems)
         {
             DBAContext dBAContext = new DBAContext();
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT count(Distinct a.AID) FROM Answers a WHERE UId='" + uId + "';");
+            int numOfAnswers = dBAContext.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();
+            numOfAnswers /= Environment.NumQus;
 
-            if (numOfSystems > answers.Count())
-                numOfSystems = answers.Count();
+            if (numOfSystems > numOfAnswers)
+                numOfSystems = numOfAnswers;
 
             getSections();
             getSystems(uId, numOfSystems);
+            // TODO: sort sections by ScoreTotal
         }
 
         // gets a specific system and stores it into Systems[0].
@@ -50,9 +51,7 @@ namespace StateTemplateV5Beta.Models
             SectionTitles = new string[Environment.NumSec];
 
             for (int i = 0; i < SectionTitles.Length; i++)
-            {
                 SectionTitles[i] = e.GetSectionName(i);
-            }
         }
 
         private void getSystems(string uId, int numOfSystems)
@@ -60,9 +59,7 @@ namespace StateTemplateV5Beta.Models
             Systems = new InventoryItem[numOfSystems];
 
             for (int i = 0; i < Systems.Length; i++)
-            {
                 Systems[i] = new InventoryItem(uId, i.ToString());
-            }
         }
     }
 }

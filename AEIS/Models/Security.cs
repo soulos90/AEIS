@@ -7,14 +7,14 @@ namespace StateTemplateV5Beta.Models
 {
     public class Security
     {
-        public static string ID { get; set; }
-        public static HttpCookie Cookie { get; set; }
-        public static bool IsLoggedIn { get; set; }
-        public static bool Remember { get; set; }
+        public string ID { get; set; }
+        public HttpCookie Cookie { get; set; }
+        public bool IsLoggedIn { get; set; }
+        public bool Remember { get; set; }
         public Security()
         {
             IsLoggedIn = false;
-            ID = "";
+            ID = null;
             Cookie = null;
             Remember = false;
         }
