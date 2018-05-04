@@ -19,6 +19,15 @@ namespace StateTemplateV5Beta.Controllers
             var key = new Chart(width: 800, height: 600);
             key.AddTitle("AEIS Inventory Analysis");
 
+            if (model.Systems.Length == 0)
+            {
+                key.AddSeries(
+                    chartType: "StackedColumn",
+                    legend: "AEIS Inventory Analysis",
+                    xValue: new []{""},
+                    yValues: new[] {""});
+            }
+
             for (int i = 0; i < model.SectionTitles.Length; i++)
             {
                 string[] systemNames = new string[model.Systems.Length];
@@ -37,6 +46,7 @@ namespace StateTemplateV5Beta.Controllers
                          legend: "AEIS Inventory Analysis",
                          xValue: systemNames,
                          yValues: sectionScore);
+
                 }
                 else
                 {
@@ -47,7 +57,9 @@ namespace StateTemplateV5Beta.Controllers
                 }
             }
 
-            key.Write();
+            key.SetXAxis("System", 0, 6);
+            key.SetYAxis("Score", 0, 100);
+            key.Write("png");
             return null;
         }
     }
