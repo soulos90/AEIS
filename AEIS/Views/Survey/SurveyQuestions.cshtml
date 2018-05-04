@@ -37,7 +37,11 @@
                     @Html.TextBoxFor(m => m.AId)
                 </div>              
             </div>
-               
+            <div>
+                <input type="hidden" name="actives" value=@Model.Active.ID>
+                <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString()>
+                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString()>
+            </div>
             <div class="form-actions">
                 <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
                 <input type ="submit" value ="Next" formaction="@Url.Action("NextQuestion","Survey")"/>                        
