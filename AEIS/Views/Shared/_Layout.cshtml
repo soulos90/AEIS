@@ -162,32 +162,31 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
-                    @if (loggedIn)
-                    {<!--TODO: pass security model along with links-->
-                        <li class="nav-item">
-                            <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
-                        </li>
-                        <li class="nav-item">
-                            <!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
-                            <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Logout</a>
-                        </li>
-                    }
-                    else
-                    {
+                @if (loggedIn)
+                {<!--TODO: pass security model along with links-->
+                    <li class="nav-item">
+                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
+                    </li>
+                    <li class="nav-item"><!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
+                        <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Logout</a>
+                    </li>
+                }
+                else
+                {
                 <!--TODO: make the size of the login button smaller when it's the only one displayed -->
-                        <li class="nav-item">
-                            <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
-                        </li>
-                    }
+                <li class="nav-item">
+                    <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                </li>
+                }
                 </ul>
             </nav>
         </div>

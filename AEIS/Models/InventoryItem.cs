@@ -8,8 +8,10 @@ namespace StateTemplateV5Beta.Models
     public class InventoryItem
     {
         public string Name { get; }
+        public int AId { get; }
         public int[] SectionScores { get; }
         public int ScoreTotal { get { return SectionScores.Sum(); } }
+        public DateTime LastUsed { get; }
         public bool HasUnanswered { get; }
         
         public InventoryItem(string uId, string aId)
@@ -22,6 +24,7 @@ namespace StateTemplateV5Beta.Models
             foreach (Answer a in answers)
             {
                 Name = a.programName.Trim();
+                AId = a.AId;
                 int sectionNum = e.GetQuestionSection(a.QId);
 
                 if (a.Value == true)
@@ -30,7 +33,13 @@ namespace StateTemplateV5Beta.Models
                     SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1);
                 else if (e.GetQuestionRO(a.QId - 1) == "0" || e.GetQuestionRO(a.QId - 1) == null)
                     HasUnanswered = true;
+
+                if (a.LastUsed > LastUsed)
+                    LastUsed = a.LastUsed;
             }
+
+            if (answers.Count() < Environment.NumQus)
+                HasUnanswered = true;
 
             int scoreDivisor = 9;
             for (int i = 0; i < SectionScores.Length; i++)

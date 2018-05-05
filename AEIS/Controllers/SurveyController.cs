@@ -7,77 +7,106 @@ using System.Web;
 using System.Web.Mvc;
 
 using StateTemplateV5Beta.ViewModels;
+using StateTemplateV5Beta.Services;
 
 namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
-        public ActionResult NameSurvey(Security active)
+        UsersController UController = new UsersController();
+        public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
         {
-            if (!ModelState.IsValid)
-                return View();
-
-            if (!isLoggedIn())
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+            
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
                 return RedirectToAction("Index", "Home");
+            }
 
-            return View();
+            QuestionVM model = new QuestionVM(active);
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult StartSurvey(QuestionVM model, Security active)
+        public ActionResult StartSurvey(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
-            if (!isLoggedIn())
+
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM model = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
 
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
+            
+            
 
             if (Request.Form["btnEditSurvey"] != null)
             {
                 Answer a = aController.GetAnswer(userId, int.Parse(Request.Form["btnEditSurvey"]));
-                surveyQuestionVM.Question = eController.GetQuestionText(1);
-                surveyQuestionVM.aID = a.AId;
-                surveyQuestionVM.CurrentID = a.QId;
+
+                surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
+                surveyQuestionVM.AId = a.AId;
+                surveyQuestionVM.QId = a.QId;
+
                 surveyQuestionVM.ProgramName = a.programName;
             }
             else
             {
-                surveyQuestionVM.Question = eController.GetQuestionText(1);
-                surveyQuestionVM.aID = aController.GetNextAId(userId);
-                surveyQuestionVM.CurrentID = 1;
-                surveyQuestionVM.ProgramName = model.Name;
+                surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
+                surveyQuestionVM.AId = aController.GetNextAId(userId);
+                surveyQuestionVM.QId = 1;
+
+                surveyQuestionVM.ProgramName = model.ProgramName;
             }
 
             using (var context = new DBAContext())
             {
-                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (1 == t.QId) & (surveyQuestionVM.aID == t.AId)) select t).FirstOrDefault();
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (1 == t.QId) & (surveyQuestionVM.AId == t.AId)) select t).FirstOrDefault();
 
                 if (CheckAnswer != null)
-                    surveyQuestionVM.Answer = CheckAnswer.Value;
+                    surveyQuestionVM.Value = CheckAnswer.Value;
+
             }
 
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult PreviousQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
+
         {
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            if (!isLoggedIn())
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
+
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
 
-            int i = model.CurrentID;
-            surveyQuestionVM.aID = model.aID;
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+
+            int i = model.QId;
+            surveyQuestionVM.AId = model.AId;
+
 
             //checks to see if previous answer exists
             using (var context = new DBAContext())
@@ -129,17 +158,26 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult NextQuestion(SurveyQuestionVM model, Security active)
+        public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
+
         {
+
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
-            if (!isLoggedIn())
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
+            }
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+
             var eController = new EnvironmentController();
             var aController = new AnswersController();
 
@@ -211,26 +249,21 @@ namespace StateTemplateV5Beta.Controllers
             summaryVM.ProgramName = model.ProgramName;
             var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
 
-            using (var context = new DBAContext())
-            {
-                //TODO: If there were questions that didnt have any yes or no. It would return an error
-                //int End = Convert.ToInt16(Controller.GetQuestionCount());
-                //int YesTotal = 0;
-                //int NoTotal = 0;
+            //int End = Convert.ToInt16(Controller.GetQuestionCount());
+            //int YesTotal = 0;
+            //int NoTotal = 0;
 
-                //for (int i=1; i <= End; i++)
-                //{
-                //    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-                //    if (CheckAnswer.Value == null)
-                //        break;
-                //    else if (CheckAnswer.Value == true)
-                //        YesTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
-                //    else if (CheckAnswer.Value == false)
-                //        NoTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
-                //}
-                //ViewModel.Points = (YesTotal + NoTotal);
-
-            }
+            //for (int i=1; i <= End; i++)
+            //{
+            //    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+            //    if (CheckAnswer.Value == null)
+            //        break;
+            //    else if (CheckAnswer.Value == true)
+            //        YesTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
+            //    else if (CheckAnswer.Value == false)
+            //        NoTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
+            //}
+            //ViewModel.Points = (YesTotal + NoTotal);       
             return View(summaryVM);
         }
 
@@ -241,16 +274,44 @@ namespace StateTemplateV5Beta.Controllers
             return active;
         }
 
-        public bool isLoggedIn()
+        private Security session(string active, string activeLog, string rem)
         {
+            Security Active;
+            if (active == null)
+            {
+                active = "";
+            }
+            if (activeLog == null)
+            {
+                activeLog = "false";
+            }
+            if (rem == null)
+            {
+                rem = "false";
+            }
+            Active = new Security(active, activeLog.Equals("True"), rem.Equals("True"));
+            return Active;
+        }
+
+        public SecurityController IsLoggedIn(SecurityController active)
+        {
+            bool value = false;
+            string decodedUser = "";
+            bool remember = false;
             HttpCookie cookie = Request.Cookies["UserInfo"];
-            bool isLoggedIn = true;
+            if (cookie != null)
+            {
+                decodedUser = HttpUtility.HtmlDecode(cookie.Values["ID"]);
+                value = HttpUtility.HtmlDecode(cookie.Values["LoggedIn"]).Equals("True");
+                remember = HttpUtility.HtmlDecode(cookie.Values["Remember"]).Equals("True");
+            }
+            if (value)
+            {
+                active.Login(decodedUser);
+                active.SetRemember(remember);
+            }
+            return active;
 
-            if (cookie == null || cookie.Values["LoggedIn"] != "True" ||
-                cookie.Values["ID"] == null)
-                isLoggedIn = false;
-
-            return isLoggedIn;
         }
     }
 }

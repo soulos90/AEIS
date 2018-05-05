@@ -15,11 +15,11 @@ namespace StateTemplateV5Beta.Models
 
         public string programName { get; set; }           
         public Nullable<bool> Value { get; set; }
+
         public Answer()
         {
 
         }
-
     }
 
     public class DBAContext : DbContext

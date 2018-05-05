@@ -6,7 +6,7 @@ using System.Web;
 
 namespace StateTemplateV5Beta.Models
 {
-    public class QuestionVM
+    public class QuestionViewModel
     {
         [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
@@ -16,7 +16,7 @@ namespace StateTemplateV5Beta.Models
         [Display(Name = "Survey Answer")]
         public string Answer { get; set; }
     }
-    public class SurveyQuestionVM
+    public class SurveyQuestionViewModel
     {
 
         [Display(Name = "Survey Question")]

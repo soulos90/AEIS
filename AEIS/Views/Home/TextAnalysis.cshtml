@@ -3,6 +3,7 @@
     ViewBag.Title = "TextAnalysis";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+
     // TODO: TEXT ANALYSIS - add adjustment for how many systems are currently displayed (possibly a dropdown list w/ numbers 2-10?)
 }
 
@@ -11,8 +12,15 @@
     <h1>AEIS Inventory Text Analysis</h1>
     <p>
         AEIS analysis was performed on the submitted inventory.<br>
-        Below is the scoring results for the top @Model.Systems.Length systems in descending order.
     </p>
+
+    @if (Model.Systems.Length == 0)
+    {
+        <div class="panel panel-primary m-t-md m-b-lg">
+            <div class="panel-heading"><h3>Your Inventory is empty!</h3></div>
+            <div class="panel-body p-b-100 p-b-100">To fill it, use the Inventory page.</div>
+        </div>
+    }
 
     @for (int i = 1; i <= Model.Systems.Length; i++)
     { 
@@ -26,7 +34,7 @@
             {
             <div>@Model.Systems[i - 1].SectionScores[j] points for '@Model.SectionTitles[j]'<br></div>
             }
-            </div> <!-- end panel body -->
+            </div> <!-- end panel body --><!--TODO: push footer to bottom of screen (might be better done in global footer but I dunno)-->
         </div> <!-- end panel -->
     }
 </div> <!-- end section -->

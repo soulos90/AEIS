@@ -39,16 +39,21 @@ namespace StateTemplateV5Beta.Controllers
             Answer answer = db.Answers.Find(id);
             return answer;
         }
+        public Answer GetAnswer(string uId, int aId)
+        {
+            Answer answer = (from t in db.Answers where ((uId == t.UId) & (aId == t.AId) & (1 == t.QId)) select t).FirstOrDefault();
+            return answer;
+        }
         // PUT: api/Answers/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutAnswer(string id, Answer answer)
+        public IHttpActionResult PutAnswer(string uId, Answer answer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != answer.UId)
+            if (uId != answer.UId)
             {
                 return BadRequest();
             }
@@ -63,7 +68,7 @@ namespace StateTemplateV5Beta.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AnswerExists(id))
+                if (!AnswerExists(uId))
                 {
                     return NotFound();
                 }
@@ -160,8 +165,12 @@ namespace StateTemplateV5Beta.Controllers
         // returns next available AId for new survey
         public int GetNextAId(string uId)
         {
-            int numOfAnswers = db.Answers.SqlQuery("SELECT DISTINCT * FROM Answers WHERE UId='" + uId + "';").Count();         
-            return numOfAnswers / Models.Environment.NumQus;
+            var result = (from Answers in db.Answers
+                          orderby Answers.AId
+                          where Answers.UId == uId
+                          select Answers.AId).Distinct().ToList();
+
+            return result.Count();
         }
 
         protected override void Dispose(bool disposing)
@@ -173,9 +182,9 @@ namespace StateTemplateV5Beta.Controllers
             base.Dispose(disposing);
         }
 
-        private bool AnswerExists(string id)
+        private bool AnswerExists(string uId)
         {
-            return db.Answers.Count(e => e.UId == id) > 0;
+            return db.Answers.Count(e => e.UId == uId) > 0;
         }
     }
 }

@@ -3,13 +3,19 @@
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var active = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    
 }
 
 <div class="section">
 
     <h1>Account Settings</h1>
+    <div class="input-group m-t-md">
+        <div class="d-flex" style="color:red">
+            @ViewBag.ErrorMessage
+        </div>
+    </div>
     <!-- Account Information -->
-    @using (Html.BeginForm("PutUser", "Login", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("PutUser", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.ValidationSummary(false, "", new { @class = "" })
         <div class="panel panel-primary">
@@ -18,33 +24,36 @@
                 <label>Email</label>
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value=@Model.Email id="Email" name="ID" tabindex="1">
+                <input type="text" style="width:250px" value="@Model.Email" id="Email" name="ID" tabindex="1">
             </div>
+            <input type="hidden" name="actives" value="@Model.Active.ID" />
+            <input type="hidden" name="activeLog" value="@Model.Active.IsLoggedIn.ToString()" />
+            <input type="hidden" name="activeRem" value="@Model.Active.Remember.ToString()" />
             <div class="row p-t p-l-md">
                 <label>First Name</label><br />
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value=@Model.FirstName id="first-name" name="FName" tabindex="2">
+                <input type="text" style="width:250px" value="@Model.FirstName" id="first-name" name="FName" tabindex="2">
             </div>
 
             <div class="row p-t p-l-md">
                 <label>Last Name</label>
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value=@Model.LastName id="last-name" name="LName" tabindex="3">
+                <input type="text" style="width:250px" value="@Model.LastName" id="last-name" name="LName" tabindex="3">
             </div>
             <div class="row p-t p-l-md">
                 <label>Organization</label>
             </div>
             <div class="row p-b p-l-md">
-                <input type="text" style="width:250px" value=@Model.Organization id="org" name="Organization" tabindex="4"><!--TODO:only printing 1 word if a multi word string (probably true for other fields)-->
+                <input type="text" style="width:250px" value="@Model.Organization" id="org" name="Organization" tabindex="4">
             </div>
             <div>
-                <input type="hidden" name="active" id="active" value=@Model.Active/>
+                <input type="hidden" name="active" id="active" value="@Model.Active" />
             </div>
         </div> <!-- end account container -->
         <!-- Change Password -->
-        <div class="panel panel-primary"><!--TODO: change password functionality-->
+        <div class="panel panel-primary">
             <div class="panel-heading"><h2>Change Password</h2></div>
             <div class="row p-t p-l-md">
                 <label>Current password</label>
@@ -56,17 +65,19 @@
                 <label>New password</label>
             </div>
             <div class="row p-l-md">
-                <input type="password" style="width:250px" placeholder="New password" id="new-password" name="newPassword" tabindex="6">
+                <input type="password" style="width:250px" placeholder="New password" id="password" name="Passhash" tabindex="6" onchange='checkLength();'>
+                <span id='pw_message'></span>
             </div>
             <div class="row p-t p-l-md">
                 <label>Reenter password</label>
             </div>
             <div class="row p-b p-l-md">
-                <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="7">
+                <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="7" onkeyup='check();'>
+                <span id='message'></span>
             </div>
         </div> <!-- end password container -->
 
-        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary"/>
+        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary" disabled="disabled" />
 
     }
     @Scripts.Render("~/Scripts/register-check.js")

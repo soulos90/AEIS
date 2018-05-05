@@ -140,11 +140,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnswersController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -165,17 +165,20 @@
     <Compile Include="Models\SummaryViewModelcs.cs" />
     <Compile Include="Models\Environment.cs" />
     <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\SurveyQuestion.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\InventoryItem.cs" />
-    <Compile Include="Models\SecurityCombined.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\SecurityService.cs" />
     <Compile Include="ViewModels\AccountVM.cs" />
     <Compile Include="ViewModels\InventoryVM.cs" />
     <Compile Include="ViewModels\IVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
+    <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
+    <Compile Include="ViewModels\SummaryVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
@@ -462,16 +465,16 @@
     <Content Include="Views\Home\ChartAnalysis.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
-
     <Content Include="Views\Home\Questions.cshtml" />
     <Content Include="Views\Survey\Index.cshtml" />
-    <Content Include="Views\Survey\SurveyQuestions.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Login\LoggedIn.cshtml" />
-
     <Content Include="Settings.csv" />
     <Content Include="Views\Home\ForgotPassword.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Logout.cshtml" />
+    <Content Include="Views\Survey\NameSurvey.cshtml" />
+    <Content Include="Views\Survey\SurveyQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -483,11 +486,9 @@
     <Folder Include="Content\StateTemplate\images\template2014\_notes\" />
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
-
     <Folder Include="Views\Chart\" />
     <Folder Include="Views\Default\" />
     <Folder Include="Views\ScoreCalculation\" />
-
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
