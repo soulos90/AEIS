@@ -162,8 +162,8 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
         {        
-            if (!ModelState.IsValid)
-                return View("SurveyQuestions", model);
+            //if (!ModelState.IsValid)
+            //    return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
