@@ -240,7 +240,10 @@ namespace StateTemplateV5Beta.Controllers
                 model = new LoginVM(SC.CheckLogin(), SC.GetActive());
                 return View("Index", model);
             }
-
+            else
+            {
+                ViewBag.ErrorMessage = "Email already registered";
+            }
             model = new SecurityVM(active);
             return View("Registration",model);
         }

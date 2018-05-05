@@ -140,12 +140,10 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AnswersController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
-    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -161,7 +159,6 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\Answer.cs" />
-    <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\SummaryViewModelcs.cs" />
     <Compile Include="Models\Environment.cs" />
