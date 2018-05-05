@@ -109,7 +109,7 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
-        
+
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)//TODO: implement
         {
             IVM model;
@@ -256,7 +256,7 @@ namespace StateTemplateV5Beta.Controllers
             UsersController u = new UsersController();
             SecurityController SC = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-            
+
             var getUser = u.GetU(user.ID);
             if (getUser == null)
             {
@@ -268,7 +268,7 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             model = new SecurityVM(active);
-            return View("Registration",model);
+            return View("Registration", model);
         }
 
         [HttpPost]
@@ -278,7 +278,7 @@ namespace StateTemplateV5Beta.Controllers
             UsersController u = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model;
-            
+
             var getUser = u.GetU(SController.GetID().Trim());
             if (getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)
             {
@@ -303,10 +303,10 @@ namespace StateTemplateV5Beta.Controllers
             {
                 ViewBag.ErrorMessage = "Invalid New Email";
             }
-            
-            model = new AccountVM(SController.GetID(),SController.GetActive());
+
+            model = new AccountVM(SController.GetID(), SController.GetActive());
             return View("Account", model);
-            
+
         }
 
         [HttpPost]
@@ -316,7 +316,7 @@ namespace StateTemplateV5Beta.Controllers
             var UController = new UsersController();
             SecurityController SController = new SecurityController(active);
             IVM model = new LoginVM(active.IsLoggedIn, active);
-            
+
             var user = UController.GetU(userName);
             if (user != null)
             {
@@ -334,9 +334,9 @@ namespace StateTemplateV5Beta.Controllers
                     ViewBag.ErrorMessage = "Invalid Password";
             }
             else
-                ViewBag.ErrorMessage = "Invalid User Name"; 
+                ViewBag.ErrorMessage = "Invalid User Name";
             return View("Index", model);    // change to redirect           
-            
+
         }
         public ActionResult Logout()
         {

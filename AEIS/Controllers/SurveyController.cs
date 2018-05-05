@@ -17,7 +17,7 @@ namespace StateTemplateV5Beta.Controllers
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
-            
+
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return RedirectToAction("Index", "Home");
@@ -30,6 +30,8 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult StartSurvey(string actives, string activeLog, string activeRem, QuestionVM model)
         {
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -46,8 +48,8 @@ namespace StateTemplateV5Beta.Controllers
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            
-            
+
+
 
             if (Request.Form["btnEditSurvey"] != null)
             {
@@ -56,8 +58,8 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
                 surveyQuestionVM.AId = a.AId;
                 surveyQuestionVM.QId = a.QId;
-                
-                surveyQuestionVM.ProgramName= a.programName;
+
+                surveyQuestionVM.ProgramName = a.programName;
             }
             else
             {
@@ -83,8 +85,8 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
         {
-            //if (!ModelState.IsValid)
-            //    return View("SurveyQuestions", model);
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -161,9 +163,9 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
-        {        
-            //if (!ModelState.IsValid)
-            //    return View("SurveyQuestions", model);
+        {
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -185,8 +187,8 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.ProgramName = model.ProgramName;
             int i = model.QId;
             if (model.Value != null)
-            { 
-            //Save the Answer to the question just answered.
+            {
+                //Save the Answer to the question just answered.
                 using (var context = new DBAContext())
                 {
                     Answer previousAnswer = new Answer();
@@ -240,7 +242,7 @@ namespace StateTemplateV5Beta.Controllers
             return RedirectToAction("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult SurveyQuestions(SurveyQuestionVM model)
+        public ActionResult SurveyQuestions(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
             return View(model);
         }
