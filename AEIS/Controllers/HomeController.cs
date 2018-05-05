@@ -162,8 +162,6 @@ namespace StateTemplateV5Beta.Controllers
         }
         public ActionResult Survey()
         {
-            session();
-            if (!active.CheckLogin())
             IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);

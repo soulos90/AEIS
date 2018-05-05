@@ -144,7 +144,6 @@
     <Compile Include="Controllers\ChartController.cs" />
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
@@ -161,7 +160,6 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\Answer.cs" />
-    <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\SummaryViewModelcs.cs" />
     <Compile Include="Models\Environment.cs" />
