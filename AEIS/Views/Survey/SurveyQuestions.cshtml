@@ -1,4 +1,4 @@
-﻿@model StateTemplateV5Beta.ViewModels.SurveyQuestionVM
+﻿@model StateTemplateV5Beta.Models.SurveyQuestionViewModel
 @{
     ViewBag.Title = "SurveyQuestions";
 }
@@ -12,35 +12,34 @@
            
             <div style="text-align:center">
                 <label class="control-label">
-                    @Html.LabelFor(x => x.QuestionText)
+                    @Html.LabelFor(x => x.Question)
                 </label>
                 <div class="controls">
-                    @Html.TextBoxFor(m => m.QuestionText, new { @class = "form-control", @title = "Fill out the survey name", @required = "", @readonly = true })
+                    @Html.TextBoxFor(m => m.Question, new { @class = "form-control", @title = "Fill out the survey name", @required = "", @readonly = true })
                 </div>
             </div>
 
             <div style="text-align:left">
                 <label class="control-label">
-                    @Html.LabelFor(x => x.Value)
+                    @Html.LabelFor(x => x.Answer)
                 </label>
                 <div class="controls">                          
-                    @Html.RadioButtonFor(x => x.Value, true)
+                    @Html.RadioButtonFor(x => x.Answer, true)
                     Yes
                 </div>
                 <div class="controls">
-                    @Html.RadioButtonFor(x => x.Value, false)
+                    @Html.RadioButtonFor(x => x.Answer, false)
                     No
                 </div>
                 <div class="hidden">
-                    @Html.TextBoxFor(m => m.QId)
+                    @Html.TextBoxFor(m => m.CurrentID)
                     @Html.TextBoxFor(m => m.ProgramName)
-                    @Html.TextBoxFor(m => m.AId)
+                    @Html.TextBoxFor(m => m.aID)
                 </div>              
             </div>
-               
             <div class="form-actions">
                 <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
-                <input type ="submit" value ="Next" formaction="@Url.Action("NextQuestion","Survey")"/>                        
+                <input type ="submit" value ="Next" formaction="@Url.Action("AnswerQuestion","Survey")"/>                        
             </div>                                            
         } 
             

@@ -144,6 +144,7 @@
     <Compile Include="Controllers\EnvironmentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -173,7 +174,6 @@
     <Compile Include="ViewModels\IVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
-    <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
     <Compile Include="ViewModels\SummaryVM.cs" />
   </ItemGroup>
@@ -472,7 +472,6 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Logout.cshtml" />
     <Content Include="Views\Survey\SurveyQuestions.cshtml" />
-    <Content Include="Views\Survey\NameSurvey.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
