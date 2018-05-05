@@ -7,24 +7,22 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class AccountVM
+    public class AccountVM : IVM
     {
-        #region Properties
         public string Email { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string Organization { get; }
-        #endregion
+        public Security Active { get; }
 
-        #region Constructor
-        public AccountVM(string uId)
+        public AccountVM(string uId, Security active)
         {
             AccountInfo accountInfo = new AccountInfo(uId);
             Email = accountInfo.Email;
             FirstName = accountInfo.FirstName;
             LastName = accountInfo.LastName;
             Organization = accountInfo.Organization;
+            Active = active;
         }
-        #endregion
     }
 }

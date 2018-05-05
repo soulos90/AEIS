@@ -12,28 +12,36 @@ namespace StateTemplateV5Beta.Controllers
     public class SecurityController
     {
         private UsersController user = new UsersController();
-        private static Security active;
+        private Security active;
         private HttpCookie activeCookie;
         public SecurityController()
         {
             active = new Security();
+        }
+        public SecurityController(Security Active)
+        {
+            active = Active;
         }
         public string GetID()
         {
             string value = "";
             if (CheckLogin())
             {
-                value = Security.ID;
+                value = active.ID;
             }
             return value;
         }
         public void SetRemember(bool RB)
         {
-            Security.Remember = RB;
+            active.Remember = RB;
         }
         public bool GetRemember()
         {
-            return Security.Remember;
+            return active.Remember;
+        }
+        public Security GetActive()
+        {
+            return active;
         }
         public bool CheckLogin()
         {
@@ -41,103 +49,32 @@ namespace StateTemplateV5Beta.Controllers
             if (active==null)
             {
                 active = new Security();
-                Security.IsLoggedIn = check;
+                active.IsLoggedIn = check;
             }
-            if(activeCookie == null)
-                activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null && Security.Cookie==null)
-            {
-                activeCookie = new HttpCookie("Status");
-                if (Security.Remember)
-                    activeCookie.Expires = DateTime.Now.AddMonths(4);
-                else
-                    activeCookie.Expires = DateTime.Now.AddHours(8);
-                activeCookie["LoggedIn"] = "False";
-                Security.Cookie = activeCookie;
-                HttpContext.Current.Response.Cookies.Set(activeCookie);
-            }
-            else if(activeCookie == null)
-            {
-                activeCookie = Security.Cookie;
-            }
-
-            if (Security.IsLoggedIn == true)
-            {
-                check = true;
-                activeCookie["ID"] = Security.ID;
-                activeCookie["LoggedIn"] = "True";
-                activeCookie["Hash"] = user.GetU(Security.ID).PassHash;
-                if (Security.Remember)
-                    activeCookie.Expires = DateTime.Now.AddMonths(4);
-                else
-                    activeCookie.Expires = DateTime.Now.AddHours(8);
-                Security.Cookie = activeCookie;
-                HttpContext.Current.Response.Cookies.Set(activeCookie);
-            }
-            else if (activeCookie["LoggedIn"].Equals("True"))
-            {
-                if (Security.Remember)
-                    activeCookie.Expires = DateTime.Now.AddMonths(4);
-                else
-                    activeCookie.Expires = DateTime.Now.AddHours(8);
-                Security.ID = activeCookie["ID"];
-                Security.IsLoggedIn = true;
-                Security.Cookie = activeCookie;
-                HttpContext.Current.Response.Cookies.Set(activeCookie);
-                check = true;
-            }
-            return check;
+           
+            return active.IsLoggedIn;
         }
 
-        public HttpCookie Login(string ID)
+        public void Login(string ID)
         {
             if (active==null)
             {
                 active = new Security();
             }
-            Security.IsLoggedIn = true;
-            if (activeCookie == null)
-                activeCookie = HttpContext.Current.Request.Cookies.Get("Status");
-            if (activeCookie == null && Security.Cookie == null)
-            {
-                activeCookie = new HttpCookie("Status");
-                Security.Cookie = activeCookie;
-            }
-            else if (activeCookie == null)
-            {
-                activeCookie = Security.Cookie;
-            }
-            else
-            {
-                Security.Cookie = activeCookie = new HttpCookie("Status");
-            }
-
-            if (Security.Remember)
-                activeCookie.Expires = DateTime.Now.AddMonths(4);
-            else
-                activeCookie.Expires = DateTime.Now.AddHours(8);
-            activeCookie["LoggedIn"] = "True";
-            activeCookie["ID"] = Security.ID = ID;
-            HttpContext.Current.Response.Cookies.Set(activeCookie);
-            return activeCookie;
+            active.ID = ID;
+            active.IsLoggedIn = true;
         }
-        public void Logout()
+        public void Login(Security ID)
         {
-            if (active==null)
-            {
-                 active = new Security();
-            }
-            Security.IsLoggedIn = false;
-            if (activeCookie!=null)
-            {
-                activeCookie["LoggedIn"] = "False";
-                if (Security.Remember)
-                    activeCookie.Expires = DateTime.Now.AddMonths(4);
-                else
-                    activeCookie.Expires = DateTime.Now.AddHours(8);
-                HttpContext.Current.Response.Cookies.Remove("Status");
-            }
+            active = ID;
+            active.IsLoggedIn = true;
         }
-
+        public DateTime GetEX()
+        {
+            if (active.Remember)
+                return DateTime.Now.AddMonths(4);
+            else
+                return DateTime.Now.AddHours(8);
+        }
     }
 }

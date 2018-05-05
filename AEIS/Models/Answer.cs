@@ -20,9 +20,9 @@ namespace StateTemplateV5Beta.Models
         {
 
         }
-
     }
 
+    }
     public class DBAContext : DbContext
     {
         public DbSet<Answer> Answers { get; set; }

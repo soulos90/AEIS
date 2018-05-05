@@ -2,16 +2,37 @@
 @{
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    var blankRows = 11;
 
-    // TODO: INVENTORY - pass value of clicked system to print page w/ button
-    // TODO: INVENTORY - implement add system button
-    // TODO: INVENTORY - add proper link to edit form button
+    // light blue: 9FC7DA
+    // primary blue: 046B99
+    // dark blue: 035376
     // TODO: INVENTORY - change to grid for pagination(?)
 }
+<style type="text/css">
+    #submit {
+        background-color: #046B99;
+        padding: .5em;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 14px;
+        text-decoration: none;
+        border: none;
+    }
+
+        #submit:hover {
+            border: none;
+            background: #035376;
+            box-shadow: 0px 0px 1px #035376;
+        }
+</style>
 
 <div class="section">
-    
-    <div class="container">     
+
+    <div class="container">
         <div class="row m-b-sm">
             <div class="col-xs-9">
                 <h1>AEIS System Inventory</h1>
@@ -19,7 +40,7 @@
             <!-- Add New System Button -->
             <div class="col-xs-3" style="text-align:right">
                 <h1>
-                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" onclick="window.location.href='/Home/Inventory'">
+                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" onclick="window.location.href='/Survey/NameSurvey'">
                         Add New System
                     </button>
                 </h1>
@@ -29,52 +50,85 @@
         <!-- Inventory System Table -->
         <div class="row">
             <div class="col-xs-12">
-                <table class="table table-bordered" style="white-space:nowrap;">
+                <table class="table table-bordered" style="white-space:nowrap;" id="overlay">
                     <thead>
-                        <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-                            <th style="text-align:center">Application / System Name</th>
-
+                        <tr bgcolor="#F1F1F1" style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                            {
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="name"> Application / System Name</button></th>
+                            }
                             @for (int i = 0; i < Model.SectionTitles.Length; i++)
                             {
-                            <th style="text-align:center">@Model.SectionTitles[i]</th>
+                                using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                                {
+                                    <th style="text-align:center"><button type="submit" id="submit" name="sort" value="@i">@Model.SectionTitles[i]</button></th>
+                                }
                             }
-
-                            <th style="text-align:center">Total</th>
+                            @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                            {
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="totalScore">Total</button></th>
+                            }
                         </tr>
                     </thead>
-
-                @for (int i = 0; i < Model.Systems.Length; i++)
-                {
-                <tr>
-                    <td>@Model.Systems[i].Name</td>
-                    @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                    @if (Model.Systems.Length == 0)
                     {
-                    <td>@Model.Systems[i].SectionScores[j]</td>
+                        for (int i = 0; i < blankRows; i++)
+                        {
+                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
+                            @for (int j = 0; j < Model.SectionTitles.Length + 2; j++)
+                            {
+                                    <td style="height:50px"></td>
+                            }
+                        </tr>
+                        }
                     }
-                    <td>@Model.Systems[i].ScoreTotal</td>
+                    @for (int i = 0; i < Model.Systems.Length; i++)
+                    {
 
-                    <td style="text-align:center">
-                        <button type="button" id="btnEdit" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                            <i class="ca-gov-icon-pencil-edit"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center">
-                        
-                            <button type="submit" name="btnPrint" value="@i" class="btn btn-primary btn-sm" title="Print">
-                                <i class="ca-gov-icon-print"></i>
-                            </button>
-                        
-                        
-                    </td>
-                    <td style="text-align:center">
-                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
-                            <i class="ca-gov-icon-close-fill"></i>
-                        </button>
-                    </td>
-                </tr>
-                }
+                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
 
-                </table>
+                            <td style="vertical-align:middle">@Model.Systems[i].Name</td>
+                            @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                            {
+                                <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
+                            }
+                            <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
+
+                            <td style="text-align:center; vertical-align:middle">
+                                @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post))
+                                {
+                                    <button type="submit" name="btnEditSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Edit Survey">
+                                        <i class="ca-gov-icon-pencil-edit"></i>
+                                    </button>
+                                }
+                            </td>
+                            <td style="text-align:center; vertical-align:middle">
+                                @using (Html.BeginForm("Justification", "Home", FormMethod.Post))
+                                {
+                                    if (Model.Systems[i].HasUnanswered)
+                                    {
+                                        <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                            <i class="ca-gov-icon-print"></i>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Print Justification">
+                                            <i class="ca-gov-icon-print"></i>
+                                        </button>
+                                    }
+                                }
+                            </td>
+                            <!-- TODO: implement delete -->
+                            <td style="text-align:center; vertical-align:middle">
+                                <button type="button" name="btnDeleteSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
+                                    <i class="ca-gov-icon-close-fill"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                </table><!--TODO: push footer to bottom of page (might be better implemented in global footer I dunno)-->
+
             </div> <!-- end system table column -->
         </div> <!-- end system table row -->
     </div> <!-- end container -->

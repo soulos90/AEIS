@@ -7,29 +7,39 @@ using StateTemplateV5Beta.Models;
 
 namespace StateTemplateV5Beta.ViewModels
 {
-    public class InventoryVM
+    public class InventoryVM : IVM
     {
-        #region Properties
-        public string[] SectionTitles { get; }
         public InventoryItem[] Systems { get; }
-        #endregion
+        public string[] SectionTitles { get; }
+        public Security Active { get; }
+        public int num { get; }
 
-        #region Constructors
+        public InventoryVM() { }
+
         // gets all systems from a uId
-        public InventoryVM(string uId)
+        public InventoryVM(string uId, Security active)
         {
             Inventory inventory = new Inventory(uId);
-            SectionTitles = inventory.SectionTitles;
+
             Systems = inventory.Systems;
+            SectionTitles = inventory.SectionTitles;
+            Active = active;
         }
 
-        // gets 'numOfSystems' number of systems from a uId
-        public InventoryVM(string uId, int numOfSystems)
+        // maps systems from inventory to VM
+        public InventoryVM(Inventory inventory, Security active, int Num)
         {
-            Inventory inventory = new Inventory(uId, numOfSystems);
             SectionTitles = inventory.SectionTitles;
             Systems = inventory.Systems;
+            Active = active;
+            num = Num;
         }
-        #endregion
+        // maps systems from inventory to VM
+        public InventoryVM(Inventory inventory, Security active)
+        {
+            SectionTitles = inventory.SectionTitles;
+            Systems = inventory.Systems;
+            Active = active;
+        }
     }
 }

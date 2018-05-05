@@ -4,8 +4,11 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
-@{ 
-    bool loggedIn = (StateTemplateV5Beta.Controllers.HomeController.active == null) ? false : true;
+@{
+    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    var cookie = HttpContext.Current.Request.Cookies.Get("UserInfo");
+    bool loggedIn = Model.Active.IsLoggedIn;
+
 }
 <html class="no-js" lang="en">
 <!--<![endif]-->
@@ -71,7 +74,7 @@
                 </button>
                 <div class="form-group form-inline">
                     <label for="locationZipCode">Saving your location allows us to provide you with more relevant information.</label>
-                    <input type="input" class="form-control" id="locationZipCode" placeholder="Zip Code">
+                    <input type="hidden" class="form-control" id="locationZipCode" placeholder="Zip Code">
                     <button type="button" class="btn btn-primary">Set Location</button>
                 </div>
             </div>
@@ -87,12 +90,12 @@
                             <li><div class="header-cagov-logo"><a href="/"><img src="/Content/stateTemplate/images/Ca-Gov-Logo-Gold.svg" alt="CA.gov" /></a></div></li>
                             <li><a href="/"><span class="ca-gov-icon-home" aria-hidden="true"></span><span class="sr-only">Home</span></a></li>
 
-						<!--
-                            <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
-                            <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
-                            <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
-                            <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
-						-->
+                            <!--
+                                <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
+                                <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
+                                <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
+                                <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
+                            -->
                         </ul>
                     </div>
                     <div class="half settings-links">
@@ -156,30 +159,30 @@
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
                     @if (loggedIn)
-                    {
-                    <li class="nav-item">
-                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
-                    </li>
-                    <!-- TODO: add logout functionality to logout button -->
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
-                    </li>
+                    {<!--TODO: add about section-->
+                        <li class="nav-item">
+                            <a href="~/Home/TextAnalysis?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true" type="submit"></span>Text Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/ChartAnalysis?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true" type="submit"></span>Chart Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Inventory?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Inventory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Account Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
+                            <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
+                        </li>
                     }
                     else
                     {
-                    <!--TODO: make the size of the login button smaller when it's the only one displayed -->
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
-                    </li>
+                        <!--TODO: make the size of the login button smaller when it's the only one displayed -->
+                        <li class="nav-item">
+                            <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                        </li>
                     }
                 </ul>
             </nav>
