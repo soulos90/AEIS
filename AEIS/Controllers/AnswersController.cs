@@ -96,7 +96,7 @@ namespace StateTemplateV5Beta.Controllers
             db.Answers.Add(answer);
 
             try
-            {
+            {                
                 db.SaveChanges();
             }
             catch (DbUpdateException)
