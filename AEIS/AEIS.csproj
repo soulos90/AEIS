@@ -170,7 +170,6 @@
     <Compile Include="Models\InventoryItem.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Services\SecurityService.cs" />
     <Compile Include="ViewModels\AccountVM.cs" />
     <Compile Include="ViewModels\InventoryVM.cs" />
     <Compile Include="ViewModels\IVM.cs" />

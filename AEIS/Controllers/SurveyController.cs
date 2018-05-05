@@ -7,7 +7,6 @@ using System.Web;
 using System.Web.Mvc;
 
 using StateTemplateV5Beta.ViewModels;
-using StateTemplateV5Beta.Services;
 
 namespace StateTemplateV5Beta.Controllers
 {
@@ -29,7 +28,7 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult StartSurvey(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
+        public ActionResult StartSurvey(string actives, string activeLog, string activeRem, QuestionVM model)
         {
 
             Security active = session(actives, activeLog, activeRem);
@@ -57,8 +56,8 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
                 surveyQuestionVM.AId = a.AId;
                 surveyQuestionVM.QId = a.QId;
-
-                surveyQuestionVM.ProgramName = a.programName;
+                
+                surveyQuestionVM.ProgramName= a.programName;
             }
             else
             {
@@ -66,7 +65,7 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.AId = aController.GetNextAId(userId);
                 surveyQuestionVM.QId = 1;
 
-                surveyQuestionVM.ProgramName = model.ProgramName;
+                surveyQuestionVM.ProgramName = model.Name;
             }
 
             using (var context = new DBAContext())
@@ -84,8 +83,8 @@ namespace StateTemplateV5Beta.Controllers
         public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
         {
-            if (!ModelState.IsValid)
-                return View("SurveyQuestions", model);
+            //if (!ModelState.IsValid)
+            //    return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -107,27 +106,29 @@ namespace StateTemplateV5Beta.Controllers
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
 
-
-            //checks to see if previous answer exists
-            using (var context = new DBAContext())
+            if (model.Value != null)
             {
-                //If the question was not answered then it gets a value of null
-                Answer previousAnswer = new Answer();
-                previousAnswer.AId = model.AId;
-                previousAnswer.QId = model.QId;
-                previousAnswer.UId = userId;
-                previousAnswer.programName = model.ProgramName;
-                previousAnswer.Value = model.Value;
-
-                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.QId == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
-                //if the answer exists use Put, otherwise use Post
-                if (CheckAnswer != null)
+                //checks to see if previous answer exists
+                using (var context = new DBAContext())
                 {
-                    previousAnswer.Created = CheckAnswer.Created;
-                    aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                    //If the question was not answered then it gets a value of null
+                    Answer previousAnswer = new Answer();
+                    previousAnswer.AId = model.AId;
+                    previousAnswer.QId = model.QId;
+                    previousAnswer.UId = userId;
+                    previousAnswer.programName = model.ProgramName;
+                    previousAnswer.Value = model.Value;
+
+                    Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.QId == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    //if the answer exists use Put, otherwise use Post
+                    if (CheckAnswer != null)
+                    {
+                        previousAnswer.Created = CheckAnswer.Created;
+                        aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                    }
+                    else
+                        aController.PostAnswer(previousAnswer);
                 }
-                else
-                    aController.PostAnswer(previousAnswer);
             }
 
             surveyQuestionVM.ProgramName = model.ProgramName;
@@ -160,8 +161,7 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
-        {
-
+        {        
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
@@ -184,26 +184,29 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.AId = model.AId;
             surveyQuestionVM.ProgramName = model.ProgramName;
             int i = model.QId;
+            if (model.Value != null)
+            { 
             //Save the Answer to the question just answered.
-            using (var context = new DBAContext())
-            {
-                Answer previousAnswer = new Answer();
-                previousAnswer.QId = model.QId;
-                previousAnswer.Value = model.Value;
-                previousAnswer.programName = model.ProgramName;
-                previousAnswer.UId = userId;
-                previousAnswer.AId = model.AId;
-
-                //checks to see if the answer exists
-                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
-                //if the answer exists use Put, otherwise use Post
-                if (CheckAnswer != null)
+                using (var context = new DBAContext())
                 {
-                    previousAnswer.Created = CheckAnswer.Created;
-                    aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                    Answer previousAnswer = new Answer();
+                    previousAnswer.QId = model.QId;
+                    previousAnswer.Value = model.Value;
+                    previousAnswer.programName = model.ProgramName;
+                    previousAnswer.UId = userId;
+                    previousAnswer.AId = model.AId;
+
+                    //checks to see if the answer exists
+                    Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    //if the answer exists use Put, otherwise use Post
+                    if (CheckAnswer != null)
+                    {
+                        previousAnswer.Created = CheckAnswer.Created;
+                        aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                    }
+                    else
+                        aController.PostAnswer(previousAnswer);
                 }
-                else
-                    aController.PostAnswer(previousAnswer);
             }
 
             // gets the next question

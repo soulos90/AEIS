@@ -7,7 +7,6 @@ using System.Web.Mvc;
 using StateTemplateV5Beta.Models;
 
 using StateTemplateV5Beta.ViewModels;
-using StateTemplateV5Beta.Services;
 
 namespace StateTemplateV5Beta.Controllers
 {

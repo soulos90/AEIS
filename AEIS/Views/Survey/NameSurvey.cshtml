@@ -20,10 +20,10 @@
                 </div>
             </div>
 
-            <div class="hidden">
-                @Html.TextBoxFor(m => m.Active.ID)
-                @Html.TextBoxFor(m => m.Active.IsLoggedIn)
-                @Html.TextBoxFor(m => m.Active.Remember)
+            <div>
+                <input type="hidden" name="actives" value=@Model.Active.ID />
+                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn />
+                <input type="hidden" name="activeRem" value=@Model.Active.Remember />
             </div>
 
             <div class="form-actions">
