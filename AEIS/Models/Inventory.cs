@@ -9,8 +9,10 @@ namespace StateTemplateV5Beta.Models
     public class Inventory
     {
         // TODO: add ascending / descending sorts
+        private const int defaultNum = 6;
         public InventoryItem[] Systems { get; set; }
         public string[] SectionTitles { get; set; }
+        public int DefaultNum { get { return defaultNum; } }
 
         private Inventory() {}
 
@@ -122,7 +124,7 @@ namespace StateTemplateV5Beta.Models
         public Inventory GetTop(int num)
         {
             if (num > Systems.Length)
-                num = Systems.Length;
+                num = Systems.Length - 1;
             else if (num < 1)
                 num = 1;
 

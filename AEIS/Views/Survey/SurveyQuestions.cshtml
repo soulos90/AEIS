@@ -1,57 +1,53 @@
-﻿@model StateTemplateV5Beta.Models.SurveyQuestionViewModel
+﻿@model StateTemplateV5Beta.ViewModels.SurveyQuestionVM
 
 @{
     ViewBag.Title = "SurveyQuestions";
 }
-}
-<div class=" fluid container"
+
+<div class="fluid container">
     <div class="offset-quarter half">       
 
-        @using (Html.BeginForm("AnswerQuestion", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.ValidationSummary(false, "", new { @class = "" })
+           
+            <div style="text-align:center">
+                <label class="control-label">
+                    @Html.LabelFor(x => x.QuestionText)
+                </label>
+                <div class="controls">
+                    @Html.TextBoxFor(m => m.QuestionText, new { @class = "form-control", @title = "Fill out the survey name", @required = "", @readonly = true })
+                </div>
+            </div>
 
+            <div style="text-align:left">
+                <label class="control-label">
+                    @Html.LabelFor(x => x.Value)
+                </label>
+                <div class="controls">                          
+                    @Html.RadioButtonFor(x => x.Value, true)
+                    Yes
+                </div>
+                <div class="controls">
+                    @Html.RadioButtonFor(x => x.Value, false)
+                    No
+                </div>
+                <div class="hidden">
+                    @Html.TextBoxFor(m => m.QId)
+                    @Html.TextBoxFor(m => m.ProgramName)
+                    @Html.TextBoxFor(m => m.AId)
+                    @Html.TextBoxFor(m => m.Active.ID)
+                    @Html.TextBoxFor(m => m.Active.IsLoggedIn)
+                    @Html.TextBoxFor(m => m.Active.Remember)
+                </div>       
+                <div class="form-actions">
+                    <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
+                    <input type ="submit" value ="Next" formaction="@Url.Action("NextQuestion","Survey")" />                        
+                </div>                                            
+            </div>
+        } 
             
-                <div style="text-align:center">
-                    <label class="control-label">
-                        @Html.LabelFor(x => x.Question)
-                    </label>
-                    <div class="controls">
-                        @Html.TextBoxFor(m => m.Question, new { @class = "form-control", @title = "Fill out the surevy name", @required = "", @readonly = true })
-                    </div>
-                </div>
-
-                <div style="text-align:left">
-                    <label class="control-label">
-                        @Html.LabelFor(x => x.Answer)
-                    </label>
-                    <div class="controls">                          
-                        @Html.RadioButtonFor(x => x.Answer, true)
-                        Yes
-                    </div>
-                    <div class="controls">
-                        @Html.RadioButtonFor(x => x.Answer, false)
-                        No
-                        <div class="hidden">
-                            @Html.TextBoxFor(m => m.CurrentID)
-                            @Html.TextBoxFor(m => m.ProgramName)
-                            @Html.TextBoxFor(m => m.aID)
-                        </div>
-                    </div>
-                </div>
-
-                
-                    <div class="form-actions">
-                        
-                        <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
-                        <input type ="submit" value ="Next" formaction="@Url.Action("AnswerQuestion","Survey")"/>
-                        
-                    </div>
-                            
-                                            
-                     } 
-            
-                </div>
+    </div>
 </div>
 
         
