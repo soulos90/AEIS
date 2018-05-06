@@ -24,14 +24,21 @@ namespace StateTemplateV5Beta.Controllers
             }
             QuestionViewModel model = new QuestionViewModel();
             model.Active = active.GetActive();
+
             return View(model);
         }
 
         [HttpPost]
-        public ActionResult Page1(QuestionViewModel model)
+        public ActionResult Page1(string actives, string activeLog, string activeRem, QuestionViewModel model)
         {
-            SecurityController active = new SecurityController(model.Active);
-            if (!(IsLoggedIn(active).CheckLogin()))
+            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            viewModel.Active = Active.GetActive();
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return View("Index", "Home");
             }
@@ -41,9 +48,6 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
             {
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                viewModel.Active = active.GetActive();
-
                 var Controller = StateTemplateV5Beta.MvcApplication.environment;
                 var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
                 var User = new StateTemplateV5Beta.Controllers.UsersController();
@@ -52,8 +56,8 @@ namespace StateTemplateV5Beta.Controllers
                 viewModel.CurrentID = 1;
                 viewModel.ProgramName = model.Name;
                 //TODO: switch to the correct stuff after testing
-                viewModel.aID = AnswerController.GetNextAId(active.GetID());
-                
+                viewModel.aID = AnswerController.GetNextAId(Active.GetID());
+
                 //viewModel.aID = 9007;
 
                 using (var context = new DBAContext())
@@ -63,22 +67,22 @@ namespace StateTemplateV5Beta.Controllers
                         viewModel.Answer = CheckAnswer.Value;
                 }
 
-                return RedirectToAction("SurveyQuestions", viewModel);
+                return View("SurveyQuestions", viewModel);
             }
 
         }
 
-        public ActionResult SurveyQuestions(SurveyQuestionViewModel model)
-        {
-
-            return View(model);
-        }
-
         //This is for when someone presses the Previous button
-        public ActionResult PreviousQuestion(SurveyQuestionViewModel model)
+        public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionViewModel model)
         {
-            SecurityController active = new SecurityController(model.Active);
-            if (!(IsLoggedIn(active).CheckLogin()))
+            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            viewModel.Active = Active.GetActive();
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return View("Index", "Home");
             }
@@ -90,8 +94,6 @@ namespace StateTemplateV5Beta.Controllers
             else
             {
                 var PreviousQuestionPress = StateTemplateV5Beta.MvcApplication.environment;
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                viewModel.Active = active.GetActive();
                 var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
 
                 int i = model.CurrentID;
@@ -101,16 +103,14 @@ namespace StateTemplateV5Beta.Controllers
                 using (var context = new DBAContext())
                 {
 
-                    Answer CheckAnswer = (from t in context.Answers where ((active.GetID() == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((viewModel.Active.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
                     //If the question was not answered then it gets a value of null
                     Answer PreviousAnswer = new Answer();
                     PreviousAnswer.QId = model.CurrentID;
                     PreviousAnswer.Value = model.Answer;
                     PreviousAnswer.programName = model.ProgramName;                      
-                    PreviousAnswer.UId = active.GetID();
-                    //PreviousAnswer.UId = "Moo5"; test
-
+                    PreviousAnswer.UId = Active.GetID();
                     PreviousAnswer.AId = model.aID;
 
                     //if the answer exists use Put
@@ -136,7 +136,7 @@ namespace StateTemplateV5Beta.Controllers
                 //Checks to see if the Answer exists
                 using (var context = new DBAContext())
                 {
-                    Answer CheckAnswer = (from t in context.Answers where ((active.GetID() == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((viewModel.Active.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
                     //if it exists set the value for the question then load it in
                     if (CheckAnswer != null)
@@ -153,15 +153,23 @@ namespace StateTemplateV5Beta.Controllers
 
                 }
                 else
-                    return RedirectToAction("SurveyQuestions", viewModel);
+                {
+                    return View("SurveyQuestions", viewModel);
+                }
             }
         }
 
         [HttpPost]
-        public ActionResult AnswerQuestion(SurveyQuestionViewModel model)
+        public ActionResult AnswerQuestion(string actives, string activeLog, string activeRem, SurveyQuestionViewModel model)
         {
-            SecurityController active = new SecurityController(model.Active);
-            if (!(IsLoggedIn(active).CheckLogin()))
+            SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
+
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            viewModel.Active = Active.GetActive();
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return View("Index", "Home");
             }
@@ -172,9 +180,6 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
             {
-
-                SurveyQuestionViewModel viewModel = new SurveyQuestionViewModel();
-                viewModel.Active = active.GetActive();
                 var Controller = StateTemplateV5Beta.MvcApplication.environment;
                 var AnswerController = new StateTemplateV5Beta.Controllers.AnswersController();
 
@@ -186,7 +191,7 @@ namespace StateTemplateV5Beta.Controllers
                 using (var context = new DBAContext())
                 {
                     //checks to see if the answer exists
-                    Answer CheckAnswer = (from t in context.Answers where ((active.GetID() == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((viewModel.Active.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
                     //Checks to see if the question was answered if it wasnt then it should save an answer
                     //If the question was not answered then it get a value of null
@@ -194,9 +199,8 @@ namespace StateTemplateV5Beta.Controllers
                     PreviousAnswer.QId = model.CurrentID;
                     PreviousAnswer.Value = model.Answer;
                     PreviousAnswer.programName = model.ProgramName;            
-                    PreviousAnswer.UId = active.GetID();
+                    PreviousAnswer.UId = Active.GetID();
                     PreviousAnswer.AId = model.aID;
-                    //PreviousAnswer.UId = "Moo5"; for testing
 
                     //if the answer exists use Put
                     if (CheckAnswer != null)
@@ -222,9 +226,9 @@ namespace StateTemplateV5Beta.Controllers
                 //checks to see if the next question has an answer already
                 using (var context = new DBAContext())
                 {
-                    Answer CheckAnswer = (from t in context.Answers where ((active.GetID() == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
+                    Answer CheckAnswer = (from t in context.Answers where ((viewModel.Active.ID == t.UId) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
 
-                    int Answers = (from t in context.Answers where ((active.GetID() == t.UId) & (model.aID == t.AId)) select t).Count();
+                    int Answers = (from t in context.Answers where ((viewModel.Active.ID == t.UId) & (model.aID == t.AId)) select t).Count();
 
                     viewModel.Percent = (Answers / Controller.GetQuestionCount());
                     viewModel.NumberofQuestions = Controller.GetQuestionCount();
@@ -241,9 +245,10 @@ namespace StateTemplateV5Beta.Controllers
                 {
                     return RedirectToAction("Summary", "Survey", viewModel);
 
-                }
-
-            return RedirectToAction("SurveyQuestions", viewModel);
+                }         
+                       
+                return View("SurveyQuestions", viewModel);
+                
             }
 
         }

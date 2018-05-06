@@ -31,5 +31,6 @@ namespace StateTemplateV5Beta.Models
         public int Percent { get; set; }
         public int NumberofQuestions { get; set; }
         public Security Active { get; set; }
+
     }
 }

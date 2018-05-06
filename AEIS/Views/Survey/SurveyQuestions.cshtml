@@ -6,7 +6,7 @@
 <div class=" fluid container">
     <div class="offset-quarter half">       
 
-        @using (Html.BeginForm("AnswerQuestion", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("Page1", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.ValidationSummary(false, "", new { @class = "" })
            
@@ -35,6 +35,11 @@
                     @Html.TextBoxFor(m => m.CurrentID)
                     @Html.TextBoxFor(m => m.ProgramName)
                     @Html.TextBoxFor(m => m.aID)
+
+
+                    <input type="hidden" name="actives" value=@Model.Active.ID />
+                    <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString() />
+                    <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString() />
                 </div>              
             </div>
             <div class="form-actions">
