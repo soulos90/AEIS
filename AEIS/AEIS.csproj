@@ -147,7 +147,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Environment.cs" />
     <Compile Include="Models\Inventory.cs" />
@@ -385,6 +384,7 @@
     <Content Include="ConnectionStrings.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\AEIS - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\register-check.js" />
