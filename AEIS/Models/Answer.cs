@@ -21,7 +21,7 @@ namespace StateTemplateV5Beta.Models
 
         }
 
-    }
+    
 
     }
     public class DBAContext : DbContext
