@@ -457,6 +457,10 @@
     <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
     <Content Include="Views\Login\LoginFail.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\NameSurvey.cshtml" />
+    <Content Include="Views\Survey\Summary.cshtml" />
+    <Content Include="Views\Survey\SurveyQuestions.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
