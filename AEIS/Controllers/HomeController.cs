@@ -146,28 +146,6 @@ namespace StateTemplateV5Beta.Controllers
 
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
-            inventory = inventory.GetTop(inventory.DefaultNum);
-            model = new InventoryVM(inventory, active);
-
-            return View(model);
-        }
-
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems)
-        {
-            IVM model;
-            Security active = session(actives, activeLog, activeRem);
-            SecurityController Active = new SecurityController(active);
-
-            if (!(IsLoggedIn(Active).CheckLogin()))
-            {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
-            }
-
-            string uId = Active.GetID();
-
-            Inventory inventory = new Inventory(uId);
-            inventory.SortByTotalScore();
             inventory = inventory.GetTop(numOfSystems);
             model = new InventoryVM(inventory, active);
 
@@ -266,7 +244,10 @@ namespace StateTemplateV5Beta.Controllers
                 model = new LoginVM(SC.CheckLogin(), SC.GetActive());
                 return View("Index", model);
             }
-
+            else
+            {
+                ViewBag.ErrorMessage = "Email already registered";
+            }
             model = new SecurityVM(active);
             return View("Registration",model);
         }

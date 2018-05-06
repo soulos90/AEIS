@@ -160,7 +160,6 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountInfo.cs" />
     <Compile Include="Models\Answer.cs" />
-    <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\SummaryViewModelcs.cs" />
     <Compile Include="Models\Environment.cs" />
@@ -175,7 +174,6 @@
     <Compile Include="ViewModels\IVM.cs" />
     <Compile Include="ViewModels\JustificationVM.cs" />
     <Compile Include="ViewModels\LoginVM.cs" />
-    <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
     <Compile Include="ViewModels\SummaryVM.cs" />
   </ItemGroup>

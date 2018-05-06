@@ -15,6 +15,7 @@ namespace StateTemplateV5Beta.Models
         public string Id { get; set; }
         [Display(Name = "Survey Answer")]
         public string Answer { get; set; }
+        public Security Active { get; set; }
     }
     public class SurveyQuestionViewModel
     {
@@ -25,11 +26,10 @@ namespace StateTemplateV5Beta.Models
         //[Display(Name = "Survey?")]
         public Nullable<bool> Answer { get; set; }
         public int CurrentID { get; set; }
-        public int AID { get; set; }
+        public int aID { get; set; }
         public string ProgramName { get; set; }
         public int Percent { get; set; }
         public int NumberofQuestions { get; set; }
-        public int QID { get; set; }
-        
+        public Security Active { get; set; }
     }
 }
