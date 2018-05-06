@@ -32,11 +32,11 @@
                     @Html.RadioButtonFor(x => x.Value, false)
                     No
                 </div>
-                <div class="hidden">
+                @*<div class="hidden">*@
                     @Html.TextBoxFor(m => m.QId)
                     @Html.TextBoxFor(m => m.ProgramName)
                     @Html.TextBoxFor(m => m.AId)
-                </div>       
+                @*</div>*@       
                 <div>
                     <input type="hidden" name="actives" value=@Model.Active.ID />
                     <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString() />
