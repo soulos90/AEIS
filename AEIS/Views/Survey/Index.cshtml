@@ -10,7 +10,6 @@
         @using (Html.BeginForm("Page1", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.ValidationSummary(false, "", new { @class = "" })
-            
             <div style="text-align:center">
                 <label class="control-label">
                     @Html.LabelFor(x => x.Name)

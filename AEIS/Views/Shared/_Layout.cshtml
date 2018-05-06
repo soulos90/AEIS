@@ -6,8 +6,7 @@
 <!--[if (gt IE 9)]><!-->
 @{
     var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
-    bool loggedIn = Model.Active.IsLoggedIn;
-
+    bool loggedIn = SU.CheckLogin();
 }
 <html class="no-js" lang="en">
 <!--<![endif]-->
