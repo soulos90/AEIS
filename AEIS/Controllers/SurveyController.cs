@@ -23,11 +23,8 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
             QuestionVM model = new QuestionVM(active);
-            //actives = model.Active.ID;
-            //activeLog = model.Active.IsLoggedIn.ToString();
-            //activeRem = model.Active.Remember.ToString();
 
-            return View();
+            return View(model);
         }
 
         [HttpPost]
@@ -45,12 +42,12 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            AnswersController aController = new AnswersController();
-            EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM();
-
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
+
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
 
             if (Request.Form["btnEditSurvey"] != null)
             {
@@ -80,7 +77,7 @@ namespace StateTemplateV5Beta.Controllers
 
             }
 
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
         public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
@@ -99,17 +96,12 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            AnswersController aController = new AnswersController();
-            EnvironmentController eController = new EnvironmentController();
 
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-
-            actives = surveyQuestionVM.Active.ID;
-            activeLog = surveyQuestionVM.Active.IsLoggedIn.ToString();
-            activeRem = surveyQuestionVM.Active.Remember.ToString();
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
 
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
@@ -163,15 +155,12 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
 
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
         [HttpPost]
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
-
         {
-
-
             if (!ModelState.IsValid)
                 return View("SurveyQuestions", model);
 
@@ -186,12 +175,8 @@ namespace StateTemplateV5Beta.Controllers
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
+
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-
-            actives = surveyQuestionVM.Active.ID;
-            activeLog = surveyQuestionVM.Active.IsLoggedIn.ToString();
-            activeRem = surveyQuestionVM.Active.Remember.ToString();
-
             var eController = new EnvironmentController();
             var aController = new AnswersController();
 
@@ -251,7 +236,7 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
 
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
         public ActionResult SurveyQuestions(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
