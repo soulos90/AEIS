@@ -76,7 +76,7 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
 
             }
-
+            ModelState.Clear();
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
@@ -154,7 +154,7 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
-
+            ModelState.Clear();
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
@@ -235,7 +235,7 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
-
+            ModelState.Clear();
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
