@@ -6,9 +6,7 @@
 <!--[if (gt IE 9)]><!-->
 @{
     var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
-    var cookie = HttpContext.Current.Request.Cookies.Get("UserInfo");
-    bool loggedIn = Model.Active.IsLoggedIn;
-
+    bool loggedIn = SU.CheckLogin();
 }
 <html class="no-js" lang="en">
 <!--<![endif]-->
@@ -170,7 +168,7 @@
                             <a href="~/Home/Inventory?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Inventory</a>
                         </li>
                         <li class="nav-item">
-                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-user-id" aria-hidden="true" type="submit"></span>Account Settings</a>
+                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Account Settings</a>
                         </li>
                         <li class="nav-item">
                             <!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->

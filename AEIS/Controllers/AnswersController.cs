@@ -34,10 +34,9 @@ namespace StateTemplateV5Beta.Controllers
             answer.LastUsed = DateTime.Now;
             return Ok(answer);
         }
-        public Answer GetA(string id)
+        public Answer GetA(string uid, int aid, int qid)
         {
-            Answer answer = db.Answers.Find(id);
-            return answer;
+            return (from t in db.Answers where ((uid == t.UId) & (qid == t.QId) & (aid == t.AId)) select t).FirstOrDefault();
         }
         public Answer GetAnswer(string uId, int aId)
         {
@@ -96,7 +95,7 @@ namespace StateTemplateV5Beta.Controllers
             db.Answers.Add(answer);
 
             try
-            {
+            {                
                 db.SaveChanges();
             }
             catch (DbUpdateException)
@@ -170,7 +169,7 @@ namespace StateTemplateV5Beta.Controllers
                           where Answers.UId == uId
                           select Answers.AId).Distinct().ToList();
 
-            return result.Count();
+            return result.Count() + 1;
         }
 
         protected override void Dispose(bool disposing)
@@ -185,6 +184,10 @@ namespace StateTemplateV5Beta.Controllers
         private bool AnswerExists(string uId)
         {
             return db.Answers.Count(e => e.UId == uId) > 0;
+        }
+        public int CountAPS(string uid, int aid)
+        {
+            return db.Answers.Count(e => e.UId == uid & e.AId == aid);
         }
     }
 }
