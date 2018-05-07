@@ -169,7 +169,7 @@ namespace StateTemplateV5Beta.Controllers
                           where Answers.UId == uId
                           select Answers.AId).Distinct().ToList();
 
-            return result.Count() + 1;
+            return result.Count();
         }
 
         protected override void Dispose(bool disposing)
