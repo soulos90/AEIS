@@ -19,6 +19,8 @@ namespace StateTemplateV5Beta.ViewModels
         public string Answer { get; set; }
         public Security Active { get; set; }
 
+        public QuestionVM()
+        { }
         public QuestionVM(Security active)
         {
             Active = active;
@@ -38,7 +40,10 @@ namespace StateTemplateV5Beta.ViewModels
         public int Percent { get; set; }
         public int NumberofQuestions { get; set; }
         public Security Active { get; set; }
+        public SurveyQuestionVM()
+        {
 
+        }
         public SurveyQuestionVM(Security active)
         {
             Active = active;

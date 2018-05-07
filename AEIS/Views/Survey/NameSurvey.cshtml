@@ -19,11 +19,14 @@
                     @Html.TextBoxFor(m => m.Name, new { @class = "form-control", @title = "Fill out the survey name", @required = "" })
                 </div>
             </div>
+
             <div>
-                <input type="hidden" name="actives" value=@Model.Active.ID>
-                <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString()>
-                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString()>
+
+                <input type="hidden" name="actives" value=@Model.Active.ID />
+                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString() />
+                <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString() />
             </div>
+
             <div class="form-actions">
                 <button type="submit" id="submitButton" class="btn btn-block btn-primary">
                     Next

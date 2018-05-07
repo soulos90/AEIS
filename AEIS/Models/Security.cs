@@ -16,7 +16,7 @@ namespace StateTemplateV5Beta.Models
             ID = null;
             Remember = false;
         }
-        public Security(string id,bool log, bool rem)
+        public Security(string id, bool log, bool rem)
         {
             ID = id;
             Remember = rem;

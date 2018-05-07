@@ -13,7 +13,6 @@ namespace StateTemplateV5Beta.Controllers
     {
         private UsersController user = new UsersController();
         private Security active;
-        private HttpCookie activeCookie;
         public SecurityController()
         {
             active = new Security();
