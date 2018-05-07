@@ -130,7 +130,7 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem,int numOfSystems = 6)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);

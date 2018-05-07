@@ -7,7 +7,7 @@
 <div class="section">
     <div class="offset-quarter half">
 
-        @using (Html.BeginForm("Page1", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.ValidationSummary(false, "", new { @class = "" })
             <div style="text-align:center">

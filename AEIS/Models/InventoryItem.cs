@@ -23,7 +23,10 @@ namespace StateTemplateV5Beta.Models
 
             foreach (Answer a in answers)
             {
-                Name = a.programName.Trim();
+                if (a.programName != null)
+                    Name = a.programName.Trim();
+                else
+                    Name = "";
                 AId = a.AId;
                 int sectionNum = e.GetQuestionSection(a.QId);
 

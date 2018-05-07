@@ -23,22 +23,18 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
             QuestionVM model = new QuestionVM(active);
-
+            ModelState.Clear();
             return View(model);
         }
 
         [HttpPost]
         public ActionResult StartSurvey(string actives, string activeLog, string activeRem, QuestionVM model)
         {
-            if (!ModelState.IsValid)
-                return View("SurveyQuestions", model);
-
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!(IsLoggedIn(Active).CheckLogin()))
+            if (!(IsLoggedIn(Active).CheckLogin()|| !ModelState.IsValid))
             {
-                //LoginVM model = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -81,18 +77,13 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
-
         {
-
-            if (!ModelState.IsValid)
-                return View("SurveyQuestions", model);
-
+            
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!(IsLoggedIn(Active).CheckLogin()))
+            if (!(IsLoggedIn(Active).CheckLogin() || !ModelState.IsValid))
             {
-                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -161,15 +152,12 @@ namespace StateTemplateV5Beta.Controllers
         [HttpPost]
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
-            if (!ModelState.IsValid)
-                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
-            if (!(IsLoggedIn(Active).CheckLogin()))
+            if (!(IsLoggedIn(Active).CheckLogin() || !ModelState.IsValid))
             {
-                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
             }
 
@@ -241,6 +229,13 @@ namespace StateTemplateV5Beta.Controllers
 
         public ActionResult SurveyQuestions(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            ModelState.Clear();
             return View(model);
         }
 

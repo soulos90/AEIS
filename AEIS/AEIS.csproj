@@ -153,7 +153,6 @@
     <Compile Include="Models\Environment.cs" />
     <Compile Include="Models\Inventory.cs" />
     <Compile Include="Models\InventoryItem.cs" />
-    <Compile Include="Models\Question.cs" />
     <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\Security.cs" />
     <Compile Include="Models\SecurityCombined.cs" />
@@ -372,7 +371,6 @@
     <Content Include="Content\StateTemplate\sample\images\student-driver.jpg" />
     <Content Include="Content\StateTemplate\sample\images\working.jpg" />
     <Content Include="Content\StateTemplate\sample\images\_notes\dwsync.xml" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -454,9 +452,7 @@
     <Content Include="Views\Home\ChartAnalysis.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
-    <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
-    <Content Include="Views\Login\LoginFail.cshtml" />
     <Content Include="Views\Survey\Index.cshtml" />
     <Content Include="Views\Survey\NameSurvey.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
@@ -473,9 +469,6 @@
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
     <Folder Include="Views\Chart\" />
-    <Folder Include="Views\InventoryItem\" />
-    <Folder Include="Views\Inventory\" />
-    <Folder Include="Views\ScoreCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
