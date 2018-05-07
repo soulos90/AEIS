@@ -3,7 +3,11 @@
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
     var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
-    var blankRows = 11;
+    var blankRows = 0;
+    if (Model.Systems.Length <= 11)
+    {
+        blankRows = 11 - Model.Systems.Length;
+    }
 
     // light blue: 9FC7DA
     // primary blue: 046B99
@@ -70,25 +74,14 @@
                             }
                         </tr>
                     </thead>
-                    @if (Model.Systems.Length == 0)
+                    @for (int i = 0; i < Model.Systems.Length + blankRows; i++)
                     {
-                        for (int i = 0; i < blankRows; i++)
-                        {
+
                         <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
-                            @for (int j = 0; j < Model.SectionTitles.Length + 2; j++)
+                            @if (i < Model.Systems.Length)
                             {
-                                    <td style="height:50px"></td>
-                            }
-                        </tr>
-                        }
-                    }
-                    @for (int i = 0; i < Model.Systems.Length; i++)
-                    {
-
-                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
-
                             <td style="vertical-align:middle">@Model.Systems[i].Name</td>
-                            @for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                            for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
                             {
                                 <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
                             }
@@ -125,6 +118,15 @@
                                     <i class="ca-gov-icon-close-fill"></i>
                                 </button>
                             </td>
+                            }
+                            else
+                            {
+                                for (int j = 0; j < Model.SectionTitles.Length + 2; j++)
+                                {
+                                    <td style="height:50px"></td>
+                                }
+                            }
+
                         </tr>
                     }
                 </table><!--TODO: push footer to bottom of page (might be better implemented in global footer I dunno)-->
