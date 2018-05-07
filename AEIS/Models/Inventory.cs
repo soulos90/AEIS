@@ -40,87 +40,7 @@ namespace StateTemplateV5Beta.Models
             Systems[0] = new InventoryItem(uId, aId);
         }
 
-        private void getSections()
-        {
-            Environment e = new Environment();
-            SectionTitles = new string[Environment.NumSec];
-
-            for (int i = 0; i < SectionTitles.Length; i++)
-                SectionTitles[i] = e.GetSectionName(i);
-        }
-
-        private void getSystems(string uId, int numOfSystems)
-        {
-            Systems = new InventoryItem[numOfSystems];
-
-            for (int i = 0; i < Systems.Length; i++)
-                Systems[i] = new InventoryItem(uId, i.ToString());
-        }
-
-        public void SortByName()
-        {
-            for (int i = 0; i < Systems.Length - 1; i++)
-            {
-                for (int j = 0; j < Systems.Length - 1 - i; j++)
-                {
-                    if (Systems[j].Name.CompareTo(Systems[j + 1].Name) == 1)
-                    {
-                        InventoryItem temp = Systems[j];
-                        Systems[j] = Systems[j + 1];
-                        Systems[j + 1] = temp;
-                    }
-                }
-            }
-        }
-
-        public void SortBySectionScore(int sectionNum)
-        {
-            for (int i = 0; i < Systems.Length - 1; i++)
-            {
-                for (int j = 0; j < Systems.Length - 1 - i; j++)
-                {
-                    if (Systems[j].SectionScores[sectionNum] < Systems[j + 1].SectionScores[sectionNum])
-                    {
-                        InventoryItem temp = Systems[j];
-                        Systems[j] = Systems[j + 1];
-                        Systems[j + 1] = temp;
-                    }
-                }
-            }
-        }
-
-        public void SortByTotalScore()
-        {
-            for (int i = 0; i < Systems.Length - 1; i++)
-            {
-                for (int j = 0; j < Systems.Length - 1 - i; j++)
-                {
-                    if (Systems[j].ScoreTotal < Systems[j + 1].ScoreTotal)
-                    {
-                        InventoryItem temp = Systems[j];
-                        Systems[j] = Systems[j + 1];
-                        Systems[j + 1] = temp;
-                    }
-                }
-            }
-        }
-
-        public void SortByLastUsed()
-        {
-            for (int i = 0; i < Systems.Length - 1; i++)
-            {
-                for (int j = 0; j < Systems.Length - 1 - i; j++)
-                {
-                    if (Systems[j].LastUsed < Systems[j + 1].LastUsed)
-                    {
-                        InventoryItem temp = Systems[j];
-                        Systems[j] = Systems[j + 1];
-                        Systems[j + 1] = temp;
-                    }
-                }
-            }
-        }
-
+        // returns a new inventory with only 0-num indexes (for chart / text analysis)
         public Inventory GetTop(int num)
         {
             if (num > Systems.Length)
@@ -136,6 +56,79 @@ namespace StateTemplateV5Beta.Models
                 inventory.Systems[i] = Systems[i];
 
             return inventory;
+        }
+
+        public void SortByName()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].Name.CompareTo(Systems[j + 1].Name) == 1)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+        }
+
+        public void SortBySectionScore(int sectionNum)
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].SectionScores[sectionNum] < Systems[j + 1].SectionScores[sectionNum])
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+        }
+
+        public void SortByTotalScore()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)           
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].ScoreTotal < Systems[j + 1].ScoreTotal)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }            
+        }
+
+        public void SortByLastUsed()
+        {
+            for (int i = 0; i < Systems.Length - 1; i++)
+                for (int j = 0; j < Systems.Length - 1 - i; j++)
+                {
+                    if (Systems[j].LastUsed < Systems[j + 1].LastUsed)
+                    {
+                        InventoryItem temp = Systems[j];
+                        Systems[j] = Systems[j + 1];
+                        Systems[j + 1] = temp;
+                    }
+                }
+        }
+
+        private void getSections()
+        {
+            Environment e = new Environment();
+            SectionTitles = new string[Environment.NumSec];
+
+            for (int i = 0; i < SectionTitles.Length; i++)
+                SectionTitles[i] = e.GetSectionName(i);
+        }
+
+        private void getSystems(string uId, int numOfSystems)
+        {
+            Systems = new InventoryItem[numOfSystems];
+
+            for (int i = 0; i < Systems.Length; i++)
+                Systems[i] = new InventoryItem(uId, i.ToString());
         }
     }
 }
