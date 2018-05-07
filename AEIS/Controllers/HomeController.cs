@@ -133,7 +133,29 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpGet]
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem,int numOfSystems = 6)
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
+        {
+            IVM model;
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                model = new LoginVM(active.IsLoggedIn, active);
+                return View("Index", model);    // change to redirect
+            }
+
+            string uId = Active.GetID();
+
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(inventory.DefaultNum);
+            model = new InventoryVM(inventory, active);
+
+            return View(model);
+        }
+
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
