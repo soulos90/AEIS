@@ -7,7 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 
 using StateTemplateV5Beta.ViewModels;
-//TODO: something is causing the inventory to not populate consistantly and/or quickly could be in survey could be elsewhere
+//TODO: something is causing the inventory to not populate consistantly and/or quickly when survey is not complete could be in survey could be elsewhere
 namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
