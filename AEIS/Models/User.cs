@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
 
 namespace StateTemplateV5Beta.Models
 {
