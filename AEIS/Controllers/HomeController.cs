@@ -11,7 +11,9 @@ using StateTemplateV5Beta.ViewModels;
 namespace StateTemplateV5Beta.Controllers
 {
     // TODO: HOME CONTROLLER - add return redirects where needed
-    // TODO: HOME CONTROLLER - update user 'last used' field when they log in
+    // TODO: HOME CONTROLLER - update user 'lastUsed' field when they log in
+    // TODO: HOME CONTROLLER - make a 404 page
+
     public class HomeController : Controller
     {
         UsersController UController = new UsersController();
@@ -24,10 +26,10 @@ namespace StateTemplateV5Beta.Controllers
             if ((IsLoggedIn(Active).CheckLogin()))
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model); //logged in    // change to redirect
+                return View("Inventory", model); 
             }
 
-            return View(model);//not logged in
+            return View(model);
         }
 
         public ActionResult Registration(string actives, string activeLog, string activeRem)
@@ -40,13 +42,14 @@ namespace StateTemplateV5Beta.Controllers
             if (IsLoggedIn(Active).CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model);    // change to redirect
+                return View("Inventory", model); 
             }
 
             return View(model);
         }
 
-        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)//TODO: implement
+        // TODO: HOME CONTROLLER - implement ForgotPassword
+        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -55,9 +58,8 @@ namespace StateTemplateV5Beta.Controllers
             if (IsLoggedIn(Active).CheckLogin())
             {
                 model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model);    // change to redirect
+                return View("Inventory", model); 
             }
-
 
             return View(model);
         }
@@ -76,7 +78,6 @@ namespace StateTemplateV5Beta.Controllers
 
             string uId = Active.GetID().Trim();
             model = new AccountVM(uId, active);
-
 
             return View(model);
         }
@@ -111,7 +112,8 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)//TODO: implement
+        // TODO: HOME CONTROLLER - implement DeleteSurvey
+        public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
@@ -216,15 +218,18 @@ namespace StateTemplateV5Beta.Controllers
             {
                 active = "";
             }
+
             if (activeLog == null)
             {
                 activeLog = "False";
             }
+
             if (rem == null)
             {
                 rem = "False";
             }
             Active = new Security(active, activeLog.Equals("True"), rem.Equals("True"));
+
             return Active;
         }
 
@@ -287,8 +292,8 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             model = new AccountVM(SController.GetID(), SController.GetActive());
-            return View("Account", model);
 
+            return View("Account", model);
         }
 
         [HttpPost]
@@ -317,9 +322,10 @@ namespace StateTemplateV5Beta.Controllers
             }
             else
                 ViewBag.ErrorMessage = "Invalid User Name";
-            return View("Index", model);    // change to redirect           
 
+            return View("Index", model);    // change to redirect           
         }
+
         public ActionResult Logout()
         {
             HttpCookie cookie = new HttpCookie("UserInfo");
@@ -328,6 +334,7 @@ namespace StateTemplateV5Beta.Controllers
             cookie.Expires = DateTime.Now.AddDays(-1d);
             Response.Cookies.Add(cookie);
             Session.Clear();
+
             return RedirectToAction("Index");
         }
 
@@ -345,6 +352,7 @@ namespace StateTemplateV5Beta.Controllers
             cookie.Expires = active.GetEX();
             Response.Cookies.Add(cookie);
         }
+
         public SecurityController IsLoggedIn(SecurityController active)
         {
 
@@ -358,13 +366,14 @@ namespace StateTemplateV5Beta.Controllers
                 value = HttpUtility.HtmlDecode(cookie.Values["LoggedIn"]).Equals("True");
                 remember = HttpUtility.HtmlDecode(cookie.Values["Remember"]).Equals("True");
             }
+
             if (value)
             {
                 active.Login(decodedUser);
                 active.SetRemember(remember);
             }
+
             return active;
         }
-        //TODO: make a 404 page
     }
 }

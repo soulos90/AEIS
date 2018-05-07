@@ -15,7 +15,6 @@
     // ********************
     // TODO: INVENTORY - implement new security w/ edit survey button
     // TODO: INVENTORY - implement new security w/ justification button
-    // TODO: INVENTORY - implement delete button
 }
 <style type="text/css">
     #submit {
@@ -115,7 +114,7 @@
                                     }
                                 }
                             </td>
-                            <!-- TODO: implement delete -->
+                            <!-- TODO: INVENTORY - implement delete button -->
                             <td style="text-align:center; vertical-align:middle">
                                 <button type="button" name="btnDeleteSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
                                     <i class="ca-gov-icon-close-fill"></i>
@@ -132,7 +131,7 @@
 
                         </tr>
                     }
-                </table><!--TODO: push footer to bottom of page (might be better implemented in global footer I dunno)-->
+                </table>
 
             </div> <!-- end system table column -->
         </div> <!-- end system table row -->
