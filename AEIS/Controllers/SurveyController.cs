@@ -22,8 +22,10 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             QuestionVM model = new QuestionVM(active);
             ModelState.Clear();
+
             return View(model);
         }
 
@@ -38,12 +40,10 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
-
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
+            string userId = Active.GetID();
 
             if (Request.Form["btnEditSurvey"] != null)
             {
@@ -72,7 +72,9 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
 
             }
+
             ModelState.Clear();
+
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
@@ -87,12 +89,10 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
-
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
+            string userId = Active.GetID();
 
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
@@ -145,7 +145,9 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
+
             ModelState.Clear();
+
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
@@ -161,16 +163,15 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
-
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-            var eController = new EnvironmentController();
-            var aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
+            AnswersController aController = new AnswersController();
+            string userId = Active.GetID();
 
             surveyQuestionVM.AId = model.AId;
             surveyQuestionVM.ProgramName = model.ProgramName;
             int i = model.QId;
+
             if (model.Value != null)
             {
                 //Save the Answer to the question just answered.
@@ -223,7 +224,9 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
+
             ModelState.Clear();
+
             return View("SurveyQuestions", surveyQuestionVM);
         }
 
@@ -235,7 +238,9 @@ namespace StateTemplateV5Beta.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
+
             ModelState.Clear();
+
             return View(model);
         }
 
