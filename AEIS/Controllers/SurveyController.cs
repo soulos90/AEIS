@@ -12,6 +12,9 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
+        // TODO: add way to rename survey
+        // TODO: possibly display more info about system that you're answering questions for? 
+        //      i.e., name of system, current question #, etc.
         UsersController UController = new UsersController();
         public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
         {
@@ -51,7 +54,7 @@ namespace StateTemplateV5Beta.Controllers
 
                 surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
                 surveyQuestionVM.AId = a.AId;
-                surveyQuestionVM.QId = a.QId;
+                surveyQuestionVM.QId = 1;
 
                 surveyQuestionVM.ProgramName = a.programName;
             }

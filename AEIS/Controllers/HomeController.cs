@@ -109,6 +109,7 @@ namespace StateTemplateV5Beta.Controllers
 
             model = new InventoryVM(inventory, active);
 
+            ModelState.Clear();
             return View(model);
         }
 
@@ -195,10 +196,11 @@ namespace StateTemplateV5Beta.Controllers
             inventory = inventory.GetTop(6);
             model = new InventoryVM(inventory, active);
 
+            ModelState.Clear();
             return View(model);
         }
 
-        public ActionResult Justification(string btnPrint, string actives, string activeLog, string activeRem)
+        public ActionResult Justification(string actives, string activeLog, string activeRem, string aId)
         {
             IVM model;
             Security active = session(actives, activeLog, activeRem);
@@ -211,13 +213,14 @@ namespace StateTemplateV5Beta.Controllers
             }
 
             string uId = Active.GetID();
-            string aId = Request.Form["btnJustification"];
+            //string aId = Request.Form["btnJustification"];
             model = new JustificationVM(uId, aId, active);
 
+            ModelState.Clear();
             return View(model);
         }
 
-        public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
+        public ActionResult About(string actives, string activeLog, string activeRem)
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
