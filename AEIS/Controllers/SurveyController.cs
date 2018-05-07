@@ -17,19 +17,21 @@ namespace StateTemplateV5Beta.Controllers
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
-            
+
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return RedirectToAction("Index", "Home");
             }
-
             QuestionVM model = new QuestionVM(active);
+
             return View(model);
         }
 
         [HttpPost]
         public ActionResult StartSurvey(string actives, string activeLog, string activeRem, QuestionVM model)
         {
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -40,14 +42,12 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            AnswersController aController = new AnswersController();
-            EnvironmentController eController = new EnvironmentController();
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            
-            
+
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
 
             if (Request.Form["btnEditSurvey"] != null)
             {
@@ -56,8 +56,8 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
                 surveyQuestionVM.AId = a.AId;
                 surveyQuestionVM.QId = a.QId;
-                
-                surveyQuestionVM.ProgramName= a.programName;
+
+                surveyQuestionVM.ProgramName = a.programName;
             }
             else
             {
@@ -76,15 +76,16 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
 
             }
-
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            ModelState.Clear();
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
         public ActionResult PreviousQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
 
         {
-            //if (!ModelState.IsValid)
-            //    return View("SurveyQuestions", model);
+
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -95,13 +96,12 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            AnswersController aController = new AnswersController();
-            EnvironmentController eController = new EnvironmentController();
 
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+            AnswersController aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
 
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
@@ -154,16 +154,15 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
-
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            ModelState.Clear();
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
         [HttpPost]
         public ActionResult NextQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
-
-        {        
-            //if (!ModelState.IsValid)
-            //    return View("SurveyQuestions", model);
+        {
+            if (!ModelState.IsValid)
+                return View("SurveyQuestions", model);
 
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -176,8 +175,8 @@ namespace StateTemplateV5Beta.Controllers
 
             HttpCookie cookie = Request.Cookies["UserInfo"];
             string userId = cookie.Values["ID"];
-            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
 
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
             var eController = new EnvironmentController();
             var aController = new AnswersController();
 
@@ -185,8 +184,8 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.ProgramName = model.ProgramName;
             int i = model.QId;
             if (model.Value != null)
-            { 
-            //Save the Answer to the question just answered.
+            {
+                //Save the Answer to the question just answered.
                 using (var context = new DBAContext())
                 {
                     Answer previousAnswer = new Answer();
@@ -236,11 +235,11 @@ namespace StateTemplateV5Beta.Controllers
                 if (CheckAnswer != null)
                     surveyQuestionVM.Value = CheckAnswer.Value;
             }
-
-            return RedirectToAction("SurveyQuestions", surveyQuestionVM);
+            ModelState.Clear();
+            return View("SurveyQuestions", surveyQuestionVM);
         }
 
-        public ActionResult SurveyQuestions(SurveyQuestionVM model)
+        public ActionResult SurveyQuestions(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
         {
             return View(model);
         }
