@@ -12,6 +12,7 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
+        // TODO: add way to rename survey
         UsersController UController = new UsersController();
         public ActionResult NameSurvey(string actives, string activeLog, string activeRem)
         {
@@ -35,16 +36,14 @@ namespace StateTemplateV5Beta.Controllers
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
-            {
-                //LoginVM model = new LoginVM(active.IsLoggedIn, active);
+            {                
                 return RedirectToAction("Index", "Home");
             }
 
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
+            string userId = Active.GetID();
 
             if (Request.Form["btnEditSurvey"] != null)
             {
@@ -84,15 +83,14 @@ namespace StateTemplateV5Beta.Controllers
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
+            
             AnswersController aController = new AnswersController();
             EnvironmentController eController = new EnvironmentController();
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+            string userId = Active.GetID();
 
             int i = model.QId;
             surveyQuestionVM.AId = model.AId;
@@ -157,15 +155,14 @@ namespace StateTemplateV5Beta.Controllers
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                //LoginVM lmodel = new LoginVM(active.IsLoggedIn, active);
                 return RedirectToAction("Index", "Home");
             }
 
-            HttpCookie cookie = Request.Cookies["UserInfo"];
-            string userId = cookie.Values["ID"];
+            
             SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
-            var eController = new EnvironmentController();
-            var aController = new AnswersController();
+            EnvironmentController eController = new EnvironmentController();
+            AnswersController aController = new AnswersController();
+            string userId = Active.GetID();
 
             surveyQuestionVM.AId = model.AId;
             surveyQuestionVM.ProgramName = model.ProgramName;
@@ -197,7 +194,7 @@ namespace StateTemplateV5Beta.Controllers
             i = surveyQuestionVM.QId;
             i++;
 
-            //redirects to the summary when it reachs the end
+            // redirects to the summary when it reachs the end
             int End = eController.GetQuestionCount();
             if (i > End)
                 return RedirectToAction("Inventory", "Home");

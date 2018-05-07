@@ -20,6 +20,7 @@ namespace StateTemplateV5Beta.Controllers
             var key = new Chart(width: 1280, height: 720);
             key.AddTitle("AEIS Inventory Analysis");
 
+            // display blank chart if there's no inventory entries
             if (model.Systems.Length == 0)
             {
                 key.AddSeries(

@@ -11,6 +11,7 @@ using StateTemplateV5Beta.ViewModels;
 namespace StateTemplateV5Beta.Controllers
 {
     // TODO: HOME CONTROLLER - add return redirects where needed
+    // TODO: HOME CONTROLLER - update user 'last used' field when they log in
     public class HomeController : Controller
     {
         UsersController UController = new UsersController();
