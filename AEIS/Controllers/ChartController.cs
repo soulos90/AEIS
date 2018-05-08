@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Helpers;
 using StateTemplateV5Beta.Models;
-
+using StateTemplateV5Beta.ViewModels;
 namespace StateTemplateV5Beta.Controllers
 {
     public class ChartController : Controller
