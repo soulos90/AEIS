@@ -4,6 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var active = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
     
+    // TODO: ACCOUNT - BUG - currently requires email to be changed, otherwise it won't let you submit (returns 'invalid new email')
+    // TODO: ACCOUNT - BUG - won't let you change any information without entering a password
+    // TODO: ACCOUNT - BUG - even after changing email, it only changes current login info (cookie and active), and doesn't change the database info at all
 }
 
 <div class="section">
@@ -24,7 +27,7 @@
                 <label>Email</label>
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value="@Model.Email" id="Email" name="ID" tabindex="1">
+                <input type="text" style="width:250px" value="@Model.Email.TrimEnd()" id="Email" name="ID" tabindex="1">
             </div>
             <input type="hidden" name="actives" value="@Model.Active.ID" />
             <input type="hidden" name="activeLog" value="@Model.Active.IsLoggedIn.ToString()" />
@@ -33,20 +36,20 @@
                 <label>First Name</label><br />
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value="@Model.FirstName" id="first-name" name="FName" tabindex="2">
+                <input type="text" style="width:250px" value="@Model.FirstName.TrimEnd()" id="first-name" name="FName" tabindex="2">
             </div>
 
             <div class="row p-t p-l-md">
                 <label>Last Name</label>
             </div>
             <div class="row p-l-md">
-                <input type="text" style="width:250px" value="@Model.LastName" id="last-name" name="LName" tabindex="3">
+                <input type="text" style="width:250px" value="@Model.LastName.TrimEnd()" id="last-name" name="LName" tabindex="3">
             </div>
             <div class="row p-t p-l-md">
                 <label>Organization</label>
             </div>
             <div class="row p-b p-l-md">
-                <input type="text" style="width:250px" value="@Model.Organization" id="org" name="Organization" tabindex="4">
+                <input type="text" style="width:250px" value="@Model.Organization.TrimEnd()" id="org" name="Organization" tabindex="4">
             </div>
             <div>
                 <input type="hidden" name="active" id="active" value="@Model.Active" />

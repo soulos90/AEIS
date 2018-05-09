@@ -95,30 +95,28 @@ namespace StateTemplateV5Beta.Controllers
         }
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
-            IVM model;
             Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                return View("Index");    // change to redirect
+                return RedirectToAction("Index");
             }
 
             string uId = Active.GetID().Trim();
-            model = new AccountVM(uId, active);
+            AccountVM model = new AccountVM(uId, active);
 
             return View(model);
         }
 
         public ActionResult Inventory(string sort, string actives, string activeLog, string activeRem)
         {
-            IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                RedirectToAction("Index");    // change to redirect
+                return RedirectToAction("Index");
             }
 
             Inventory inventory = new Inventory(Active.GetID());
@@ -134,7 +132,7 @@ namespace StateTemplateV5Beta.Controllers
             else if (int.TryParse(sort, out section))
                 inventory.SortBySectionScore(section);
 
-            model = new InventoryVM(inventory, active);
+            InventoryVM model = new InventoryVM(inventory, active);
 
             return View(model);
         }
@@ -142,33 +140,52 @@ namespace StateTemplateV5Beta.Controllers
         // TODO: HOME CONTROLLER - implement DeleteSurvey
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
-            IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                return RedirectToAction("Index");
             }
 
             string uId = Active.GetID();
 
-            model = new InventoryVM(uId, active);
+            // add delete logic
+
+            InventoryVM model = new InventoryVM(uId, active);
             return RedirectToAction("Inventory", model);
 
         }
 
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem,int numOfSystems = 6)
+        [HttpGet]
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem)
         {
-            IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                return RedirectToAction("Index");
+            }
+
+            string uId = Active.GetID();
+
+            Inventory inventory = new Inventory(uId);
+            inventory.SortByTotalScore();
+            inventory = inventory.GetTop(inventory.DefaultNum);
+            InventoryVM model = new InventoryVM(inventory, active);
+
+            return View(model);
+        }
+
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems)
+        {
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin()))
+            {
+                return RedirectToAction("Index");
             }
 
             string uId = Active.GetID();
@@ -176,52 +193,47 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(numOfSystems);
-            model = new InventoryVM(inventory, active,numOfSystems);
+            InventoryVM model = new InventoryVM(inventory, active);
 
             return View(model);
         }
 
         public ActionResult TextAnalysis(string actives, string activeLog, string activeRem)
         {
-            IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                return RedirectToAction("Index");
             }
 
             string uId = Active.GetID();
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(6);
-            model = new InventoryVM(inventory, active);
+            InventoryVM model = new InventoryVM(inventory, active);
 
             return View(model);
         }
 
-        public ActionResult Justification(string btnPrint, string actives, string activeLog, string activeRem)
+        public ActionResult Justification(string actives, string activeLog, string activeRem, string aId)
         {
-            IVM model;
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                return RedirectToAction("Index");
             }
 
             string uId = Active.GetID();
-            string aId = Request.Form["btnJustification"];
-            model = new JustificationVM(uId, aId, active);
+            JustificationVM model = new JustificationVM(uId, aId, active);
 
             return View(model);
         }
 
-        public ActionResult About(string btnPrint, string actives, string activeLog, string activeRem)
+        public ActionResult About(string actives, string activeLog, string activeRem)
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);

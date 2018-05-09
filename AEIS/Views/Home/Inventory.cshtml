@@ -13,8 +13,8 @@
     // primary blue: 046B99
     // dark blue: 035376
     // ********************
-    // TODO: INVENTORY - implement new security w/ edit survey button
-    // TODO: INVENTORY - implement new security w/ justification button
+
+    // TODO: INVENTORY - implement delete button
 }
 <style type="text/css">
     #submit {
@@ -46,7 +46,8 @@
             <!-- Add New System Button -->
             <div class="col-xs-3" style="text-align:right">
                 <h1>
-                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" onclick="window.location.href='/Survey/NameSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()'">
+                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" 
+                            onclick="window.location.href='/Survey/NameSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()'">
                         Add New System
                     </button>
                 </h1>
@@ -98,23 +99,22 @@
                                 }
                             </td>
                             <td style="text-align:center; vertical-align:middle">
-                                @using (Html.BeginForm("Justification", "Home", FormMethod.Post))
-                                {
-                                    if (Model.Systems[i].HasUnanswered)
+
+                                    @if (Model.Systems[i].HasUnanswered)
                                     {
-                                        <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                        <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
                                             <i class="ca-gov-icon-print"></i>
                                         </button>
                                     }
                                     else
                                     {
-                                        <button type="submit" name="btnJustification" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Print Justification">
+                                        <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="Print Justification" 
+                                                onclick="window.location.href='/Home/Justification?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()&aId=@Model.Systems[i].AId'">
                                             <i class="ca-gov-icon-print"></i>
                                         </button>
                                     }
-                                }
+                                
                             </td>
-                            <!-- TODO: INVENTORY - implement delete button -->
                             <td style="text-align:center; vertical-align:middle">
                                 <button type="button" name="btnDeleteSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
                                     <i class="ca-gov-icon-close-fill"></i>

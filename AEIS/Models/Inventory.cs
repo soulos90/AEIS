@@ -44,7 +44,7 @@ namespace StateTemplateV5Beta.Models
         public Inventory GetTop(int num)
         {
             if (num > Systems.Length)
-                num = Systems.Length - 1;
+                num = Systems.Length;
             else if (num < 1)
                 num = 1;
 
