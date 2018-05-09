@@ -166,7 +166,6 @@
     <Compile Include="ViewModels\LoginVM.cs" />
     <Compile Include="ViewModels\QuestionVM.cs" />
     <Compile Include="ViewModels\SecurityVM.cs" />
-    <Compile Include="ViewModels\SummaryVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
@@ -459,6 +458,7 @@
     <Content Include="Views\Survey\NameSurvey.cshtml" />
     <Content Include="Views\Survey\Summary.cshtml" />
     <Content Include="Views\Survey\SurveyQuestions.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -470,7 +470,6 @@
     <Folder Include="Content\StateTemplate\images\template2014\_notes\" />
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
-    <Folder Include="Views\Chart\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

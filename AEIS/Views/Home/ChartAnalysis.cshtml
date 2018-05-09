@@ -30,13 +30,13 @@
                     <input type="hidden" value=@Model.Active.ID name="actives" />
                     <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
                     <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
-                    <input type="text" name="numOfSystems" placeholder=@Model.Systems.Length tabindex="1">
+                    <input type="text" name="numOfSystems" placeholder=@Model.num tabindex="1">
                     <input type="submit" value="Update Chart #" class="btn" tabindex="2" />
                 </div>
             </row>
         }
         <div class="row" style="text-align:center">
-            <img src="/Chart/GetChart?user=@Model.Active.ID&num=@Model.Systems.Length" />
+            <img src="/Chart/GetChart?user=@Model.Active.ID&num=@Model.num" />
         </div>
     </row>
 </div>

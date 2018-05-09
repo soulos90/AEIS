@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Net.Mail;
 using System.Web;
 using System.Web.Mvc;
 using StateTemplateV5Beta.Models;
@@ -49,21 +51,48 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         // TODO: HOME CONTROLLER - implement ForgotPassword
-        public ActionResult ForgotPassword(string actives, string activeLog, string activeRem)
+        public ActionResult ForgotPassword(string userName = null)
         {
-            Security active = session(actives, activeLog, activeRem);
+            Security active;
+            if (userName == null)
+                active = session("", "False", "False");
+            active = session(userName, "False", "False");
             SecurityController Active = new SecurityController(active);
             IVM model = new SecurityVM(active);
 
-            if (IsLoggedIn(Active).CheckLogin())
-            {
-                model = new InventoryVM(Active.GetID(), Active.GetActive());
-                return View("Inventory", model); 
-            }
+            if (userName == null)
+                return View("ForgotPassword",model);
 
-            return View(model);
+            string randomPass = genPass().Trim();
+            UsersController u = new UsersController();
+            User user = u.GetU(userName);
+            user.PassHash = u.HashPassword(randomPass, user.PassSalt);
+            u.PutUser(user);
+            sendEmail(randomPass, userName,user.FName);
+            model = new LoginVM(false,active);
+            return View("Index",model);
         }
-
+        private void sendEmail(string randomPass,string userName,string FName)
+        {
+            SmtpClient email = new SmtpClient();
+            string message = "Hello " + FName +","+
+               "\nIn order to protect your information we have changed your password to: " + randomPass +
+               "\nPlease use that password at the Department of Rehibilitation's AEIS website to login."+
+               "\n\nThis address can not receive responses, please do not reply.";
+            email.Port = 25;
+            email.Host = "smtp.saclink.csus.edu";
+            email.Send("NorthDelta@csus.edu", userName, "AEIS new password", message);
+        }
+        private string genPass()
+        {
+            string Value = "";
+            Random n = new Random();
+            for(int i = 0;i<8;++i)
+            {
+                Value += (char)((n.Next()%26)+65);
+            }
+            return Value.Trim();
+        }
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             IVM model;
@@ -72,8 +101,7 @@ namespace StateTemplateV5Beta.Controllers
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                model = new LoginVM(active.IsLoggedIn, active);
-                return View("Index", model);    // change to redirect
+                return View("Index");    // change to redirect
             }
 
             string uId = Active.GetID().Trim();
@@ -90,7 +118,6 @@ namespace StateTemplateV5Beta.Controllers
 
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
-                //model = new LoginVM(active.IsLoggedIn, active);
                 RedirectToAction("Index");    // change to redirect
             }
 
@@ -132,7 +159,6 @@ namespace StateTemplateV5Beta.Controllers
 
         }
 
-        [HttpGet]
         public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem,int numOfSystems = 6)
         {
             IVM model;
@@ -150,7 +176,7 @@ namespace StateTemplateV5Beta.Controllers
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
             inventory = inventory.GetTop(numOfSystems);
-            model = new InventoryVM(inventory, active);
+            model = new InventoryVM(inventory, active,numOfSystems);
 
             return View(model);
         }
@@ -267,7 +293,7 @@ namespace StateTemplateV5Beta.Controllers
             IVM model;
 
             var getUser = u.GetU(SController.GetID().Trim());
-            if (getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)
+            if ((getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)|| getUser.ID == user.ID)
             {
                 user.PassSalt = getUser.PassSalt;
                 if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())

@@ -78,7 +78,30 @@ namespace StateTemplateV5Beta.Controllers
 
             return StatusCode(HttpStatusCode.NoContent);
         }
+        public bool PutUser( User user)
+        {
+            user.LastUsed = DateTime.Now;
 
+            db.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                db.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(user.ID))
+                {
+                    return false;
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return true;
+        }
         [ResponseType(typeof(User))]
         public IHttpActionResult PostUser(User user)
         {

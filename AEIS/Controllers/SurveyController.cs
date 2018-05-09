@@ -239,31 +239,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        //TODO: Need to change it so that it is in line with the new models
-        public ActionResult Summary(SurveyQuestionVM model)
-        {
-            SummaryVM summaryVM = new SummaryVM();
-            summaryVM.ProgramName = model.ProgramName;
-            var Controller = new StateTemplateV5Beta.Controllers.EnvironmentController();
-
-            //int End = Convert.ToInt16(Controller.GetQuestionCount());
-            //int YesTotal = 0;
-            //int NoTotal = 0;
-
-            //for (int i=1; i <= End; i++)
-            //{
-            //    Answer CheckAnswer = (from t in context.Answers where ((model.ProgramName == t.programName) & (i == t.QId) & (model.aID == t.AId)) select t).FirstOrDefault();
-            //    if (CheckAnswer.Value == null)
-            //        break;
-            //    else if (CheckAnswer.Value == true)
-            //        YesTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
-            //    else if (CheckAnswer.Value == false)
-            //        NoTotal += Convert.ToInt16(Controller.GetQuestionYesVal(i));
-            //}
-            //ViewModel.Points = (YesTotal + NoTotal);       
-            return View(summaryVM);
-        }
-
         private Security session(Security active)
         {
             if (active == null)

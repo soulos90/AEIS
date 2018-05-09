@@ -16,6 +16,16 @@ namespace StateTemplateV5Beta.Models
         public DateTime LastUsed { get; set; }
 
         public User() {}
+        public User(User a)
+        {
+            ID = a.ID;
+            Organization = a.Organization;
+            FName = a.FName;
+            LName = a.LName;
+            PassHash = a.PassHash;
+            PassSalt = a.PassSalt;
+            Created = a.Created;
+        }
     }
 
     public class DBUContext : DbContext
