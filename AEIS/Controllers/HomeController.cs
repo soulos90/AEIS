@@ -95,7 +95,7 @@ namespace StateTemplateV5Beta.Controllers
         }
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
-            Security active = session(actives.Trim(), activeLog.Trim(), activeRem.Trim());
+            Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
 
             if (!(IsLoggedIn(Active).CheckLogin()))
@@ -103,7 +103,7 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index");
             }
 
-            string uId = Active.GetID().Trim();
+            string uId = Active.GetID();
             AccountVM model = new AccountVM(uId, active);
 
             return View(model);
@@ -136,21 +136,19 @@ namespace StateTemplateV5Beta.Controllers
 
             return View(model);
         }
-
-        // TODO: HOME CONTROLLER - implement DeleteSurvey
+        
         public ActionResult DeleteSurvey(string actives, string activeLog, string activeRem, int aId)
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
-
+            AnswersController a = new AnswersController();
             if (!(IsLoggedIn(Active).CheckLogin()))
             {
                 return RedirectToAction("Index");
             }
 
             string uId = Active.GetID();
-
-            // add delete logic
+            a.DeleteWholeAnswer(uId,aId);
 
             InventoryVM model = new InventoryVM(uId, active);
             return RedirectToAction("Inventory", model);

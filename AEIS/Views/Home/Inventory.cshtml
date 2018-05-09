@@ -43,18 +43,18 @@
             <div class="col-xs-9">
                 <h1>AEIS System Inventory</h1>
             </div>
-            <!-- Add New System Button -->
+<!-- Add New System Button -->
             <div class="col-xs-3" style="text-align:right">
                 <h1>
                     <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" 
-                            onclick="window.location.href='/Survey/NameSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()'">
+                    onclick="window.location.href='/Survey/NameSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()'">
                         Add New System
                     </button>
                 </h1>
             </div>
         </div>
 
-        <!-- Inventory System Table -->
+<!-- Inventory System Table -->
         <div class="row">
             <div class="col-xs-12">
                 <table class="table table-bordered" style="white-space:nowrap;" id="overlay">
@@ -68,7 +68,7 @@
                             {
                                 using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
                                 {
-                                    <th style="text-align:center"><button type="submit" id="submit" name="sort" value="@i">@Model.SectionTitles[i]</button></th>
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="@i">@Model.SectionTitles[i]</button></th>
                                 }
                             }
                             @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
@@ -83,43 +83,52 @@
                         <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
                             @if (i < Model.Systems.Length)
                             {
-                            <td style="vertical-align:middle">@Model.Systems[i].Name</td>
-                            for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
-                            {
-                                <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
-                            }
-                            <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
-
-                            <td style="text-align:center; vertical-align:middle">
-                                @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post))
-                                {
-                                    <button type="submit" name="btnEditSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Edit Survey">
-                                        <i class="ca-gov-icon-pencil-edit"></i>
-                                    </button>
-                                }
-                            </td>
-                            <td style="text-align:center; vertical-align:middle">
-
-                                    @if (Model.Systems[i].HasUnanswered)
+                                <td style="vertical-align:middle">@Model.Systems[i].Name</td>
+                                    for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
                                     {
-                                        <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
-                                            <i class="ca-gov-icon-print"></i>
-                                        </button>
+                                        <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
                                     }
-                                    else
-                                    {
-                                        <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="Print Justification" 
+                                    <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
+
+                                        <td style="text-align:center; vertical-align:middle">
+                                            @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post))
+                                            {
+                                                <button type="submit" name="btnEditSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Edit Survey">
+                                                    <i class="ca-gov-icon-pencil-edit"></i>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle">
+
+                                            @if (Model.Systems[i].HasUnanswered)
+                                            {
+                                                <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                                    <i class="ca-gov-icon-print"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="Print Justification"
                                                 onclick="window.location.href='/Home/Justification?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()&aId=@Model.Systems[i].AId'">
-                                            <i class="ca-gov-icon-print"></i>
-                                        </button>
-                                    }
-                                
-                            </td>
-                            <td style="text-align:center; vertical-align:middle">
-                                <button type="button" name="btnDeleteSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Delete System" onclick="confirm('Remove \'@Model.Systems[i].Name\' from Inventory?')">
-                                    <i class="ca-gov-icon-close-fill"></i>
-                                </button>
-                            </td>
+                                                    <i class="ca-gov-icon-print"></i>
+                                                </button>
+                                            }
+
+                                         </td><!--string actives, string activeLog, string activeRem, int aId-->
+                                         <td style="text-align:center; vertical-align:middle">
+                                            @using (Html.BeginForm("DeleteSurvey", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                                            {
+                                                @Html.ValidationSummary(false, "", new { @class = "" })
+
+                                                <input type="hidden" name="actives" value=@Model.Active.ID>
+                                                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString()>
+                                                <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString()>
+                                                <input type="hidden" name="aId" value=@Model.Systems[i].AId>
+                                                <input type="submit" name="btnDelete" class="btn btn-primary btn-sm" title="Delete Survey"/>
+                                                <i class="ca-gov-icon-close-fill"></i>
+                                            }
+
+                                         </td>
                             }
                             else
                             {
@@ -130,9 +139,9 @@
                             }
 
                         </tr>
-                    }
+                     }
                 </table>
-
+                @Scripts.Render("~/Scripts/confirm-delete.js")
             </div> <!-- end system table column -->
         </div> <!-- end system table row -->
     </div> <!-- end container -->

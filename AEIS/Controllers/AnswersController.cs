@@ -128,35 +128,54 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(answer);
         }
-
-        [ResponseType(typeof(Answer))]
-        public IHttpActionResult DeleteWholeAnswer(string id)
+        public void DeleteAnswer(string uid,int aid,int qid)
         {
-            int temp = 0, temp1 = 0,one = 1;
+            Answer answer = db.Answers.Find(new object[] { uid, aid, qid });
+            if (answer == null)
+            {
+
+            }
+            else
+            {
+                db.Answers.Remove(answer);
+                db.SaveChanges();
+            }
+        }
+        [ResponseType(typeof(Answer))]
+        public IHttpActionResult DeleteWholeAnswer(string uid,int aid)
+        {
+            int temp = 0, temp1 = 0;
             string tempo = "";
             bool check = false;
-            Answer answer = db.Answers.Find(new { id, one });
+            int i = 1;
+            Answer answer = db.Answers.Find(new object[] { uid, aid, i });
             if (answer == null)
             {
                 return NotFound();
             }
-            if (db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1 > answer.AId)
+            int count = CountAPU(uid)-1;
+            if (count > answer.AId)
             {
                 temp = answer.AId;
-                temp1 = db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1;
+                temp1 = count;
                 tempo = answer.UId;
                 check = true;
             }
-            db.Answers.Remove(answer);
+            for(int e = 1;e<= Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++e)
+            {
+                DeleteAnswer(uid,aid,e);
+            }
             if(check)
             {
-                for(int i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
+                for(i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
                 {
-                    PutAnswer(id, db.Answers.Find(new { tempo, temp1, i }));
-                    db.Answers.Remove(db.Answers.Find(new { tempo, temp1, i }));
+                    Answer a = GetA(tempo,count,i);
+
+                    a.AId = temp;
+                    DeleteAnswer(tempo, temp1, i);
+                    PutAnswer(uid, a);
                 }
             }
-            db.SaveChanges();
 
             return Ok(answer);
         }
@@ -188,6 +207,10 @@ namespace StateTemplateV5Beta.Controllers
         public int CountAPS(string uid, int aid)
         {
             return db.Answers.Count(e => e.UId == uid & e.AId == aid);
+        }
+        public int CountAPU(string uid)
+        {
+            return db.Answers.Count(e => e.UId == uid & e.QId == 1);
         }
     }
 }
