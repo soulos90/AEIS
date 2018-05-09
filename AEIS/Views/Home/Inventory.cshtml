@@ -14,7 +14,7 @@
     // dark blue: 035376
     // ********************
 
-    // TODO: INVENTORY - implement delete button
+    // TODO: INVENTORY - Still ugly when table is empty (the table stretches to full screen)
 }
 <style type="text/css">
     #submit {
@@ -115,20 +115,13 @@
                                             }
 
                                          </td><!--string actives, string activeLog, string activeRem, int aId-->
-                                         <td style="text-align:center; vertical-align:middle">
-                                            @using (Html.BeginForm("DeleteSurvey", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-                                            {
-                                                @Html.ValidationSummary(false, "", new { @class = "" })
-
-                                                <input type="hidden" name="actives" value=@Model.Active.ID>
-                                                <input type="hidden" name="activeLog" value=@Model.Active.IsLoggedIn.ToString()>
-                                                <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString()>
-                                                <input type="hidden" name="aId" value=@Model.Systems[i].AId>
-                                                <input type="submit" name="btnDelete" class="btn btn-primary btn-sm" title="Delete Survey"/>
+                                        <td style="text-align:center; vertical-align:middle">
+                                            <button type="button" name="btnDelete" class="btn btn-primary btn-sm" title="Delete Application Survey"
+                                                    onclick="window.location.href='/Home/DeleteSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()&aId=@Model.Systems[i].AId'">
                                                 <i class="ca-gov-icon-close-fill"></i>
-                                            }
-
-                                         </td>
+                                            </button>
+                                          
+                                        </td>
                             }
                             else
                             {
