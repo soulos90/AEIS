@@ -66,8 +66,8 @@ namespace StateTemplateV5Beta.Controllers
             return null;
         }
 
-        private Object TextBoxes()
-    Object Index
+        private Object TextBoxes() { return new object(); }
+        Object Index;
 
     }
 }
