@@ -60,8 +60,9 @@ namespace StateTemplateV5Beta.Controllers
                 surveyQuestionVM.QuestionText = eController.GetQuestionText(1);
                 surveyQuestionVM.AId = aController.GetNextAId(userId);
                 surveyQuestionVM.QId = 1;
-
+                surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
                 surveyQuestionVM.ProgramName = model.Name;
+
             }
 
             using (var context = new DBAContext())
@@ -72,6 +73,9 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
 
             }
+            surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
+            surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+
             ModelState.Clear();
             return View("SurveyQuestions", surveyQuestionVM);
         }
@@ -102,6 +106,10 @@ namespace StateTemplateV5Beta.Controllers
                 //checks to see if previous answer exists
                 using (var context = new DBAContext())
                 {
+                    Answer CheckName = (from t in context.Answers where ((userId == t.UId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    if (CheckName != null && CheckName.programName != surveyQuestionVM.ProgramName)
+                        RenameProgram(userId, model.AId, surveyQuestionVM.ProgramName);
+
                     //If the question was not answered then it gets a value of null
                     Answer previousAnswer = new Answer();
                     previousAnswer.AId = model.AId;
@@ -122,9 +130,16 @@ namespace StateTemplateV5Beta.Controllers
                 }
             }
 
+            surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
+            surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
             surveyQuestionVM.ProgramName = model.ProgramName;
             surveyQuestionVM.QId = model.QId;
+
             i--;
+            if (surveyQuestionVM.DisableQuestion.Exists(x => x == i))
+            {
+                i -= 1;
+            }
 
             if (i <= 0)
                 return RedirectToAction("Inventory", "Home");
@@ -142,7 +157,7 @@ namespace StateTemplateV5Beta.Controllers
                     surveyQuestionVM.Value = CheckAnswer.Value;
 
                 int Answers = (from t in context.Answers where ((model.ProgramName == t.programName) & (model.AId == t.AId)) select t).Count();
-                surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount() * 100);
+
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             }
             ModelState.Clear();
@@ -176,6 +191,10 @@ namespace StateTemplateV5Beta.Controllers
                 //Save the Answer to the question just answered.
                 using (var context = new DBAContext())
                 {
+                    Answer CheckName = (from t in context.Answers where ((userId == t.UId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    if (CheckName != null && CheckName.programName != surveyQuestionVM.ProgramName)
+                            RenameProgram(userId, model.AId, surveyQuestionVM.ProgramName);
+
                     Answer previousAnswer = new Answer();
                     previousAnswer.QId = model.QId;
                     previousAnswer.Value = model.Value;
@@ -196,10 +215,18 @@ namespace StateTemplateV5Beta.Controllers
                 }
             }
 
+            surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+            surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
+
             // gets the next question
             surveyQuestionVM.QId = model.QId;
             i = surveyQuestionVM.QId;
+            
             i++;
+            if (surveyQuestionVM.DisableQuestion.Exists(x => x == i))
+            {
+                i += 1;
+            }
 
             //redirects to the summary when it reachs the end
             int End = eController.GetQuestionCount();
@@ -214,9 +241,6 @@ namespace StateTemplateV5Beta.Controllers
             {
                 Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (i == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
 
-                int Answers = (from t in context.Answers where ((userId == t.UId) & (model.AId == t.AId)) select t).Count();
-
-                surveyQuestionVM.Percent = (Answers / eController.GetQuestionCount());
                 surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
 
                 //sets the value for the next answer to the answer that exists
@@ -225,6 +249,78 @@ namespace StateTemplateV5Beta.Controllers
             }
             ModelState.Clear();
             return View("SurveyQuestions", surveyQuestionVM);
+        }
+
+        public ActionResult SkipQuestion(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
+        {
+            Security active = session(actives, activeLog, activeRem);
+            SecurityController Active = new SecurityController(active);
+
+            if (!(IsLoggedIn(Active).CheckLogin() || !ModelState.IsValid))
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+            HttpCookie cookie = Request.Cookies["UserInfo"];
+            string userId = cookie.Values["ID"];
+
+            SurveyQuestionVM surveyQuestionVM = new SurveyQuestionVM(active);
+            var eController = new EnvironmentController();
+            var aController = new AnswersController();
+
+            surveyQuestionVM.AId = model.AId;
+            surveyQuestionVM.ProgramName = model.ProgramName;
+
+            if (model.Value != null)
+            {
+                //Save the Answer to the question just answered.
+                using (var context = new DBAContext())
+                {
+                    Answer CheckName = (from t in context.Answers where ((userId == t.UId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    if (CheckName != null && CheckName.programName != surveyQuestionVM.ProgramName)
+                        RenameProgram(userId, model.AId, surveyQuestionVM.ProgramName);
+
+                    Answer previousAnswer = new Answer();
+                    previousAnswer.QId = model.QId;
+                    previousAnswer.Value = model.Value;
+                    previousAnswer.programName = model.ProgramName;
+                    previousAnswer.UId = userId;
+                    previousAnswer.AId = model.AId;
+
+                    //checks to see if the answer exists
+                    Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.QId == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+                    //if the answer exists use Put, otherwise use Post
+                    if (CheckAnswer != null)
+                    {
+                        previousAnswer.Created = CheckAnswer.Created;
+                        aController.PutAnswer(previousAnswer.UId, previousAnswer);
+                    }
+                    else
+                        aController.PostAnswer(previousAnswer);
+                }
+            }
+            surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
+            surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+
+            int i = model.SkipTo;
+            surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
+            surveyQuestionVM.QId = model.SkipTo;
+
+            //checks to see if the next question has an answer already
+            using (var context = new DBAContext())
+            {
+                Answer CheckAnswer = (from t in context.Answers where ((userId == t.UId) & (model.SkipTo == t.QId) & (model.AId == t.AId)) select t).FirstOrDefault();
+
+                surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
+
+                //sets the value for the next answer to the answer that exists
+                if (CheckAnswer != null)
+                    surveyQuestionVM.Value = CheckAnswer.Value;
+            }
+
+            ModelState.Clear();
+            return View("SurveyQuestions", surveyQuestionVM);
+
         }
 
         public ActionResult SurveyQuestions(string actives, string activeLog, string activeRem, SurveyQuestionVM model)
@@ -262,6 +358,57 @@ namespace StateTemplateV5Beta.Controllers
             //}
             //ViewModel.Points = (YesTotal + NoTotal);       
             return View(summaryVM);
+        }
+        
+        private List<int> GetDisable(string userID, int Aid, List<int> AnsweredQuestion)
+        {
+            var eController = new EnvironmentController();
+
+            List<int> iDisable = new List<int>();
+            for(int i =1; i <= eController.GetQuestionCount(); i++)
+            {
+                eController.GetQuestionReliesOn(i);
+                if (Convert.ToInt16(eController.GetQuestionReliesOn(i)) != 0)
+                {
+                    using (var context = new DBAContext())
+                    {
+                        int AnswerForRlies = Convert.ToInt16(eController.GetQuestionReliesOn(i));
+                        Answer CheckAnswer = (from t in context.Answers where ((userID == t.UId) & (AnswerForRlies == t.QId) & (Aid == t.AId)) select t).FirstOrDefault();
+                        if (CheckAnswer == null || CheckAnswer.Value == false)
+                            iDisable.Add(i);
+                    }
+                }                
+            }
+
+            return iDisable;
+        }
+
+        private List<int> GetAnsweredList(string userID, int Aid)
+        {
+            using (var context = new DBAContext())
+            {
+                IEnumerable<Answer> CheckName = (from t in context.Answers where ((userID == t.UId) & (Aid == t.AId)) select t).ToList();
+                List<int> iList = new List<int>();
+                foreach (var answer in CheckName)
+                {
+                    iList.Add(answer.QId);
+                }
+                return iList;
+            }
+        }
+
+        private void RenameProgram(string userID, int Aid, string NewName)
+        {
+            using (var context = new DBAContext())
+            {
+                IEnumerable<Answer> CheckName = (from t in context.Answers where ((userID == t.UId) & (Aid == t.AId)) select t).ToList();
+
+                foreach (var answer in CheckName)
+                {
+                    answer.programName = NewName;
+                    context.SaveChanges();
+                }
+            }
         }
 
         private Security session(Security active)
