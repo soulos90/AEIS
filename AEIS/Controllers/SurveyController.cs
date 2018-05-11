@@ -215,7 +215,9 @@ namespace StateTemplateV5Beta.Controllers
                 }
             }
 
+            surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+
             surveyQuestionVM.QuestionText = eController.GetQuestionText(i);
 
             // gets the next question
