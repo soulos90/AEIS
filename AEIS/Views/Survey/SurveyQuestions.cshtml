@@ -23,7 +23,7 @@
                             {
                                 <button type="button" class="btn btn-success btn-sm disabled">Question @i</button>             
                             }
-                            else if (Model.DisableQuestion.Exists(x => x == i))
+                            else if (Model.AnsweredQuestions.Exists(x => x == i))
                             {
                                 <input type="submit" class="btn btn-success btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />
                             }
