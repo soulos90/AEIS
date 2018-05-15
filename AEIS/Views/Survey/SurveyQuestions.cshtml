@@ -9,15 +9,40 @@
 
         @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
-            @Html.ValidationSummary(false, "", new { @class = "" })
             <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-actions btn-group-vertical" style="overflow: auto; width: auto; max-height: 200px">
+                        @Html.TextBoxFor(m => m.ProgramName, new { style = "width: 100px" })
+                        @for (int i = 1; i <= Model.NumberofQuestions; i++)
+                        {
+                            if (i == Model.QId)
+                            {
+                                <button type="button" class="btn btn-primary btn-sm">Question @i</button>
+                            }
+                            else if (Model.DisableQuestion.Exists(x => x == i))
+                            {
+                                <button type="button" class="btn btn-success btn-sm disabled">Question @i</button>             
+                            }
+                            else if (Model.AnsweredQuestions.Exists(x => x == i))
+                            {
+                                <input type="submit" class="btn btn-success btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />
+                            }
+                            else
+                            {
+                                <input type="submit" class="btn btn-danger btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />
+                            }
+                            @*<input type="submit" class="btn btn-default btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />*@
+                            @*<href="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" class="button">Question 'i'</>*@
+                            @*<a href="#" id="submit_link" class="button">Log In</a>*@
+                        }
+                    </div>
+                </div>
+                @Html.ValidationSummary(false, "", new { @class = "" })
                 <div class="col-sm-8">
                     <div style="text-align:left">
                         @Model.QuestionText
                     </div>
-                </div>
-            </div>
-            <div class="row m-t-md m-b-md">
+                @*<div class="row m-t-md m-b-md">*@
                 <div style="text-align:left">
                     <div class="controls">
                         @Html.RadioButtonFor(x => x.Value, true)
@@ -28,7 +53,6 @@
                         No
                     </div>
                     <div>
-                        <input type="hidden" name="ProgramName" value=@Model.ProgramName />
                         <input type="hidden" name="AId" value=@Model.AId />
                         <input type="hidden" name="QId" value=@Model.QId />
                         <input type="hidden" name="actives" value=@Model.Active.ID />
@@ -36,10 +60,12 @@
                         <input type="hidden" name="activeRem" value=@Model.Active.Remember.ToString() />
                     </div>
                     <div class="form-actions">
-                        <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion","Survey")" />
-                        <input type="submit" value="Next" formaction="@Url.Action("NextQuestion","Survey")" />
+                        <input type="submit" value="Previous" formaction="@Url.Action("PreviousQuestion", "Survey")" />
+                        <input type="submit" value="Next" formaction="@Url.Action("NextQuestion", "Survey")" />
                     </div>
                 </div>
+            </div>
+                    @*</div>*@
             </div>
         }
     </div>

@@ -37,9 +37,11 @@ namespace StateTemplateV5Beta.ViewModels
         //[Display(Name = "Survey?")]
         public string ProgramName { get; set; }
         public Nullable<bool> Value { get; set; }
-        public int Percent { get; set; }
         public int NumberofQuestions { get; set; }
         public Security Active { get; set; }
+        public int SkipTo { get; set; }
+        public List<int> AnsweredQuestions { get; set; }
+        public List<int> DisableQuestion { get; set; }
         public SurveyQuestionVM()
         {
 
