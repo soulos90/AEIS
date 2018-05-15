@@ -12,7 +12,6 @@ namespace StateTemplateV5Beta.ViewModels
         public InventoryItem[] Systems { get; }
         public string[] SectionTitles { get; }
         public Security Active { get; }
-        public int num { get;set; }
 
         public InventoryVM() { }
 
@@ -32,13 +31,6 @@ namespace StateTemplateV5Beta.ViewModels
             SectionTitles = inventory.SectionTitles;
             Systems = inventory.Systems;
             Active = active;
-        }
-        public InventoryVM(Inventory inventory, Security active, int Num)
-        {
-            SectionTitles = inventory.SectionTitles;
-            Systems = inventory.Systems;
-            Active = active;
-            num = Num;
         }
     }
 }

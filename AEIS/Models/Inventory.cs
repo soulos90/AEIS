@@ -8,7 +8,6 @@ namespace StateTemplateV5Beta.Models
 {
     public class Inventory
     {
-        // TODO: add ascending / descending sorts
         private const int defaultNum = 6;
         public InventoryItem[] Systems { get; set; }
         public string[] SectionTitles { get; set; }

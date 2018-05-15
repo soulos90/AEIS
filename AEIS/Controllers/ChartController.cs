@@ -65,9 +65,5 @@ namespace StateTemplateV5Beta.Controllers
             key.Write("png");
             return null;
         }
-
-        private Object TextBoxes() { return new object(); }
-        Object Index;
-
     }
 }

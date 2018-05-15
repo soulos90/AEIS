@@ -12,7 +12,6 @@ using StateTemplateV5Beta.ViewModels;
 
 namespace StateTemplateV5Beta.Controllers
 {
-    // TODO: HOME CONTROLLER - add return redirects where needed
     // TODO: HOME CONTROLLER - update user 'lastUsed' field when they log in
     // TODO: HOME CONTROLLER - make a 404 page
 
@@ -50,7 +49,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        // TODO: HOME CONTROLLER - implement ForgotPassword
         public ActionResult ForgotPassword(string userName = null)
         {
             Security active;
@@ -77,12 +75,13 @@ namespace StateTemplateV5Beta.Controllers
             SmtpClient email = new SmtpClient();
             string message = "Hello " + FName +","+
                "\nIn order to protect your information we have changed your password to: " + randomPass +
-               "\nPlease use that password at the Department of Rehibilitation's AEIS website to login."+
+               "\nPlease use that password at the Department of Rehabilitation's AEIS website to login."+
                "\n\nThis address can not receive responses, please do not reply.";
             email.Port = 25;
             email.Host = "smtp.saclink.csus.edu";
             email.Send("NorthDelta@csus.edu", userName, "AEIS new password", message);
         }
+
         private string genPass()
         {
             string Value = "";
@@ -93,6 +92,7 @@ namespace StateTemplateV5Beta.Controllers
             }
             return Value.Trim();
         }
+
         public ActionResult Account(string actives, string activeLog, string activeRem)
         {
             Security active = session(actives, activeLog, activeRem);
@@ -240,13 +240,6 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        //public ActionResult Logout()
-        //{
-        //    if (active == null)
-        //        active = new Security();
-        //    return active;
-        //}
-
         private Security session(string active, string activeLog, string rem)
         {
             Security Active;
@@ -351,7 +344,7 @@ namespace StateTemplateV5Beta.Controllers
                     SController.SetRemember(RememberBox);
                     Login(SController);
                     model = new InventoryVM(userName.Trim(), SController.GetActive());
-                    return View("Inventory", model);    // change to redirect
+                    return View("Inventory", model);
                 }
                 else
                     ViewBag.ErrorMessage = "Invalid Password";
@@ -359,7 +352,7 @@ namespace StateTemplateV5Beta.Controllers
             else
                 ViewBag.ErrorMessage = "Invalid User Name";
 
-            return View("Index", model);    // change to redirect           
+            return View("Index", model);      
         }
 
         public ActionResult Logout()
@@ -376,7 +369,6 @@ namespace StateTemplateV5Beta.Controllers
 
         private void Login(SecurityController active)
         {
-            //Session["loggedin"] = true;
             HttpCookie cookie = Request.Cookies["UserInfo"];
 
             if (cookie == null || cookie.Values["LoggedIn"] != "True")
@@ -391,7 +383,6 @@ namespace StateTemplateV5Beta.Controllers
 
         public SecurityController IsLoggedIn(SecurityController active)
         {
-
             bool value = false;
             string decodedUser = "";
             bool remember = false;

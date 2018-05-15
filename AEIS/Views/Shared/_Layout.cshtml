@@ -168,16 +168,14 @@
                             <a href="~/Home/Inventory?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Inventory</a>
                         </li>
                         <li class="nav-item">
-                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Account Settings</a>
+                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-user-id" aria-hidden="true" type="submit"></span>Account Settings</a>
                         </li>
                         <li class="nav-item">
-                            <!--TODO: onclick function breaks the display for some reason also I think it still doesn't work... so thats an issue-->
                             <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
                         </li>
                     }
                     else
                     {
-                        <!--TODO: make the size of the login button smaller when it's the only one displayed -->
                         <li class="nav-item">
                             <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
                         </li>
