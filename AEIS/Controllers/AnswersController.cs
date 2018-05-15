@@ -34,23 +34,25 @@ namespace StateTemplateV5Beta.Controllers
             answer.LastUsed = DateTime.Now;
             return Ok(answer);
         }
-        public Answer GetA(string id)
+        public Answer GetA(string uid, int aid, int qid)
         {
-            Answer answer = db.Answers.Find(id);
-            if (answer != null)
-                PutAnswer(id, answer);
+            return (from t in db.Answers where ((uid == t.UId) & (qid == t.QId) & (aid == t.AId)) select t).FirstOrDefault();
+        }
+        public Answer GetAnswer(string uId, int aId)
+        {
+            Answer answer = (from t in db.Answers where ((uId == t.UId) & (aId == t.AId) & (1 == t.QId)) select t).FirstOrDefault();
             return answer;
         }
         // PUT: api/Answers/5
         [ResponseType(typeof(void))]
-        public IHttpActionResult PutAnswer(string id, Answer answer)
+        public IHttpActionResult PutAnswer(string uId, Answer answer)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != answer.UId)
+            if (uId != answer.UId)
             {
                 return BadRequest();
             }
@@ -65,7 +67,7 @@ namespace StateTemplateV5Beta.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!AnswerExists(id))
+                if (!AnswerExists(uId))
                 {
                     return NotFound();
                 }
@@ -93,7 +95,7 @@ namespace StateTemplateV5Beta.Controllers
             db.Answers.Add(answer);
 
             try
-            {
+            {                
                 db.SaveChanges();
             }
             catch (DbUpdateException)
@@ -126,43 +128,75 @@ namespace StateTemplateV5Beta.Controllers
 
             return Ok(answer);
         }
-
-        [ResponseType(typeof(Answer))]
-        public IHttpActionResult DeleteWholeAnswer(string id)
+        public void DeleteAnswer(string uid,int aid,int qid)
         {
-            int temp = 0, temp1 = 0,one = 1;
+            Answer answer = db.Answers.Find(new object[] { uid, aid, qid });
+            if (answer == null)
+            {
+
+            }
+            else
+            {
+                db.Answers.Remove(answer);
+                db.SaveChanges();
+            }
+        }
+        [ResponseType(typeof(Answer))]
+        public IHttpActionResult DeleteWholeAnswer(string uid,int aid)
+        {
+            int temp = 0, temp1 = 0;
             string tempo = "";
             bool check = false;
-            Answer answer = db.Answers.Find(new { id, one });
+            int i = 1;
+            Answer answer = db.Answers.Find(new object[] { uid, aid, i });
             if (answer == null)
             {
                 return NotFound();
             }
-            if (db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1 > answer.AId)
+            int count = CountAPU(uid)-1;
+            if (count > answer.AId)
             {
                 temp = answer.AId;
-                temp1 = db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + answer.UId + ";").Count() - 1;
+                temp1 = count;
                 tempo = answer.UId;
                 check = true;
             }
-            db.Answers.Remove(answer);
+            for(int e = 1;e<= Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++e)
+            {
+                DeleteAnswer(uid,aid,e);
+            }
             if(check)
             {
-                for(int i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
+                for(i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
                 {
-                    PutAnswer(id, db.Answers.Find(new { tempo, temp1, i }));
-                    db.Answers.Remove(db.Answers.Find(new { tempo, temp1, i }));
+                    Answer a = GetA(tempo,count,i);
+                    if (a == null)
+                    {
+
+                    }
+                    else
+                    {
+                        a = new Answer(a);
+                        a.AId = temp;
+                        PostAnswer(a);
+                        DeleteAnswer(tempo, temp1, i);
+                    }
+                    
                 }
             }
-            db.SaveChanges();
 
             return Ok(answer);
         }
 
-        public int Next(string id)//this id is just email not a touple
+        // returns next available AId for new survey
+        public int GetNextAId(string uId)
         {
+            var result = (from Answers in db.Answers
+                          orderby Answers.AId
+                          where Answers.UId == uId
+                          select Answers.AId).Distinct().ToList();
 
-            return db.Answers.SqlQuery("SELECT AId FROM Answers WHERE UId = " + id + ";").Count();
+            return result.Count();
         }
 
         protected override void Dispose(bool disposing)
@@ -174,9 +208,17 @@ namespace StateTemplateV5Beta.Controllers
             base.Dispose(disposing);
         }
 
-        private bool AnswerExists(string id)
+        private bool AnswerExists(string uId)
         {
-            return db.Answers.Count(e => e.UId == id) > 0;
+            return db.Answers.Count(e => e.UId == uId) > 0;
+        }
+        public int CountAPS(string uid, int aid)
+        {
+            return db.Answers.Count(e => e.UId == uid & e.AId == aid);
+        }
+        public int CountAPU(string uid)
+        {
+            return db.Answers.Count(e => e.UId == uid & e.QId == 1);
         }
     }
 }

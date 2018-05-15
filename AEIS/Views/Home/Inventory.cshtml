@@ -1,61 +1,141 @@
-﻿@{
+﻿@model StateTemplateV5Beta.ViewModels.InventoryVM
+@{
     ViewBag.Title = "Inventory";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    var blankRows = 0;
+    if (Model.Systems.Length <= 11)
+    {
+        blankRows = 11 - Model.Systems.Length;
+    }
+    // ****** Colors ******
+    // light blue: 9FC7DA
+    // primary blue: 046B99
+    // dark blue: 035376
+    // ********************
 
-    /*
-    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
-    */
-
-    string[] sectionInfo = new string[6] { "name", "##", "##", "##", "##", "##" };
-    string[] sectionNames = new string[4] { "Public Services", "Internal Services", "Accessibility", "Life Span" };
-
-    // TODO: INVENTORY - populate with info from db
-    // TODO: INVENTORY - pass value of clicked system to print page w/ button
-    // TODO: INVENTORY - add proper link to edit form button
-    // TODO: INVENTORY - change to grid for pagination(?)
+    // TODO: INVENTORY - Still ugly when table is empty (the table stretches to full screen)
 }
+<style type="text/css">
+    #submit {
+        background-color: #046B99;
+        padding: .5em;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        border-radius: 6px;
+        color: #fff;
+        font-size: 14px;
+        text-decoration: none;
+        border: none;
+    }
+
+        #submit:hover {
+            border: none;
+            background: #035376;
+            box-shadow: 0px 0px 1px #035376;
+        }
+</style>
 
 <div class="section">
-    <h1 class="text-center">AEIS System Inventory</h1>
-    <div class="row p-b-lg">
-        <div class="offset-quarter half">
-            <table class="table table-bordered" style="white-space:nowrap;">
 
-                <thead>
-                    <tr style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
-                        <th style="text-align:center">Application / System Name</th>
-                        @for (int i = 0; i < sectionNames.Length; i++)
-                        {
-                            <th style="text-align:center">@sectionNames[i]</th>
-                        }
-                        <th style="text-align:center">Total</th>
-                    </tr>
-                </thead>
+    <div class="container">
+        <div class="row m-b-sm">
+            <div class="col-xs-9">
+                <h1>AEIS System Inventory</h1>
+            </div>
+<!-- Add New System Button -->
+            <div class="col-xs-3" style="text-align:right">
+                <h1>
+                    <button type="button" id="btnAddSystem" class="btn btn-primary btn-sm" title="Add New System" 
+                    onclick="window.location.href='/Survey/NameSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()'">
+                        Add New System
+                    </button>
+                </h1>
+            </div>
+        </div>
 
-                <tr>
-                    @for (int i = 0; i < sectionInfo.Length; i++)
+<!-- Inventory System Table -->
+        <div class="row">
+            <div class="col-xs-12">
+                <table class="table table-bordered" style="white-space:nowrap;" id="overlay">
+                    <thead>
+                        <tr bgcolor="#F1F1F1" style="white-space:nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                            {
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="name"> Application / System Name</button></th>
+                            }
+                            @for (int i = 0; i < Model.SectionTitles.Length; i++)
+                            {
+                                using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                                {
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="@i">@Model.SectionTitles[i]</button></th>
+                                }
+                            }
+                            @using (Html.BeginForm("Inventory", "Home", FormMethod.Post))
+                            {
+                                <th style="text-align:center"><button type="submit" id="submit" name="sort" value="totalScore">Total</button></th>
+                            }
+                        </tr>
+                    </thead>
+                    @for (int i = 0; i < Model.Systems.Length + blankRows; i++)
                     {
-                        <td>@sectionInfo[i]</td>
-                    }
-                    <td style="text-align:center">
-                        <button type="button" id="btnEdit" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Edit" onclick="editSelectedForm()">
-                            <i class="ca-gov-icon-pencil-edit"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center">
-                        <button type="button" id="btnPrint" value="@sectionInfo[0]" class="btn btn-primary btn-sm" title="Print" onclick="window.location.href='/Home/Justification'">
-                            <i class="ca-gov-icon-print"></i>
-                        </button>
-                    </td>
-                    <td style="text-align:center">
-                        <button type="button" id="btnDelete" class="btn btn-primary btn-sm" title="Delete" onclick="confirm('Remove \'@sectionInfo[0]\' from Inventory?')">
-                            <i class="ca-gov-icon-close-fill"></i>
-                        </button>
-                    </td>
-                </tr>
 
-            </table>
-        </div> <!-- end offset -->
-    </div> <!-- end row -->
+                        <tr bgcolor="@(i % 2 == 1 ? "#F7F7F7" : "")">
+                            @if (i < Model.Systems.Length)
+                            {
+                                <td style="vertical-align:middle">@Model.Systems[i].Name</td>
+                                    for (int j = 0; j < Model.Systems[i].SectionScores.Length; j++)
+                                    {
+                                        <td style="vertical-align:middle">@Model.Systems[i].SectionScores[j]</td>
+                                    }
+                                    <td style="vertical-align:middle">@Model.Systems[i].ScoreTotal</td>
+
+                                        <td style="text-align:center; vertical-align:middle">
+                                            @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post))
+                                            {
+                                                <button type="submit" name="btnEditSurvey" value="@Model.Systems[i].AId" class="btn btn-primary btn-sm" title="Edit Survey">
+                                                    <i class="ca-gov-icon-pencil-edit"></i>
+                                                </button>
+                                            }
+                                        </td>
+                                        <td style="text-align:center; vertical-align:middle">
+
+                                            @if (Model.Systems[i].HasUnanswered)
+                                            {
+                                                <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="All questions in the survey must be answered before printing" disabled>
+                                                    <i class="ca-gov-icon-print"></i>
+                                                </button>
+                                            }
+                                            else
+                                            {
+                                                <button type="button" name="btnJustification" class="btn btn-primary btn-sm" title="Print Justification"
+                                                onclick="window.location.href='/Home/Justification?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()&aId=@Model.Systems[i].AId'">
+                                                    <i class="ca-gov-icon-print"></i>
+                                                </button>
+                                            }
+
+                                         </td><!--string actives, string activeLog, string activeRem, int aId-->
+                                        <td style="text-align:center; vertical-align:middle">
+                                            <button type="button" name="btnDelete" class="btn btn-primary btn-sm" title="Delete Application Survey"
+                                                    onclick="window.location.href='/Home/DeleteSurvey?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()&aId=@Model.Systems[i].AId'">
+                                                <i class="ca-gov-icon-close-fill"></i>
+                                            </button>
+                                          
+                                        </td>
+                            }
+                            else
+                            {
+                                for (int j = 0; j < Model.SectionTitles.Length + 2; j++)
+                                {
+                                    <td style="height:50px"></td>
+                                }
+                            }
+
+                        </tr>
+                     }
+                </table>
+                @Scripts.Render("~/Scripts/confirm-delete.js")
+            </div> <!-- end system table column -->
+        </div> <!-- end system table row -->
+    </div> <!-- end container -->
 </div> <!-- end section -->

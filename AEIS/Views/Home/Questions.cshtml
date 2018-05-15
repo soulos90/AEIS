@@ -1,0 +1,36 @@
+﻿@model StateTemplateV5Beta.Models.Question
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.Title = "Questions";
+    var question = new StateTemplateV5Beta.Models.Question();
+    var qcontroller = new StateTemplateV5Beta.Controllers.QuestionsController();
+    var answer = new StateTemplateV5Beta.Models.Answer();
+    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
+    var user = new StateTemplateV5Beta.Models.User();
+    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
+    question = qcontroller.GetQ(1);
+}
+
+
+    
+<div class="section">
+    <h1 class="text-center">Survey</h1>
+
+    @using (Ajax.BeginForm("QuestionsController", "Questions", new AjaxOptions { HttpMethod = "POST", InsertionMode = InsertionMode.Replace, UpdateTargetId = "updateDiv" }))
+    {
+
+             @question.Text
+
+              @Html.TextBox("txtQuestion");
+
+             <input type="submit" value="Submit" />
+     }
+
+                <div id="updateDiv"></div>
+           
+        
+
+
+</div>

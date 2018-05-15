@@ -1,52 +1,37 @@
-﻿@{
+﻿@model StateTemplateV5Beta.ViewModels.JustificationVM
+@{
     ViewBag.Title = "Justification";
-
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    /* Database access reference
-    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
-
-    var systemName = ucontroller.GetU(MvcApplication.active.GetID()).;
-    var publicScore = MvcApplication.environment.GetQuestionCount();
-    var internalScore = MvcApplication.environment.GetDBSource();
-    var accessibilityScore = MvcApplication.environment.GetInitCatalog();
-    //var systemScore = ucontroller.GetU(MvcApplication.active.GetID()).Orginization; //Throws an error?
-    var totalScore = MvcApplication.environment.GetSectionName(1);
-    */
-
-    // TODO: JUSTIFICATION - link to database for displaying information
-    // TODO: JUSTIFICATION - display database info for passed variable
-
-    var systemName = "System Name";
-    string[] sectionNames = new string[4] { "Public Services:", "Internal Services:", "Accessibility:", "Life Span:" };
-    var sectionScore = "##";
-    var totalScore = "##";
-    var descriptionHeight = "190px";
+    var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    var systemHeight = "190px";
     var servicesHeight = "190px";
     var impactHeight = "190px";
 }
+<!-- TODO: implement drop down where user can change selected the system from this page -->
 <style>
     #JustificationPage {
         border: 2px solid black;
-        height: 1100px;
+        height: 1040px;
         width: 850px;
+        padding-top: -40px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+    #Description {
+        height: 190px;
+    }
+
+    #Services {
+        height: 190px;
+    }
+
+    #Impact {
+        height: 190px;
     }
 </style>
-<main class="main-primary">
-
-
-    <!-- Print button -->
-    <div class="section hidden-print">
-        <div class="container">
-            <div class="row m-b-sm" style="vertical-align:middle">
-                <div class="col-xs-9">
-                    <h1>Summary / Justification</h1>
-                </div>
-                <div class="col-xs-3 display: visible-lg-inline-block" style="text-align:left">
-                    <h1><button onclick="myFunction('printable')">Print This Page</button></h1>
-                    <script>
-                        function myFunction(divName) {
+<script>
+    function myFunction(divName) {
         var printContents = document.getElementById(divName).innerHTML;
         var originalContents = document.body.innerHTML;
 
@@ -56,18 +41,33 @@
 
         document.body.innerHTML = originalContents;
     }
-                    </script>
-                </div>
-            </div><!-- End Print Button -->
-        </div>
-    </div>
+</script>
+<main class="main-primary">
 
+    <div class="section hidden-print">
+        <div class="container">
+            <div class="row m-b-sm" style="vertical-align:middle">
+                <div class="col-xs-9">
+                    <h1>Summary / Justification</h1>
+                </div>
+                <!-- Print button -->
+                <div class="col-xs-3" style="text-align:right">
+                    <h1><button class="btn btn-primary btn-sm" onclick="myFunction('printable')">Print This Page</button></h1>
+                </div> <!-- end col -->
+            </div> <!-- end row -->
+        </div> <!-- end container -->
+    </div> <!-- end section -->
+    <!-- Printable Justification Page -->
     <div class="container m-t-sm m-b-sm" id="JustificationPage">
         <div class="section" id="printable">
             <div class="row">
-                <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@systemName'</strong></h2>
+                <div class="col-xs-12">
+                    <h2 class="text-center p-t-md p-b-md"><strong>AEIS Assessment for '@Model.SystemName'</strong></h2>
+                </div>
+            </div>
 
-                <!-- AEIS Breakdown -->
+            <!-- AEIS Breakdown -->
+            <div class="row">
                 <div class="col-xs-5">
                     <table class="table">
                         <thead>
@@ -76,53 +76,46 @@
                             </tr>
                         </thead>
 
-                        @for (int i = 0; i < sectionNames.Length; i++)
+                        @for (int i = 0; i < @Model.SectionTitles.Length; i++)
                         {
                             <tr>
-                                <td class="text-right" style="width: 65%">@sectionNames[i]</td>
+                                <td class="text-right" style="width: 65%">@Model.SectionTitles[i]:</td>
                                 <td style="width: 15%"></td>
-                                <td class="bg-primary text-center"><strong>@sectionScore</strong></td>
+                                <td class="bg-primary text-center"><strong>@Model.SectionScores[i]</strong></td>
                             </tr>
                         }
-                        
                         <tr>
                             <td class="text-right">Total:</td>
                             <td></td>
-                            <td class="bg-primary text-center"><strong>@totalScore</strong></td>
+                            <td class="bg-primary text-center"><strong>@Model.ScoreTotal</strong></td>
                         </tr>
                     </table>
                 </div> <!-- end breakdown column -->
-
                 <!-- System Descripton -->
                 <div class="col-xs-7">
                     <div class="panel panel-primary" style="height:100%;">
                         <div class="panel-heading text-center"><strong>System Description:</strong></div>
-                        <div class="panel-body" style="height: @descriptionHeight">
-                            <!--<input id="SysDesc" class="form-control" type="text" placeholder="System Description">-->
-                        </div>
-                    </div>
+                        <div class="panel-body" style="height: @systemHeight"></div>
+                    </div> <!-- end system description panel -->
                 </div> <!-- end system description column -->
-
             </div> <!-- end breakdown and description row -->
-
             <!-- Services -->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><strong>Services that the system provides to the general public:</strong></div>
-                        <div class="panel-body" style="height:@servicesHeight;"></div>
-                    </div> <!-- end panel -->
-                </div> <!-- end column -->
+                        <div class="panel-body" style="height: @servicesHeight"></div>
+                    </div> <!-- end services panel -->
+                </div> <!-- end services column -->
             </div> <!-- end services row -->
-
             <!-- Impact -->
             <div class="row">
                 <div class="col-xs-12">
                     <div class="panel panel-primary">
                         <div class="panel-heading"><strong>Impact of <u>not</u> having access to the system:</strong></div>
-                        <div class="panel-body" style="height:@impactHeight;"></div>
-                    </div><!-- end panel -->
-                </div> <!-- end column -->
+                        <div class="panel-body" style="height: @impactHeight"></div>
+                    </div> <!-- end impact panel -->
+                </div> <!-- end impact column -->
             </div> <!-- end impact row -->
 
         </div> <!-- end section -->

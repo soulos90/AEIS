@@ -1,45 +1,41 @@
-﻿
+﻿@model StateTemplateV5Beta.ViewModels.InventoryVM
 @{
     ViewBag.Title = "TextAnalysis";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
 
-    /*
-    var ucontroller = new StateTemplateV5Beta.Controllers.UsersController();
-    var acontroller = new StateTemplateV5Beta.Controllers.AnswersController();
-    */
-
-    var numOfSystems = 6;
-    var numOfSections = 4;
-    var systemName = "SYSTEM_NAME";
-    var totalScore = "TOTAL_SCORE";
-    string[] sectionNames = new string[4] { "Public Services", "Internal Services", "Accessibility", "Life Span" };
-    var sectionScore = "SECTION_SCORE";
-    // TODO: TEXT ANALYSIS - populate with info from db
-    // TODO: TEXT ANALYSIS - add adjustment for how many systems are displayed (possibly a dropdown list w/ numbers 2-10?)
+    // TODO: TEXT ANALYSIS - add adjustment for how many systems are currently displayed (possibly a dropdown list w/ numbers 2-10?)
 }
 
 <div class="section">
 
     <h1>AEIS Inventory Text Analysis</h1>
     <p>
-        AEIS analysis was performed on the submitted inventory.<br />
-        Below is the scoring results for the top @numOfSystems systems in descending order.
+        AEIS analysis was performed on the submitted inventory.<br>
     </p>
 
-    @for (int i = 1; i <= 6; i++)
+    @if (Model.Systems.Length == 0)
+    {
+        <div class="panel panel-primary m-t-md m-b-lg">
+            <div class="panel-heading"><h3>Your Inventory is empty!</h3></div>
+            <div class="panel-body p-b-100 p-b-100">To fill it, use the Inventory page.</div>
+        </div>
+    }
+
+    @for (int i = 1; i <= Model.Systems.Length; i++)
     { 
         <div class="panel panel-primary">
-            <div class="panel-heading"><h3>#@i - @systemName - AEIS Score: @totalScore</h3></div>
+            <div class="panel-heading"><h3>#@i - @Model.Systems[i - 1].Name - AEIS Score: @Model.Systems[i - 1].ScoreTotal</h3></div>
             <div class="panel-body">
-                Score #@i given to @systemName with an AEIS of @totalScore. <br />
-                Scoring breakdown for '@systemName' is as follows:<br />
+                Score #@i given to @Model.Systems[i - 1].Name with an AEIS of @Model.Systems[i - 1].ScoreTotal. <br>
+                Scoring breakdown for '@Model.Systems[i - 1].Name' is as follows:<br>
 
-                @for(int j = 0; j < numOfSections; j++)
-                {
-                    <div>@sectionScore points for '@sectionNames[j]'<br /></div>
-                }
-            </div>
-        </div>
+            @for (int j = 0; j < Model.SectionTitles.Length; j++)
+            {
+            <div>@Model.Systems[i - 1].SectionScores[j] points for '@Model.SectionTitles[j]'<br></div>
+            }
+            </div> <!-- end panel body --><!--TODO: push footer to bottom of screen (might be better done in global footer but I dunno)-->
+        </div> <!-- end panel -->
     }
 </div> <!-- end section -->
 

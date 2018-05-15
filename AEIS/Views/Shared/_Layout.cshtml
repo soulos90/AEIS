@@ -4,6 +4,10 @@
 <!--[if IE 8]>    <html class="no-js ie8 oldie" lang="en"> <![endif]-->
 <!--[if IE 9]>    <html class="no-js ie9 oldie" lang="en"> <![endif]-->
 <!--[if (gt IE 9)]><!-->
+@{
+    var SU = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    bool loggedIn = SU.CheckLogin();
+}
 <html class="no-js" lang="en">
 <!--<![endif]-->
 <head>
@@ -45,7 +49,7 @@
     <!-- For Nokia -->
     <link rel="shortcut icon" href="~/Content/StateTemplate/images/template2014/apple-touch-icon-57x57.png">
     <!-- For everything else -->
-    <link rel="shortcut icon" href="~/Content/StateTemplate/favicon.ico">
+    <link rel="shortcut icon" href="~/Content/StateTemplate/images/favicon.ico">
     <!-- Activate ClearType for Mobile IE -->
     <!--[if IE]>
     <meta http-equiv="cleartype" content="on">
@@ -68,7 +72,7 @@
                 </button>
                 <div class="form-group form-inline">
                     <label for="locationZipCode">Saving your location allows us to provide you with more relevant information.</label>
-                    <input type="input" class="form-control" id="locationZipCode" placeholder="Zip Code">
+                    <input type="hidden" class="form-control" id="locationZipCode" placeholder="Zip Code">
                     <button type="button" class="btn btn-primary">Set Location</button>
                 </div>
             </div>
@@ -84,18 +88,18 @@
                             <li><div class="header-cagov-logo"><a href="/"><img src="/Content/stateTemplate/images/Ca-Gov-Logo-Gold.svg" alt="CA.gov" /></a></div></li>
                             <li><a href="/"><span class="ca-gov-icon-home" aria-hidden="true"></span><span class="sr-only">Home</span></a></li>
 
-						<!--
-                            <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
-                            <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
-                            <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
-                            <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
-						-->
+                            <!--
+                                <li><a class="ca-gov-icon-facebook" title="Share via Facebook"><span class="sr-only">Facebook</span></a></li>
+                                <li><a class="ca-gov-icon-twitter" title="Share via Twitter"><span class="sr-only">Twitter</span></a></li>
+                                <li><a class="ca-gov-icon-google-plus" title="Share via Google+"><span class="sr-only">Google+</span></a></li>
+                                <li><a class="ca-gov-icon-email" title="Share via email"><span class="sr-only">Email</span></a></li>
+                            -->
                         </ul>
                     </div>
                     <div class="half settings-links">
                         <ul class="utility-links ">
-                            <li><a href="">Contact Us</a></li>
-                            <li><a role="button" data-toggle="collapse" href="#siteSettings" aria-expanded="false" aria-controls="siteSettings"><span class="ca-gov-icon-gear" aria-hidden="true"></span> Settings</a></li>
+                            <li><a href="http://www.dor.ca.gov/Public/Contact-Us.html">Contact Us</a></li>
+                            <li><a role="button" data-toggle="collapse" href="#siteSettings" aria-expanded="false" aria-controls="siteSettings"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Settings</a></li>
 
                         </ul>
                     </div>
@@ -152,27 +156,30 @@
                     <li class="home-link nav-item">
                         <a href="/" class="first-level-link"><span id="nav_home_container" class="ca-gov-icon-home" aria-hidden="true"></span>Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Inventory" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true"></span>Inventory</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/ChartAnalysis" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true"></span>Chart Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/TextAnalysis" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true"></span>Text Analysis</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Justification" class="first-level-link"><span class="ca-gov-icon-page" aria-hidden="true"></span>Justification</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Account" class="first-level-link"><span class="ca-gov-icon-gear" aria-hidden="true"></span>Account Settings</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="~/Home/Registration" class="first-level-link"><span class="ca-gov-icon-contacts" aria-hidden="true"></span>Create Account</a>
-                    </li>
+                    @if (loggedIn)
+                    {<!--TODO: add about section-->
+                        <li class="nav-item">
+                            <a href="~/Home/TextAnalysis?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-read-book" aria-hidden="true" type="submit"></span>Text Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/ChartAnalysis?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-bar-chart" aria-hidden="true" type="submit"></span>Chart Analysis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Inventory?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-clipboard" aria-hidden="true" type="submit"></span>Inventory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Account?actives=@Model.Active.ID&activeLog=@Model.Active.IsLoggedIn.ToString()&activeRem=@Model.Active.Remember.ToString()" class="first-level-link"><span class="ca-gov-icon-user-id" aria-hidden="true" type="submit"></span>Account Settings</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="~/Home/Logout" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true" type="submit"></span>Logout</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a href="~/Home" class="first-level-link"><span class="ca-gov-icon-key" aria-hidden="true"></span>Login</a>
+                        </li>
+                    }
                 </ul>
             </nav>
         </div>
@@ -185,7 +192,6 @@
 
     </div>
 
-
     <!-- Global Footer -->
     <footer id="footer" class="global-footer hidden-print row">
         <div class="container">
@@ -193,10 +199,11 @@
                 <div class="three-quarters">
                     <ul class="footer-links">
                         <li><a href="#skip-to-content">Back to Top</a></li>
-                        <li><a href="/">Conditions of Use</a></li>
-                        <li><a href="/">Privacy Policy</a></li>
-                        <li><a href="/">Accessibility</a></li>
-                        <li><a href="/">Contact Us</a></li>
+                        <li><a href="http://www.dor.ca.gov/Public/Use.html">Conditions of Use</a></li>
+                        <li><a href="http://www.dor.ca.gov/Public/Privacy.html">Privacy Policy</a></li>
+                        <li><a href="http://www.dor.ca.gov/Public/Accessibility.html">Accessibility</a></li>
+                        <li><a href="/Home/About/">About</a></li>
+                        <li><a href="http://www.dor.ca.gov/Public/Contact-Us.html">Contact Us</a></li>
                     </ul>
                 </div>
             </div>
@@ -211,7 +218,6 @@
     </footer>
     <!-- Extra Decorative Content -->
     <div class="decoration-last hidden-print">&nbsp;</div>
-
 
     @Scripts.Render("~/bundles/stateTemplateJs")
 </body>

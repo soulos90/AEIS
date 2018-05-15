@@ -1,69 +1,88 @@
-﻿
+﻿@model StateTemplateV5Beta.ViewModels.AccountVM
 @{
     ViewBag.Title = "Account";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    var uController = new StateTemplateV5Beta.Controllers.UsersController();
-    var user = uController.GetU(MvcApplication.active.GetID());
-
-    //var FirstName = "John";
-    //var LastName = "Smith";
-    //var Organization = "CSUS";
-
-    // TODO: ACCOUNT - fix MvcApplication.active null (?)
-    // TODO: ACCOUNT - on submit button press change db info
+    var active = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
+    
+    // TODO: ACCOUNT - BUG - currently requires email to be changed, otherwise it won't let you submit (returns 'invalid new email')
+    // TODO: ACCOUNT - BUG - won't let you change any information without entering a password
+    // TODO: ACCOUNT - BUG - even after changing email, it only changes current login info (cookie and active), and doesn't change the database info at all
 }
 
 <div class="section">
 
     <h1>Account Settings</h1>
+    <div class="input-group m-t-md">
+        <div class="d-flex" style="color:red">
+            @ViewBag.ErrorMessage
+        </div>
+    </div>
     <!-- Account Information -->
-    <div class="panel panel-primary">
-        <div class="panel-heading"><h2>Account Information</h2></div>
-        <div class="row p-t p-l-md">
-            <label>First Name</label><br />
-        </div>
-        <div class="row p-l-md">
-            <input type="text" style="width:250px" value=@user.FName id="first-name" name="firstName" tabindex="1">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Last Name</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="text" style="width:250px" value=@user.LName id="last-name" name="lastName" tabindex="2">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Organization</label>
-        </div>
-        <div class="row p-b p-l-md">
-            <input type="text" style="width:250px" value=@user.Orginization id="org" name="organization" tabindex="3">
-        </div>
-    </div> <!-- end account container -->
-    <!-- Change Password -->
-    <div class="panel panel-primary">
-        <div class="panel-heading"><h2>Change Password</h2></div>
-        <div class="row p-t p-l-md">
-            <label>Current password</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="currentPassword" tabindex="4">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>New password</label>
-        </div>
-        <div class="row p-l-md">
-            <input type="password" style="width:250px" placeholder="New password" id="new-password" name="newPassword" tabindex="5">
-        </div>
-        <div class="row p-t p-l-md">
-            <label>Reenter password</label>
-        </div>
-        <div class="row p-b p-l-md">
-            <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="6">
-        </div>
-    </div> <!-- end password container -->
+    @using (Html.BeginForm("PutUser", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.ValidationSummary(false, "", new { @class = "" })
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h2>Account Information</h2></div>
+            <div class="row p-t p-l-md">
+                <label>Email</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value="@Model.Email.TrimEnd()" id="Email" name="ID" tabindex="1">
+            </div>
+            <input type="hidden" name="actives" value="@Model.Active.ID" />
+            <input type="hidden" name="activeLog" value="@Model.Active.IsLoggedIn.ToString()" />
+            <input type="hidden" name="activeRem" value="@Model.Active.Remember.ToString()" />
+            <div class="row p-t p-l-md">
+                <label>First Name</label><br />
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value="@Model.FirstName.TrimEnd()" id="first-name" name="FName" tabindex="2">
+            </div>
 
-    <input type="submit" value="Save Changes" class="btn btn-lg btn-primary" onclick="window.location.href='/Home/Inventory'" />
+            <div class="row p-t p-l-md">
+                <label>Last Name</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="text" style="width:250px" value="@Model.LastName.TrimEnd()" id="last-name" name="LName" tabindex="3">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>Organization</label>
+            </div>
+            <div class="row p-b p-l-md">
+                <input type="text" style="width:250px" value="@Model.Organization.TrimEnd()" id="org" name="Organization" tabindex="4">
+            </div>
+            <div>
+                <input type="hidden" name="active" id="active" value="@Model.Active" />
+            </div>
+        </div> <!-- end account container -->
+        <!-- Change Password -->
+        <div class="panel panel-primary">
+            <div class="panel-heading"><h2>Change Password</h2></div>
+            <div class="row p-t p-l-md">
+                <label>Current password</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="currentPassword" tabindex="5">
+            </div>
+            <div class="row p-t p-l-md">
+                <label>New password</label>
+            </div>
+            <div class="row p-l-md">
+                <input type="password" style="width:250px" placeholder="New password" id="password" name="Passhash" tabindex="6" onchange='checkLength();'>
+                <span id='pw_message'></span>
+            </div>
+            <div class="row p-t p-l-md">
+                <label>Reenter password</label>
+            </div>
+            <div class="row p-b p-l-md">
+                <input type="password" style="width:250px" placeholder="Reenter password" id="reenter-password" name="reenterPassword" tabindex="7" onkeyup='check();'>
+                <span id='message'></span>
+            </div>
+        </div> <!-- end password container -->
 
+        <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary" disabled="disabled" />
 
+    }
+    @Scripts.Render("~/Scripts/register-check.js")
 </div> <!-- end section -->
 
