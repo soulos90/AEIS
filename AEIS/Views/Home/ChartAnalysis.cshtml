@@ -1,14 +1,42 @@
-﻿@{
+﻿@model StateTemplateV5Beta.ViewModels.InventoryVM
+@{
     ViewBag.Title = "ChartAnalysis";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    // TODO: validate text box to make sure it's an integer (currently throws error with non-int entries)
 }
 
-<div class="section">
+<style>
+    h1 {
+        padding: 0px;
+        margin: 0px;
+    }
+</style>
 
-    <h1>AEIS Inventory Chart Analysis</h1>
-    <div class="container">
-        <row>
-            <img src="/Chart/GetChart" />
-        </row>
-    </div>
+<div class="section">
+   
+    <row class="container">
+        @using (Html.BeginForm("ChartAnalysis", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.ValidationSummary(false, "", new { @class = "" })
+            <row m-b-sm>
+                <div class="col-lg-9"><h1>AEIS Inventory Chart Analysis</h1></div>
+                <div class="col-lg-3">
+                    <label>Number of Systems on Chart</label>
+                </div>
+            </row>
+            <row p-l-md>
+                <div class="col-lg-9"></div>
+                <div class="col-lg-3">
+                    <input type="hidden" value=@Model.Active.ID name="actives" />
+                    <input type="hidden" value=@Model.Active.IsLoggedIn.ToString() name="activeLog" />
+                    <input type="hidden" value=@Model.Active.Remember.ToString() name="activeRem" />
+                    <input type="text" name="numOfSystems" placeholder=@Model.Systems.Length tabindex="1">
+                    <input type="submit" value="Update Chart #" class="btn" tabindex="2" />
+                </div>
+            </row>
+        }
+        <div class="row" style="text-align:center">
+            <img src="/Chart/GetChart?user=@Model.Active.ID&num=@Model.Systems.Length" />
+        </div>
+    </row>
 </div>

@@ -143,16 +143,29 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />
+    <Compile Include="Controllers\SurveyController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\Answer.cs" />
     <Compile Include="Models\Environment.cs" />
-    <Compile Include="Models\InventoryVM.cs" />
+    <Compile Include="Models\Inventory.cs" />
+    <Compile Include="Models\InventoryItem.cs" />
+    <Compile Include="Models\QuestionViewModel.cs" />
     <Compile Include="Models\Security.cs" />
+    <Compile Include="Models\SecurityCombined.cs" />
+    <Compile Include="Models\SummaryViewModelcs.cs" />
+    <Compile Include="Models\SurveyQuestion.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModels\AccountVM.cs" />
+    <Compile Include="ViewModels\InventoryVM.cs" />
+    <Compile Include="ViewModels\IVM.cs" />
+    <Compile Include="ViewModels\JustificationVM.cs" />
+    <Compile Include="ViewModels\LoginVM.cs" />
+    <Compile Include="ViewModels\QuestionVM.cs" />
+    <Compile Include="ViewModels\SecurityVM.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\site.css" />
@@ -356,7 +369,6 @@
     <Content Include="Content\StateTemplate\sample\images\student-driver.jpg" />
     <Content Include="Content\StateTemplate\sample\images\working.jpg" />
     <Content Include="Content\StateTemplate\sample\images\_notes\dwsync.xml" />
-    <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
@@ -373,7 +385,10 @@
     <Content Include="Content\StateTemplate\sample\configs\line.json" />
     <Content Include="Content\StateTemplate\sample\configs\pie.csv" />
     <Content Include="Content\StateTemplate\sample\configs\pie.json" />
-    <Content Include="ConnectionStrings.config" />
+    <Content Include="ConnectionStrings.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\AEIS - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\register-check.js" />
@@ -438,9 +453,12 @@
     <Content Include="Views\Home\ChartAnalysis.cshtml" />
     <Content Include="Views\Home\Account.cshtml" />
     <Content Include="Views\Home\Registration.cshtml" />
-    <Content Include="Views\Login\LoggedIn.cshtml" />
     <Content Include="Settings.csv" />
-    <Content Include="Views\Login\LoginFail.cshtml" />
+    <Content Include="Views\Survey\Index.cshtml" />
+    <Content Include="Views\Survey\NameSurvey.cshtml" />
+    <Content Include="Views\Survey\Summary.cshtml" />
+    <Content Include="Views\Survey\SurveyQuestions.cshtml" />
+    <Content Include="Views\Home\ForgotPassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -452,8 +470,6 @@
     <Folder Include="Content\StateTemplate\images\template2014\_notes\" />
     <Folder Include="Content\StateTemplate\images\_notes\" />
     <Folder Include="Content\StateTemplate\sample\_notes\" />
-    <Folder Include="Views\Chart\" />
-    <Folder Include="Views\ScoreCalculation\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

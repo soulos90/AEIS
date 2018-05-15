@@ -1,0 +1,144 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="StateTemplateV5Beta.Controllers.ChartController" Collapsed="true">
+    <Position X="9.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Controllers\ChartController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Controllers.HomeController" Collapsed="true">
+    <Position X="6.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ggAAAgABAAAAAAEAAAEAAAIIAAAAAAAAIAEzAgAEAEA=</HashCode>
+      <FileName>Controllers\HomeController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Controllers.SurveyController" Collapsed="true">
+    <Position X="3.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>hgCAAAAQAgAAAAAAAAEAAAIAAAAAAEAAIAATAAAAAAQ=</HashCode>
+      <FileName>Controllers\SurveyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.Answer" Collapsed="true">
+    <Position X="0.5" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAAAAAAIAAAAAAAAAAAAAAAAAAQQAAAAgAAAAEQA=</HashCode>
+      <FileName>Models\Answer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.Environment" Collapsed="true">
+    <Position X="0.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAFAAAACAAAAAAAAAgAgBAQABAABAAmAECAAAEAAAA=</HashCode>
+      <FileName>Models\Environment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.Inventory" Collapsed="true">
+    <Position X="6.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAAAAAEEAAQBAgAAAQAAgCAAAAAAAAAAAAAAIABAAAA=</HashCode>
+      <FileName>Models\Inventory.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Systems" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.InventoryItem" Collapsed="true">
+    <Position X="4.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AwAAAAABAAAAAAQAAAAAAAQAAAQAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Models\InventoryItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.Security" Collapsed="true">
+    <Position X="8.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAABAAAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Models\Security.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.SurveyQuestion" Collapsed="true">
+    <Position X="2.75" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQIAAAAAAAAAAAAAgAAAACAAAAAEAAAgAAEgCAAAAQA=</HashCode>
+      <FileName>Models\SurveyQuestion.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="QuestionVM" />
+      <Property Name="SurveyQuestionVM" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="StateTemplateV5Beta.Models.User" Collapsed="true">
+    <Position X="0.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAgBAAAAEAAgAEAAAAAAQAAAIAAAAAIAA=</HashCode>
+      <FileName>Models\User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.AccountVM" Collapsed="true">
+    <Position X="4.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAACAAAAAAAAAAAgAAAAAAAAAgAAIAAIAAIAg=</HashCode>
+      <FileName>ViewModels\AccountVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.InventoryVM" Collapsed="true">
+    <Position X="7.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAABAAAA=</HashCode>
+      <FileName>ViewModels\InventoryVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.JustificationVM" Collapsed="true">
+    <Position X="5.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAEBAAAAAAAAAAAAAAAAAAQAAAAgAgAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\JustificationVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.LoginVM" Collapsed="true">
+    <Position X="6.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\LoginVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.QuestionVM" Collapsed="true">
+    <Position X="2.5" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAgAAAAAgAAAAA=</HashCode>
+      <FileName>ViewModels\QuestionVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.SurveyQuestionVM" Collapsed="true">
+    <Position X="4.25" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AQAAAAAAAAAAAAAAgAAAACAAAAAAAAAgAAEgCAAAAQA=</HashCode>
+      <FileName>ViewModels\QuestionVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="StateTemplateV5Beta.ViewModels.SecurityVM" Collapsed="true">
+    <Position X="10" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\SecurityVM.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Interface Name="StateTemplateV5Beta.ViewModels.IVM" Collapsed="true">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>ViewModels\IVM.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
