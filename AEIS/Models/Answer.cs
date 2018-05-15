@@ -20,7 +20,15 @@ namespace StateTemplateV5Beta.Models
         {
 
         }
-
+        public Answer(Answer a)
+        {
+            AId = a.AId;
+            QId = a.QId;
+            UId = a.UId;
+            Created = a.Created;
+            programName = a.programName;
+            Value = a.Value;
+        }
     
 
     }

@@ -169,11 +169,12 @@ namespace StateTemplateV5Beta.Controllers
             {
                 for(i =1;i<=Convert.ToInt32(MvcApplication.environment.GetQuestionCount());++i)
                 {
-                    Answer a = GetA(tempo,count,i);
+                    Answer a = new Answer(GetA(tempo,count,i));
 
                     a.AId = temp;
                     DeleteAnswer(tempo, temp1, i);
-                    PutAnswer(uid, a);
+                    DeleteAnswer(tempo, count, i);
+                    PostAnswer(a);
                 }
             }
 
