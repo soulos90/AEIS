@@ -36,12 +36,13 @@ namespace StateTemplateV5Beta.ViewModels
         
  
         }
-    
 
-    public class InventoryItem
-    {
-    }
 
-    public class IVM
+public class InventoryItem
+{
+    internal readonly string Name;
+}
+
+public class IVM
     {
     }
