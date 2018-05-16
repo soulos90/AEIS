@@ -33,8 +33,8 @@ namespace StateTemplateV5Beta.Models
                     {
                         int ro = int.Parse(e.GetQuestionRO(i - 1));
                         Answer aReliesOn = (from t in dBAContext.Answers where ((uId == t.UId) & (ro == t.QId) & (iaId == t.AId)) select t).FirstOrDefault();
-
-                        if (aReliesOn.Value != e.GetQuestionROV(ro - 1))
+                        
+                        if (aReliesOn == null || aReliesOn.Value != e.GetQuestionROV(ro - 1))
                             HasUnanswered = true;
                     }
                 }
