@@ -1,5 +1,5 @@
 DBSource:,aeis1.database.windows.net
-,Initial Catalog:,AEIS
+,Initial Catalog:,aeis1
 ,Database User:,aeisadmin
 ,Database Password:,Aeis123456
 Number of Questions:,10
