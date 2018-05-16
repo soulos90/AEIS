@@ -26,13 +26,15 @@ namespace StateTemplateV5Beta.Models
         public int YesVal { get; set; }
         public int NoVal { get; set; }
         public string ReliesOn { get; set; }
+        public bool ReliesOnValue { get; set; }
 
-        public Question(string t, string y, string n, string r)
+        public Question(string t, string y, string n, string r, string rv)
         {
             text = t;
             YesVal = int.Parse(y);
             NoVal = int.Parse(n);
             ReliesOn = r;
+            ReliesOnValue = rv.Equals("True");
         }
     }
 
@@ -53,11 +55,12 @@ namespace StateTemplateV5Beta.Models
                  File.GetLastWriteTime(HostingEnvironment.ApplicationPhysicalPath + "ConnectionStrings.config")));
             
             StreamReader file = new StreamReader(HostingEnvironment.ApplicationPhysicalPath + "/Settings.csv");
-            string line, qtext = "", qY = "", qN = "", qR = "", sf = "", sl = "", sn = "";
+            string line, qtext = "", qY = "", qN = "", qR = "", sf = "", sl = "", sn = "",qRV;
             int scount = 0, qcount = 0;
 
             while ((line = file.ReadLine())!=null)
             {
+                qRV = "";
                     if (line.Contains("DBSource:"))
                     {
                         DBSource = line.Split(',')[1];
@@ -99,7 +102,8 @@ namespace StateTemplateV5Beta.Models
                     else if (line.Contains("ReliesOn:"))
                     {
                         qR = line.Split(',')[3];
-                        Questions[qcount++] = new Question(qtext, qY, qN, qR);
+                        qRV = line.Split(',')[4];
+                        Questions[qcount++] = new Question(qtext, qY, qN, qR, qRV);
                     }
                     else if (line.Contains("Name:"))
                     {
@@ -157,6 +161,10 @@ namespace StateTemplateV5Beta.Models
         public string GetQuestionRO(int i)
         {
             return Questions[i].ReliesOn;
+        }
+        public bool GetQuestionROV(int i)
+        {
+            return Questions[i].ReliesOnValue;
         }
         public int GetQuestionSection(int qId)
         {

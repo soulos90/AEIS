@@ -67,5 +67,9 @@ namespace StateTemplateV5Beta.Controllers
         {
             return Env.GetQuestionRO(i-1);
         }
+        public bool GetQuestionReliesOnValue(int i)
+        {
+            return Env.GetQuestionROV(i-1);
+        }
     }
 }
