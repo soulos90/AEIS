@@ -1,7 +1,7 @@
-DBSource:,aeis.database.windows.net
-,Initial Catalog:,AEIS
-,Database User:,matthewswart
-,Database Password:,MattSwart69
+DBSource:,aeis1.database.windows.net
+,Initial Catalog:,aeis1
+,Database User:,aeisadmin
+,Database Password:,Aeis123456
 Number of Questions:,10
 ,Max Score:,900
 ,Question 1 Text:,"Does the system provide a service that is essential to the general public?"

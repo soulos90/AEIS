@@ -77,6 +77,7 @@ namespace StateTemplateV5Beta.Controllers
 
             }
             //sets up the state of the buttons
+            surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
 
