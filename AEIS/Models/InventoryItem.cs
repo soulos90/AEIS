@@ -13,43 +13,56 @@ namespace StateTemplateV5Beta.Models
         public int ScoreTotal { get { return SectionScores.Sum(); } }
         public DateTime LastUsed { get; }
         public bool HasUnanswered { get; }
-        
+
         public InventoryItem(string uId, string aId)
         {
             DBAContext dBAContext = new DBAContext();
-            IEnumerable<Answer> answers = dBAContext.Answers.SqlQuery("SELECT * FROM Answers WHERE AId='" + aId + "' AND UId='" + uId + "';");
             Environment e = new Environment();
             SectionScores = new int[Environment.NumSec];
+            int iaId = int.Parse(aId);
 
-            foreach (Answer a in answers)
+            for (int i = 1; i <= Environment.NumQus; i++)
             {
-                if (a.programName != null)
-                    Name = a.programName.Trim();
+                Answer a = (from t in dBAContext.Answers where ((uId == t.UId) & (i == t.QId) & (iaId == t.AId)) select t).FirstOrDefault();
+
+                if (a == null)
+                {
+                    if (e.GetQuestionRO(i - 1) == "0" || e.GetQuestionRO(i - 1) == null)
+                        HasUnanswered = true;
+                    else
+                    {
+                        int ro = int.Parse(e.GetQuestionRO(i - 1));
+                        Answer aReliesOn = (from t in dBAContext.Answers where ((uId == t.UId) & (ro == t.QId) & (iaId == t.AId)) select t).FirstOrDefault();
+
+                        if (aReliesOn.Value != e.GetQuestionROV(ro - 1))
+                            HasUnanswered = true;
+                    }
+                }
                 else
-                    Name = "";
-                AId = a.AId;
-                int sectionNum = e.GetQuestionSection(a.QId);
+                {
+                    if (a.programName != null)
+                        Name = a.programName.Trim();
+                    else
+                        Name = "";
 
-                if (a.Value == true)
-                    SectionScores[sectionNum] += e.GetQuestionYV(a.QId - 1);
-                else if (a.Value == false)
-                    SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1);
-                else if (e.GetQuestionRO(a.QId - 1) == "0" || e.GetQuestionRO(a.QId - 1) == null)
-                    HasUnanswered = true;
+                    AId = a.AId;
+                    int sectionNum = e.GetQuestionSection(a.QId);
 
-                if (a.LastUsed > LastUsed)
-                    LastUsed = a.LastUsed;
+                    if (a.Value == true)
+                        SectionScores[sectionNum] += e.GetQuestionYV(a.QId - 1);
+                    else if (a.Value == false)
+                        SectionScores[sectionNum] += e.GetQuestionNV(a.QId - 1);
+
+                    if (a.LastUsed > LastUsed)
+                        LastUsed = a.LastUsed;
+                }
             }
-
-            if (answers.Count() < Environment.NumQus)
-                HasUnanswered = true;
 
             int scoreDivisor = 9;
             for (int i = 0; i < SectionScores.Length; i++)
             {
                 SectionScores[i] /= scoreDivisor;
             }
-            
         }
     }
 }
