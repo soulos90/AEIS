@@ -312,12 +312,8 @@ namespace StateTemplateV5Beta.Controllers
                 }
                 else
                 {
-                    ViewBag.ErrorMessage = "Invalid Current Password";
+                    ViewBag.ErrorMessage = "Invalid Password";
                 }
-            }
-            else
-            {
-                ViewBag.ErrorMessage = "Invalid New Email";
             }
 
             model = new AccountVM(SController.GetID(), SController.GetActive());
