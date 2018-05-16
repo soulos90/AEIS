@@ -5,31 +5,39 @@
 }
 
 <div class="fluid container">
-    <div class="offset-quarter half">
+    @*<div class="offset-quarter half">*@
 
         @using (Html.BeginForm("StartSurvey", "Survey", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
         {
             <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-actions btn-group-vertical" style="overflow: auto; width: auto; max-height: 200px">
-                        @Html.TextBoxFor(m => m.ProgramName, new { style = "width: 100px" })
+                <div class="col-sm-2">
+                    <div class="form-actions btn-group-vertical" style="overflow: auto; width: auto; height: auto;">
                         @for (int i = 1; i <= Model.NumberofQuestions; i++)
                         {
                             if (i == Model.QId)
                             {
-                                <button type="button" class="btn btn-primary btn-sm">Question @i</button>
+                                <div style="padding: 1px">
+                                    <button type="button" class="btn btn-primary btn-sm">Question @i</button>
+                                </div>
+                                                              
                             }
                             else if (Model.DisableQuestion.Exists(x => x == i))
                             {
-                                <button type="button" class="btn btn-success btn-sm disabled">Question @i</button>             
+                                <div style="padding: 1px">
+                                <button type="button" class="btn btn-success btn-sm disabled " padding = "100px">Question @i</button>  
+                                    </div>           
                             }
                             else if (Model.AnsweredQuestions.Exists(x => x == i))
                             {
+                                <div style="padding: 1px">
                                 <input type="submit" class="btn btn-success btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />
+                                    </div>
                             }
                             else
                             {
+                                <div style="padding: 1px">
                                 <input type="submit" class="btn btn-danger btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />
+                                    </div>
                             }
                             @*<input type="submit" class="btn btn-default btn-sm" value="Question @i" formaction="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" />*@
                             @*<href="@Url.Action("SkipQuestion", "Survey", new { SkipTo = i })" class="button">Question 'i'</>*@
@@ -38,8 +46,8 @@
                     </div>
                 </div>
                 @Html.ValidationSummary(false, "", new { @class = "" })
-                <div class="col-sm-8">
-                    <div style="text-align:left">
+                <div class="col-sm-5">
+                    <div style="text-align:left; border:1px solid black; padding: 2px">
                         @Model.QuestionText
                     </div>
                 @*<div class="row m-t-md m-b-md">*@
@@ -66,9 +74,14 @@
                 </div>
             </div>
                     @*</div>*@
-            </div>
+                <div class="col-sm-5">
+                    <div style="text-align:left ">
+                       Program:  @Html.TextBoxFor(m => m.ProgramName, new { style = "width: 100px" })
+                    </div>
+                </div>
+        </div>
         }
-    </div>
+    @*</div>*@
 </div>
 
 
