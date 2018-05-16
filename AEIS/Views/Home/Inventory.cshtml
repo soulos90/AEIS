@@ -4,9 +4,9 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     var SC = new StateTemplateV5Beta.Controllers.SecurityController(Model.Active);
     var blankRows = 0;
-    if (Model.Systems.Length <= 11)
+    if (Model.Systems.Length <= 6)
     {
-        blankRows = 11 - Model.Systems.Length;
+        blankRows = 6 - Model.Systems.Length;
     }
     // ****** Colors ******
     // light blue: 9FC7DA
