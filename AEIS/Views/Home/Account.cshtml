@@ -55,7 +55,7 @@
                 <label>Current password</label>
             </div>
             <div class="row p-l-md">
-                <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="CurrentPassword" tabindex="4">
+                <input type="password" style="width:250px" placeholder="Current password" id="current-password" name="CurrentPassword" tabindex="4" onchange="check1();">
             </div>
             <div class="row p-t p-l-md">
                 <label>New password</label>
@@ -75,5 +75,5 @@
 
         <input type="submit" value="Submit" id="submit" class="btn btn-lg btn-primary" disabled="disabled" />
     }
-    @Scripts.Render("~/Scripts/register-check.js")
+    @Scripts.Render("~/Scripts/account-check.js")
 </div> <!-- end section -->

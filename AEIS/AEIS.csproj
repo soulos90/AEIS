@@ -391,6 +391,7 @@
     <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\AEIS - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\account-check.js" />
     <Content Include="Scripts\register-check.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
