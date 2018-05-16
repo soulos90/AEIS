@@ -14,7 +14,7 @@
         </div>
     </div>
     <!-- Account Information -->
-    @using (Html.BeginForm("Account", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    @using (Html.BeginForm("PutUser", "Home", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
     {
         @Html.ValidationSummary(false, "", new { @class = "" })
         <div class="panel panel-primary">

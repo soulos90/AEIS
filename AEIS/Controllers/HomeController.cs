@@ -276,8 +276,8 @@ namespace StateTemplateV5Beta.Controllers
                 SC.Login(user.ID);
                 Login(SC);
                 UController.PostUser(user);
-                model = new LoginVM(SC.CheckLogin(), SC.GetActive());
-                return View("Index", model);
+                model = new InventoryVM(SC.GetID(), active);
+                return View("Inventory", model);
             }
             else
             {
@@ -288,7 +288,7 @@ namespace StateTemplateV5Beta.Controllers
         }
 
         [HttpPost]
-        public ActionResult PutUser(User user, string actives, string activeLog, string activeRem, string currentPassword)
+        public ActionResult PutUser(string FirstName, string LastName, string Organization, string PassHash, string actives, string activeLog, string activeRem, string CurrentPassword, string NewPassword)
         {
             Security active = session(actives, activeLog, activeRem);
             UsersController u = new UsersController();
@@ -296,24 +296,24 @@ namespace StateTemplateV5Beta.Controllers
             IVM model;
 
             var getUser = u.GetU(SController.GetID().Trim());
-            if ((getUser.ID != user.ID && u.GetU(user.ID.Trim()) == null)|| getUser.ID == user.ID)
-            {
-                user.PassSalt = getUser.PassSalt;
-                if (getUser.PassHash.Trim() == u.HashPassword(currentPassword, user.PassSalt).Trim())
-                {
-                    user.Created = getUser.Created;
-                    SController.Login(user.ID);
-                    Login(SController);
 
-                    user.PassHash = u.HashPassword(user.PassHash, user.PassSalt);
-                    model = new LoginVM(active.IsLoggedIn, SController.GetActive());
-                    UController.PutUser(user.ID, user);
-                    return View("Index", model);
-                }
-                else
-                {
-                    ViewBag.ErrorMessage = "Invalid Password";
-                }
+            if (getUser.PassHash.Trim() == u.HashPassword(CurrentPassword, getUser.PassSalt).Trim())
+            {
+                getUser.FName = FirstName;
+                getUser.LName = LastName;
+                getUser.Organization = Organization;
+
+                getUser.PassHash = u.HashPassword(NewPassword, getUser.PassSalt);
+                //model = new LoginVM(active.IsLoggedIn, SController.GetActive());
+                UController.PutUser(getUser.ID, getUser);
+
+                ViewBag.ErrorMessage = "Account Info Updated";
+
+                //return View("Account", model);
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Invalid Password";
             }
 
             model = new AccountVM(SController.GetID(), SController.GetActive());
