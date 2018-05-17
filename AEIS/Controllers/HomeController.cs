@@ -176,7 +176,7 @@ namespace StateTemplateV5Beta.Controllers
             return View(model);
         }
 
-        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, int numOfSystems)
+        public ActionResult ChartAnalysis(string actives, string activeLog, string activeRem, string numOfSystems)
         {
             Security active = session(actives, activeLog, activeRem);
             SecurityController Active = new SecurityController(active);
@@ -186,11 +186,16 @@ namespace StateTemplateV5Beta.Controllers
                 return RedirectToAction("Index");
             }
 
+            // check that numOfSystems is a valid number
+            int num;
+            if (numOfSystems == null || !int.TryParse(numOfSystems, out num))
+                num = 6;
+
             string uId = Active.GetID();
 
             Inventory inventory = new Inventory(uId);
             inventory.SortByTotalScore();
-            inventory = inventory.GetTop(numOfSystems);
+            inventory = inventory.GetTop(num);
             InventoryVM model = new InventoryVM(inventory, active);
 
             return View(model);

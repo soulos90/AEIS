@@ -44,8 +44,8 @@ namespace StateTemplateV5Beta.Models
         {
             if (num > Systems.Length)
                 num = Systems.Length;
-            else if (num < 1)
-                num = 1;
+            else if (num < 0)
+                num = 0;
 
             Inventory inventory = new Inventory();
             inventory.Systems = new InventoryItem[num];

@@ -20,20 +20,17 @@ namespace StateTemplateV5Beta.Controllers
             var key = new Chart(width: 1280, height: 720);
             key.AddTitle("AEIS Inventory Analysis");
 
-            // display blank chart if there's no inventory entries
-            if (model.Systems.Length == 0)
-            {
-                key.AddSeries(
-                    chartType: "StackedColumn",
-                    legend: "AEIS Inventory Analysis",
-                    xValue: new []{""},
-                    yValues: new[] {""});
-            }
-
             for (int i = 0; i < model.SectionTitles.Length; i++)
             {
-                string[] systemNames = new string[model.Systems.Length];
-                int[] sectionScore = new int[model.Systems.Length];
+                string[] systemNames = new string[model.Systems.Length + 1];
+                int[] sectionScore = new int[model.Systems.Length + 1];
+
+                // display blank chart if inventory is empty
+                if (model.Systems.Length == 0)
+                {
+                    systemNames[0] = " ";
+                    sectionScore[0] = 0;
+                }
 
                 for (int j = 0; j < model.Systems.Length; j++)
                 {
