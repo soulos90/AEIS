@@ -312,6 +312,8 @@ namespace StateTemplateV5Beta.Controllers
             //set up for the state of the buttons
             surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+            if (surveyQuestionVM.DisableQuestion != null)
+                DeleteAnswer(userId, surveyQuestionVM.AId, surveyQuestionVM.DisableQuestion);
             surveyQuestionVM.QuestionText = eController.GetQuestionText(model.SkipTo);
             surveyQuestionVM.QId = model.SkipTo;
 
