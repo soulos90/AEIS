@@ -12,7 +12,6 @@ namespace StateTemplateV5Beta.Controllers
 {
     public class SurveyController : Controller
     {
-        // TODO: add way to rename survey
         // TODO: possibly display more info about system that you're answering questions for? 
         //      i.e., name of system, current question #, etc.
         UsersController UController = new UsersController();
@@ -80,6 +79,8 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+            if (surveyQuestionVM.DisableQuestion != null)
+                DeleteAnswer(userId, surveyQuestionVM.AId, surveyQuestionVM.DisableQuestion);
 
             ModelState.Clear();
 
@@ -137,6 +138,8 @@ namespace StateTemplateV5Beta.Controllers
             surveyQuestionVM.NumberofQuestions = eController.GetQuestionCount();
             surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+            if (surveyQuestionVM.DisableQuestion != null)
+                DeleteAnswer(userId, surveyQuestionVM.AId, surveyQuestionVM.DisableQuestion);
             surveyQuestionVM.QId = model.QId;
             int i = model.QId;
 
@@ -222,6 +225,8 @@ namespace StateTemplateV5Beta.Controllers
             //sets up the state of the buttons
             surveyQuestionVM.AnsweredQuestions = GetAnsweredList(userId, surveyQuestionVM.AId);
             surveyQuestionVM.DisableQuestion = GetDisable(userId, surveyQuestionVM.AId, surveyQuestionVM.AnsweredQuestions);
+            if (surveyQuestionVM.DisableQuestion != null)
+                DeleteAnswer(userId, surveyQuestionVM.AId, surveyQuestionVM.DisableQuestion);
             surveyQuestionVM.QId = model.QId;
             int i = model.QId;
             
@@ -338,6 +343,19 @@ namespace StateTemplateV5Beta.Controllers
             }
             ModelState.Clear();
             return View(model);
+        }
+        
+        //The question id that are supposed to be disable are also the ones that should not exist
+        private void DeleteAnswer(string userID, int Aid, List<int> Disable)
+        {
+            AnswersController aController = new AnswersController();
+            using (var context = new DBAContext())
+            {
+                foreach (var Answer in Disable)
+                {
+                    aController.DeleteAnswer(userID, Aid, Answer);
+                }
+            }
         }
 
         //creates a list of the questions that should be disabled based on the relieson field 
