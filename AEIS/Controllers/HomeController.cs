@@ -278,6 +278,18 @@ namespace StateTemplateV5Beta.Controllers
             var getUser = u.GetU(user.ID);
             if (getUser == null)
             {
+                if(user.FName==null)
+                {
+                    user.FName = "";
+                }
+                if (user.LName == null)
+                {
+                    user.LName = "";
+                }
+                if (user.Organization == null)
+                {
+                    user.Organization = "";
+                }
                 SC.Login(user.ID);
                 Login(SC);
                 UController.PostUser(user);
@@ -304,12 +316,23 @@ namespace StateTemplateV5Beta.Controllers
 
             if (getUser.PassHash.Trim() == u.HashPassword(CurrentPassword, getUser.PassSalt).Trim())
             {
+                if (FirstName == null)
+                {
+                    FirstName = "";
+                }
+                if (LastName == null)
+                {
+                    LastName = "";
+                }
+                if (Organization == null)
+                {
+                    Organization = "";
+                }
                 getUser.FName = FirstName;
                 getUser.LName = LastName;
                 getUser.Organization = Organization;
 
                 getUser.PassHash = u.HashPassword(NewPassword, getUser.PassSalt);
-                //model = new LoginVM(active.IsLoggedIn, SController.GetActive());
                 UController.PutUser(getUser.ID, getUser);
 
                 ViewBag.ErrorMessage = "Account Info Updated";
